@@ -73,8 +73,6 @@
 
 
 
-  
-
 
   <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
 
@@ -83,17 +81,17 @@
 
 
 
-<meta name="description" content="舒宇，哈尔滨人，高级运维工程师！ 希望与大家一起分享技术知识 微信:1510334954">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://shenshengkun.github.io/about/index.html">
+<meta name="description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos7搭建shadowsock实现vpn翻墙">
+<meta property="og:url" content="https://shenshengkun.github.io/2017/04/22/vpn/centos7搭建shadowsock实现vpn翻墙/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="舒宇，哈尔滨人，高级运维工程师！ 希望与大家一起分享技术知识 微信:1510334954">
+<meta property="og:description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-07T03:06:28.724Z">
+<meta property="og:updated_time" content="2018-11-07T09:18:58.910Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="舒宇，哈尔滨人，高级运维工程师！ 希望与大家一起分享技术知识 微信:1510334954">
+<meta name="twitter:title" content="centos7搭建shadowsock实现vpn翻墙">
+<meta name="twitter:description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
 
 
 
@@ -123,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/about/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2017/04/22/vpn/centos7搭建shadowsock实现vpn翻墙/">
 
 
 
 
 
-  <title>about | 舒宇的博客</title>
+  <title>centos7搭建shadowsock实现vpn翻墙 | 舒宇的博客</title>
   
 
 
@@ -258,36 +256,182 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2017/04/22/vpn/centos7搭建shadowsock实现vpn翻墙/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>舒宇，哈尔滨人，高级运维工程师！</p>
-<p>希望与大家一起分享技术知识</p>
-<p>微信:1510334954</p>
-
+          <h1 class="post-title" itemprop="name headline">centos7搭建shadowsock实现vpn翻墙</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-22T20:10:20+08:00">
+                2017-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/vpn/" itemprop="url" rel="index">
+                    <span itemprop="name">vpn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>使用root用户登录，运行以下命令：</p>
+<blockquote>
+<p>wget –no-check-certificate -O shadowsocks.sh <a href="https://cyh.abcdocker.com/vpn/shadowsocks.sh" target="_blank" rel="noopener">https://cyh.abcdocker.com/vpn/shadowsocks.sh</a><br>  chmod +x shadowsocks.sh<br>  ./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</p>
+</blockquote>
+<p>安装完成后，脚本提示如下：</p>
+<blockquote>
+<p>Congratulations, Shadowsocks-python server install completed!<br>Your Server IP        :your_server_ip<br>Your Server Port      :your_server_port<br>Your Password         :your_password<br>Your Encryption Method:your_encryption_method<br>Welcome to visit:<a href="https://teddysun.com/342.html" target="_blank" rel="noopener">https://teddysun.com/342.html</a><br>Enjoy it!</p>
+</blockquote>
+<h1 id="卸载方法"><a href="#卸载方法" class="headerlink" title="卸载方法"></a>卸载方法</h1><p>使用root用户登录，运行以下命令：</p>
+<blockquote>
+<p>./shadowsocks.sh uninstall</p>
+</blockquote>
+<p>配置文件路径：/etc/shadowsocks.json</p>
+<blockquote>
+<p>{<br>    “server”:”0.0.0.0”,<br>    “server_port”:your_server_port,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “password”:”your_password”,<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p>
+</blockquote>
+<h1 id="多用户多端口配置文件"><a href="#多用户多端口配置文件" class="headerlink" title="多用户多端口配置文件"></a>多用户多端口配置文件</h1><p>配置文件路径：/etc/shadowsocks.json</p>
+<blockquote>
+<p>{<br>    “server”:”0.0.0.0”,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “port_password”:{<br>         “8989”:”password0”,<br>         “9001”:”password1”,<br>         “9002”:”password2”,<br>         “9003”:”password3”,<br>         “9004”:”password4”<br>    },<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p>
+</blockquote>
+<blockquote>
+<p>启动：/etc/init.d/shadowsocks start<br>停止：/etc/init.d/shadowsocks stop<br>重启：/etc/init.d/shadowsocks restart<br>状态：/etc/init.d/shadowsocks status</p>
+</blockquote>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/20/vpn/pptp/" rel="next" title="pptp">
+                <i class="fa fa-chevron-left"></i> pptp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -320,8 +464,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -391,6 +544,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卸载方法"><span class="nav-number">2.</span> <span class="nav-text">卸载方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多用户多端口配置文件"><span class="nav-number">3.</span> <span class="nav-text">多用户多端口配置文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="首先检查您的CPU是否支持硬件虚拟化 egrep’(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic se">
+<meta name="description" content="首先检查您的CPU是否支持硬件虚拟化 egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos6.4安装kvm">
 <meta property="og:url" content="https://shenshengkun.github.io/2017/03/20/虚拟化/centos6.4安装kvm/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="首先检查您的CPU是否支持硬件虚拟化 egrep’(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic se">
+<meta property="og:description" content="首先检查您的CPU是否支持硬件虚拟化 egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic s">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-07T03:28:12.820Z">
+<meta property="og:updated_time" content="2018-11-07T08:50:37.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos6.4安装kvm">
-<meta name="twitter:description" content="首先检查您的CPU是否支持硬件虚拟化 egrep’(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic se">
+<meta name="twitter:description" content="首先检查您的CPU是否支持硬件虚拟化 egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags           : fpu vme de pse tsc msr pae mce cx8 apic s">
 
 
 
@@ -358,14 +358,14 @@
 
       
         <p>首先检查您的CPU是否支持硬件虚拟化</p>
-<p>egrep’(vmx|svm)’ –color=always /proc/cpuinfo</p>
+<p>egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo</p>
 <p>应该显示一些东西，例如：</p>
 <p>[root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>[root@server1 ~]#</p>
 <p>现在我们导入软件包的GPG密钥：</p>
 <p>rpm–import /etc/pki/rpm-gpg/RPM-GPG-KEY*</p>
-<p>yuminstall kvm libvirt python-virtinst qemu-kvm</p>
-<p>/etc/init.d/libvirtdstart</p>
-<p>virsh-c qemu:///system list</p>
+<p>yum install kvm libvirt python-virtinst qemu-kvm</p>
+<p>/etc/init.d/libvirtd start</p>
+<p>virsh -c qemu:///system list</p>
 <p>导入镜像文件</p>
 <p>xterm-253-1.el6.x86_64.rpm</p>
 <p>之后xmanager开始kvm就可以了</p>
@@ -471,7 +471,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

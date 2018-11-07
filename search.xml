@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[centos7搭建shadowsock实现vpn翻墙]]></title>
+    <url>%2F2017%2F04%2F22%2Fvpn%2Fcentos7%E6%90%AD%E5%BB%BAshadowsock%E5%AE%9E%E7%8E%B0vpn%E7%BF%BB%E5%A2%99%2F</url>
+    <content type="text"><![CDATA[安装使用root用户登录，运行以下命令： wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh chmod +x shadowsocks.sh ./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log 安装完成后，脚本提示如下： Congratulations, Shadowsocks-python server install completed!Your Server IP :your_server_ipYour Server Port :your_server_portYour Password :your_passwordYour Encryption Method:your_encryption_methodWelcome to visit:https://teddysun.com/342.htmlEnjoy it! 卸载方法使用root用户登录，运行以下命令： ./shadowsocks.sh uninstall 配置文件路径：/etc/shadowsocks.json { “server”:”0.0.0.0”, “server_port”:your_server_port, “local_address”:”127.0.0.1”, “local_port”:1080, “password”:”your_password”, “timeout”:300, “method”:”your_encryption_method”, “fast_open”: false} 多用户多端口配置文件配置文件路径：/etc/shadowsocks.json { “server”:”0.0.0.0”, “local_address”:”127.0.0.1”, “local_port”:1080, “port_password”:{ “8989”:”password0”, “9001”:”password1”, “9002”:”password2”, “9003”:”password3”, “9004”:”password4” }, “timeout”:300, “method”:”your_encryption_method”, “fast_open”: false} 启动：/etc/init.d/shadowsocks start停止：/etc/init.d/shadowsocks stop重启：/etc/init.d/shadowsocks restart状态：/etc/init.d/shadowsocks status]]></content>
+      <categories>
+        <category>vpn</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[pptp]]></title>
     <url>%2F2017%2F04%2F20%2Fvpn%2Fpptp%2F</url>
     <content type="text"><![CDATA[安装pptpd$ yum install pptpd 配置本地及远程IP地址$ vi /etc/pptpd.conf localip 192.168.100.1 remoteip 192.168.100.2-245 配置DNS$ vi /etc/ppp/options.pptpd ms-dns 223.5.5.5 ms-dns 223.6.6.6 修改MTU$ vi / etc / ppp / ip-up /sbin/ifconfig $ 1 mtu 1500 用户和密码配置$ vi /etc/ppp/chap-secrets client server secret IP address 注释掉 testin_user1 pptpd testin_user1 * 配置防火墙$ vi /etc/sysctl.conf net.ipv4.ip_forward = 1＃开启IP转发 $ iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth1 -j MASQUERADE＃允许外网连接 开启服务$ service pptpd start $ service iptables start]]></content>
@@ -19,7 +27,7 @@
   <entry>
     <title><![CDATA[centos6.4安装kvm]]></title>
     <url>%2F2017%2F03%2F20%2F%E8%99%9A%E6%8B%9F%E5%8C%96%2Fcentos6.4%E5%AE%89%E8%A3%85kvm%2F</url>
-    <content type="text"><![CDATA[首先检查您的CPU是否支持硬件虚拟化 egrep’(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsseflags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse[root@server1 ~]# 现在我们导入软件包的GPG密钥： rpm–import /etc/pki/rpm-gpg/RPM-GPG-KEY* yuminstall kvm libvirt python-virtinst qemu-kvm /etc/init.d/libvirtdstart virsh-c qemu:///system list 导入镜像文件 xterm-253-1.el6.x86_64.rpm 之后xmanager开始kvm就可以了]]></content>
+    <content type="text"><![CDATA[首先检查您的CPU是否支持硬件虚拟化 egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo 应该显示一些东西，例如： [root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfoflags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsseflags : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse[root@server1 ~]# 现在我们导入软件包的GPG密钥： rpm–import /etc/pki/rpm-gpg/RPM-GPG-KEY* yum install kvm libvirt python-virtinst qemu-kvm /etc/init.d/libvirtd start virsh -c qemu:///system list 导入镜像文件 xterm-253-1.el6.x86_64.rpm 之后xmanager开始kvm就可以了]]></content>
       <categories>
         <category>虚拟化</category>
       </categories>

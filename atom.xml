@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2018-11-07T05:58:16.356Z</updated>
+  <updated>2018-11-07T09:18:58.910Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>centos7搭建shadowsock实现vpn翻墙</title>
+    <link href="https://shenshengkun.github.io/2017/04/22/vpn/centos7%E6%90%AD%E5%BB%BAshadowsock%E5%AE%9E%E7%8E%B0vpn%E7%BF%BB%E5%A2%99/"/>
+    <id>https://shenshengkun.github.io/2017/04/22/vpn/centos7搭建shadowsock实现vpn翻墙/</id>
+    <published>2017-04-22T12:10:20.000Z</published>
+    <updated>2018-11-07T09:18:58.910Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>使用root用户登录，运行以下命令：</p><blockquote><p>wget –no-check-certificate -O shadowsocks.sh <a href="https://cyh.abcdocker.com/vpn/shadowsocks.sh" target="_blank" rel="noopener">https://cyh.abcdocker.com/vpn/shadowsocks.sh</a><br>  chmod +x shadowsocks.sh<br>  ./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</p></blockquote><p>安装完成后，脚本提示如下：</p><blockquote><p>Congratulations, Shadowsocks-python server install completed!<br>Your Server IP        :your_server_ip<br>Your Server Port      :your_server_port<br>Your Password         :your_password<br>Your Encryption Method:your_encryption_method<br>Welcome to visit:<a href="https://teddysun.com/342.html" target="_blank" rel="noopener">https://teddysun.com/342.html</a><br>Enjoy it!</p></blockquote><h1 id="卸载方法"><a href="#卸载方法" class="headerlink" title="卸载方法"></a>卸载方法</h1><p>使用root用户登录，运行以下命令：</p><blockquote><p>./shadowsocks.sh uninstall</p></blockquote><p>配置文件路径：/etc/shadowsocks.json</p><blockquote><p>{<br>    “server”:”0.0.0.0”,<br>    “server_port”:your_server_port,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “password”:”your_password”,<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p></blockquote><h1 id="多用户多端口配置文件"><a href="#多用户多端口配置文件" class="headerlink" title="多用户多端口配置文件"></a>多用户多端口配置文件</h1><p>配置文件路径：/etc/shadowsocks.json</p><blockquote><p>{<br>    “server”:”0.0.0.0”,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “port_password”:{<br>         “8989”:”password0”,<br>         “9001”:”password1”,<br>         “9002”:”password2”,<br>         “9003”:”password3”,<br>         “9004”:”password4”<br>    },<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p></blockquote><blockquote><p>启动：/etc/init.d/shadowsocks start<br>停止：/etc/init.d/shadowsocks stop<br>重启：/etc/init.d/shadowsocks restart<br>状态：/etc/init.d/shadowsocks status</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h1&gt;&lt;p&gt;使用root用户登录，运行以下命令：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;wget –no-check-certificate -O s
+      
+    
+    </summary>
+    
+      <category term="vpn" scheme="https://shenshengkun.github.io/categories/vpn/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>pptp</title>
@@ -68,18 +93,18 @@
     <link href="https://shenshengkun.github.io/2017/03/20/%E8%99%9A%E6%8B%9F%E5%8C%96/centos6.4%E5%AE%89%E8%A3%85kvm/"/>
     <id>https://shenshengkun.github.io/2017/03/20/虚拟化/centos6.4安装kvm/</id>
     <published>2017-03-20T09:20:50.000Z</published>
-    <updated>2018-11-07T03:28:12.820Z</updated>
+    <updated>2018-11-07T08:50:37.905Z</updated>
     
-    <content type="html"><![CDATA[<p>首先检查您的CPU是否支持硬件虚拟化</p><p>egrep’(vmx|svm)’ –color=always /proc/cpuinfo</p><p>应该显示一些东西，例如：</p><p>[root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>[root@server1 ~]#</p><p>现在我们导入软件包的GPG密钥：</p><p>rpm–import /etc/pki/rpm-gpg/RPM-GPG-KEY*</p><p>yuminstall kvm libvirt python-virtinst qemu-kvm</p><p>/etc/init.d/libvirtdstart</p><p>virsh-c qemu:///system list</p><p>导入镜像文件</p><p>xterm-253-1.el6.x86_64.rpm</p><p>之后xmanager开始kvm就可以了</p>]]></content>
+    <content type="html"><![CDATA[<p>首先检查您的CPU是否支持硬件虚拟化</p><p>egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo</p><p>应该显示一些东西，例如：</p><p>[root@server1 ~]# egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall<br> nx mmxext fxsr_opt rdtscp lm 3dnowext 3dnow pni cx16 lahf_lm cmp_legacy svm extapic cr8_legacy misalignsse<br>[root@server1 ~]#</p><p>现在我们导入软件包的GPG密钥：</p><p>rpm–import /etc/pki/rpm-gpg/RPM-GPG-KEY*</p><p>yum install kvm libvirt python-virtinst qemu-kvm</p><p>/etc/init.d/libvirtd start</p><p>virsh -c qemu:///system list</p><p>导入镜像文件</p><p>xterm-253-1.el6.x86_64.rpm</p><p>之后xmanager开始kvm就可以了</p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;首先检查您的CPU是否支持硬件虚拟化&lt;/p&gt;
-&lt;p&gt;egrep’(vmx|svm)’ –color=always /proc/cpuinfo&lt;/p&gt;
+&lt;p&gt;egrep ‘(vmx|svm)’ –color=always /proc/cpuinfo&lt;/p&gt;
 &lt;p&gt;应该显示一些东西，例如：&lt;/p&gt;
-&lt;p&gt;[root@server1 ~]# egrep ‘(vmx|svm)’ –co
+&lt;p&gt;[root@server1 ~]# egrep ‘(vmx|svm)’ –c
       
     
     </summary>
