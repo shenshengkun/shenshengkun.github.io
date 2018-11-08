@@ -81,13 +81,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/categories/虚拟化/index.html">
+<meta name="description" content="下面来说说CI/CD是怎么实现的： 登录gitlab-runner机器切换runner普通用户  [root@localhost ~]# su - gitlab-runner  编写.gitlab-ci.yml文件随便创建一个目录，叫什么无所谓  [gitlab-runner@localhost ~]$ mkdir git  将gitlab上想要发布的项目克隆到这个目录里  [gitlab-run">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitlab-ci自动部署（二）">
+<meta property="og:url" content="https://shenshengkun.github.io/2017/05/21/gitlab/gitlab-ci(二)/index.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="下面来说说CI/CD是怎么实现的： 登录gitlab-runner机器切换runner普通用户  [root@localhost ~]# su - gitlab-runner  编写.gitlab-ci.yml文件随便创建一个目录，叫什么无所谓  [gitlab-runner@localhost ~]$ mkdir git  将gitlab上想要发布的项目克隆到这个目录里  [gitlab-run">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718090018886?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzkzNDEzNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180718091841574?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzkzNDEzNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-11-08T02:56:47.172Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="gitlab-ci自动部署（二）">
+<meta name="twitter:description" content="下面来说说CI/CD是怎么实现的： 登录gitlab-runner机器切换runner普通用户  [root@localhost ~]# su - gitlab-runner  编写.gitlab-ci.yml文件随便创建一个目录，叫什么无所谓  [gitlab-runner@localhost ~]$ mkdir git  将gitlab上想要发布的项目克隆到这个目录里  [gitlab-run">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180718090018886?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzkzNDEzNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 
 
 
@@ -117,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/categories/虚拟化/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2017/05/21/gitlab/gitlab-ci(二)/">
 
 
 
 
 
-  <title>分类: 虚拟化 | 舒宇的博客</title>
+  <title>gitlab-ci自动部署（二） | 舒宇的博客</title>
   
 
 
@@ -142,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -250,53 +257,191 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>虚拟化<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2017/05/21/gitlab/gitlab-ci(二)/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/03/20/虚拟化/centos6.4安装kvm/" itemprop="url">
-              
-                <span itemprop="name">centos6.4安装kvm</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">gitlab-ci自动部署（二）</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-03-20T17:20:50+08:00" content="2017-03-20">
-          03-20
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T09:10:30+08:00">
+                2017-05-21
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/gitlab/" itemprop="url" rel="index">
+                    <span itemprop="name">gitlab</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>下面来说说CI/CD是怎么实现的：</p>
+<h1 id="登录gitlab-runner机器"><a href="#登录gitlab-runner机器" class="headerlink" title="登录gitlab-runner机器"></a>登录gitlab-runner机器</h1><p>切换runner普通用户</p>
+<blockquote>
+<p>[root@localhost ~]# su - gitlab-runner</p>
+</blockquote>
+<h1 id="编写-gitlab-ci-yml文件"><a href="#编写-gitlab-ci-yml文件" class="headerlink" title="编写.gitlab-ci.yml文件"></a>编写.gitlab-ci.yml文件</h1><p>随便创建一个目录，叫什么无所谓</p>
+<blockquote>
+<p>[gitlab-runner@localhost ~]$ mkdir git</p>
+</blockquote>
+<p>将gitlab上想要发布的项目克隆到这个目录里</p>
+<blockquote>
+<p>[gitlab-runner@localhost git]$ git clone <a href="mailto:git@gitlab.xxx.com" target="_blank" rel="noopener">git@gitlab.xxx.com</a>:xxx/xxx.git</p>
+</blockquote>
+<p>因为我们的项目是大工程，里面带着很多子工程，所以就需要通过yml文件，将项目分离出去</p>
+<p>比方说我们想发布bb项目，但是bb项目属于aa这个大项目的子项目，所以就进aa大工程目录下</p>
+<p>在项目目录里面创建一个.gitlab-ci.yml文件，如下<br><img src="https://img-blog.csdn.net/20180718090018886?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzkzNDEzNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<blockquote>
+<p>[gitlab-runner@localhost ~]$ cat .gitlab-ci.yml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">job 1:</span><br><span class="line">  stage: test</span><br><span class="line">  script: </span><br><span class="line">    - git subtree push -q --prefix=bb git@gitlab.xx.com:bb1/bb.git dev</span><br><span class="line">  only:</span><br><span class="line">    - dev</span><br><span class="line">  tags:</span><br><span class="line">    - shell</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这样就可以将bb项目分离出去，相当于创建了一个新的项目</p>
+<p>进入bb目录，也编写.gitlab-ci.yml文件，这个就是我们需要编译的脚本，中间可以穿插maven、node和shell的一系列命令</p>
+<blockquote>
+<p>[gitlab-runner@localhost bb]$ cat .gitlab-ci.yml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">job 1:</span><br><span class="line">  stage: build</span><br><span class="line">  script: </span><br><span class="line">    - rm -rf /opt/M2_REPO/com/bb/*</span><br><span class="line">    - mvn clean package -P test -Dmaven.test.skip</span><br><span class="line">    - bash -x /opt/bb/shell/bb.sh</span><br><span class="line">  only:</span><br><span class="line">    - dev</span><br><span class="line">  tags:</span><br><span class="line">    - shell</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>编写完yml文件后都需要提交下</p>
+<p>git add .</p>
+<p>git commit -m “add gitlab-ci.yml”</p>
+<p>git push origin dev</p>
+<p>另外包括传包，启动等命令都可以在yml文件里面体现，这样只要dev分支有commit的改变了，gitlab-ci就会自动创建job来自动发布<br><img src="https://img-blog.csdn.net/20180718091841574?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNzkzNDEzNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/gitlab/gitlab-ci(一)/" rel="next" title="gitlab-ci自动部署（一）">
+                <i class="fa fa-chevron-left"></i> gitlab-ci自动部署（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -304,6 +449,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -324,8 +473,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -395,6 +553,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#登录gitlab-runner机器"><span class="nav-number">1.</span> <span class="nav-text">登录gitlab-runner机器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写-gitlab-ci-yml文件"><span class="nav-number">2.</span> <span class="nav-text">编写.gitlab-ci.yml文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -542,6 +716,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 

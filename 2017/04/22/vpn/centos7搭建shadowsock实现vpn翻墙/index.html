@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
+<meta name="description" content="安装使用root用户登录，运行以下命令：123wget --no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log 安装完成后，脚本提">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos7搭建shadowsock实现vpn翻墙">
 <meta property="og:url" content="https://shenshengkun.github.io/2017/04/22/vpn/centos7搭建shadowsock实现vpn翻墙/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
+<meta property="og:description" content="安装使用root用户登录，运行以下命令：123wget --no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log 安装完成后，脚本提">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-07T09:18:58.910Z">
+<meta property="og:updated_time" content="2018-11-08T02:59:07.077Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos7搭建shadowsock实现vpn翻墙">
-<meta name="twitter:description" content="安装使用root用户登录，运行以下命令：  wget –no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log  安装完成后，脚本提示">
+<meta name="twitter:description" content="安装使用root用户登录，运行以下命令：123wget --no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh  chmod +x shadowsocks.sh  ./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log 安装完成后，脚本提">
 
 
 
@@ -357,30 +357,18 @@
       
 
       
-        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>使用root用户登录，运行以下命令：</p>
-<blockquote>
-<p>wget –no-check-certificate -O shadowsocks.sh <a href="https://cyh.abcdocker.com/vpn/shadowsocks.sh" target="_blank" rel="noopener">https://cyh.abcdocker.com/vpn/shadowsocks.sh</a><br>  chmod +x shadowsocks.sh<br>  ./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</p>
-</blockquote>
+        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>使用root用户登录，运行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate -O shadowsocks.sh https://cyh.abcdocker.com/vpn/shadowsocks.sh</span><br><span class="line">  chmod +x shadowsocks.sh</span><br><span class="line">  ./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</span><br></pre></td></tr></table></figure></p>
 <p>安装完成后，脚本提示如下：</p>
-<blockquote>
-<p>Congratulations, Shadowsocks-python server install completed!<br>Your Server IP        :your_server_ip<br>Your Server Port      :your_server_port<br>Your Password         :your_password<br>Your Encryption Method:your_encryption_method<br>Welcome to visit:<a href="https://teddysun.com/342.html" target="_blank" rel="noopener">https://teddysun.com/342.html</a><br>Enjoy it!</p>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> Congratulations, Shadowsocks-python server install completed!</span><br><span class="line">Your Server IP        :your_server_ip</span><br><span class="line">Your Server Port      :your_server_port</span><br><span class="line">Your Password         :your_password</span><br><span class="line">Your Encryption Method:your_encryption_method</span><br><span class="line">Welcome to visit:https://teddysun.com/342.html</span><br><span class="line">Enjoy it!</span><br></pre></td></tr></table></figure>
 <h1 id="卸载方法"><a href="#卸载方法" class="headerlink" title="卸载方法"></a>卸载方法</h1><p>使用root用户登录，运行以下命令：</p>
 <blockquote>
 <p>./shadowsocks.sh uninstall</p>
 </blockquote>
 <p>配置文件路径：/etc/shadowsocks.json</p>
-<blockquote>
-<p>{<br>    “server”:”0.0.0.0”,<br>    “server_port”:your_server_port,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “password”:”your_password”,<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p>
-</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;server&quot;:&quot;0.0.0.0&quot;,</span><br><span class="line">    &quot;server_port&quot;:your_server_port,</span><br><span class="line">    &quot;local_address&quot;:&quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;local_port&quot;:1080,</span><br><span class="line">    &quot;password&quot;:&quot;your_password&quot;,</span><br><span class="line">    &quot;timeout&quot;:300,</span><br><span class="line">    &quot;method&quot;:&quot;your_encryption_method&quot;,</span><br><span class="line">    &quot;fast_open&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="多用户多端口配置文件"><a href="#多用户多端口配置文件" class="headerlink" title="多用户多端口配置文件"></a>多用户多端口配置文件</h1><p>配置文件路径：/etc/shadowsocks.json</p>
-<blockquote>
-<p>{<br>    “server”:”0.0.0.0”,<br>    “local_address”:”127.0.0.1”,<br>    “local_port”:1080,<br>    “port_password”:{<br>         “8989”:”password0”,<br>         “9001”:”password1”,<br>         “9002”:”password2”,<br>         “9003”:”password3”,<br>         “9004”:”password4”<br>    },<br>    “timeout”:300,<br>    “method”:”your_encryption_method”,<br>    “fast_open”: false<br>}</p>
-</blockquote>
-<blockquote>
-<p>启动：/etc/init.d/shadowsocks start<br>停止：/etc/init.d/shadowsocks stop<br>重启：/etc/init.d/shadowsocks restart<br>状态：/etc/init.d/shadowsocks status</p>
-</blockquote>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> &#123;</span><br><span class="line">    &quot;server&quot;:&quot;0.0.0.0&quot;,</span><br><span class="line">    &quot;local_address&quot;:&quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;local_port&quot;:1080,</span><br><span class="line">    &quot;port_password&quot;:&#123;</span><br><span class="line">         &quot;8989&quot;:&quot;password0&quot;,</span><br><span class="line">         &quot;9001&quot;:&quot;password1&quot;,</span><br><span class="line">         &quot;9002&quot;:&quot;password2&quot;,</span><br><span class="line">         &quot;9003&quot;:&quot;password3&quot;,</span><br><span class="line">         &quot;9004&quot;:&quot;password4&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;timeout&quot;:300,</span><br><span class="line">    &quot;method&quot;:&quot;your_encryption_method&quot;,</span><br><span class="line">    &quot;fast_open&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">启动：/etc/init.d/shadowsocks start</span><br><span class="line">停止：/etc/init.d/shadowsocks stop</span><br><span class="line">重启：/etc/init.d/shadowsocks restart</span><br><span class="line">状态：/etc/init.d/shadowsocks status</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -413,6 +401,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/20/gitlab/gitlab-ci(一)/" rel="prev" title="gitlab-ci自动部署（一）">
+                gitlab-ci自动部署（一） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -491,7 +483,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -502,7 +494,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
