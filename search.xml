@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[k8s基本命令]]></title>
+    <url>%2F2018%2F05%2F10%2Fk8s%2Fk8s%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ kubectl rollout history deployment/DEPLOYMENT_NAME 跳转到特定修订版1$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N service查看服务1$ kubectl get services 将POD作为服务公开（创建端点）1$ kubectl expose deployment/aa --port=2000 --type=NodePort login$ kubectl exec -ti $1 bash -n product log$ kubectl logs -f $1 -n product]]></content>
+      <categories>
+        <category>k8s</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[gitlab-ci自动部署（二）]]></title>
     <url>%2F2017%2F05%2F21%2Fgitlab%2Fgitlab-ci(%E4%BA%8C)%2F</url>
     <content type="text"><![CDATA[下面来说说CI/CD是怎么实现的： 登录gitlab-runner机器切换runner普通用户 [root@localhost ~]# su - gitlab-runner 编写.gitlab-ci.yml文件随便创建一个目录，叫什么无所谓 [gitlab-runner@localhost ~]$ mkdir git 将gitlab上想要发布的项目克隆到这个目录里 [gitlab-runner@localhost git]$ git clone git@gitlab.xxx.com:xxx/xxx.git 因为我们的项目是大工程，里面带着很多子工程，所以就需要通过yml文件，将项目分离出去 比方说我们想发布bb项目，但是bb项目属于aa这个大项目的子项目，所以就进aa大工程目录下 在项目目录里面创建一个.gitlab-ci.yml文件，如下 [gitlab-runner@localhost ~]$ cat .gitlab-ci.yml12345678job 1: stage: test script: - git subtree push -q --prefix=bb git@gitlab.xx.com:bb1/bb.git dev only: - dev tags: - shell 这样就可以将bb项目分离出去，相当于创建了一个新的项目 进入bb目录，也编写.gitlab-ci.yml文件，这个就是我们需要编译的脚本，中间可以穿插maven、node和shell的一系列命令 [gitlab-runner@localhost bb]$ cat .gitlab-ci.yml12345678910job 1: stage: build script: - rm -rf /opt/M2_REPO/com/bb/* - mvn clean package -P test -Dmaven.test.skip - bash -x /opt/bb/shell/bb.sh only: - dev tags: - shell 编写完yml文件后都需要提交下 git add . git commit -m “add gitlab-ci.yml” git push origin dev 另外包括传包，启动等命令都可以在yml文件里面体现，这样只要dev分支有commit的改变了，gitlab-ci就会自动创建job来自动发布]]></content>
@@ -30,14 +38,6 @@
     <content type="text"><![CDATA[安装pptpd$ yum install pptpd 配置本地及远程IP地址$ vi /etc/pptpd.conf localip 192.168.100.1 remoteip 192.168.100.2-245 配置DNS$ vi /etc/ppp/options.pptpd ms-dns 223.5.5.5 ms-dns 223.6.6.6 修改MTU$ vi / etc / ppp / ip-up /sbin/ifconfig $ 1 mtu 1500 用户和密码配置$ vi /etc/ppp/chap-secrets client server secret IP address 注释掉 testin_user1 pptpd testin_user1 * 配置防火墙$ vi /etc/sysctl.conf net.ipv4.ip_forward = 1＃开启IP转发 $ iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth1 -j MASQUERADE＃允许外网连接 开启服务$ service pptpd start $ service iptables start]]></content>
       <categories>
         <category>vpn</category>
-      </categories>
-  </entry>
-  <entry>
-    <title><![CDATA[k8s基本命令]]></title>
-    <url>%2F2017%2F04%2F20%2Fk8s%2Fk8s%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%2F</url>
-    <content type="text"><![CDATA[pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ kubectl rollout history deployment/DEPLOYMENT_NAME 跳转到特定修订版1$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N service查看服务1$ kubectl get services 将POD作为服务公开（创建端点）1$ kubectl expose deployment/aa --port=2000 --type=NodePort login$ kubectl exec -ti $1 bash -n product log$ kubectl logs -f $1 -n product]]></content>
-      <categories>
-        <category>k8s</category>
       </categories>
   </entry>
   <entry>
