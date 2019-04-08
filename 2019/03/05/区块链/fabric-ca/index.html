@@ -89,7 +89,7 @@
 <meta property="og:description" content="部署一个fabric-ca架构图 创建一个由两个组织org1.example.com和org2.example.com组成的的联盟1234567891011121314151617181920还有一个组织example.com用来部署orderer。组织example.com部署了一个solo模式的orderer。（多个orderer的部署方式，以后探讨）orderer.example.com组织">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://shenshengkun.github.io/images/fabric-ca.jpg">
-<meta property="og:updated_time" content="2019-03-05T03:40:06.318Z">
+<meta property="og:updated_time" content="2019-04-08T07:13:00.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fabric-ca部署">
 <meta name="twitter:description" content="部署一个fabric-ca架构图 创建一个由两个组织org1.example.com和org2.example.com组成的的联盟1234567891011121314151617181920还有一个组织example.com用来部署orderer。组织example.com部署了一个solo模式的orderer。（多个orderer的部署方式，以后探讨）orderer.example.com组织">
@@ -447,6 +447,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fabric-ca-client register -H `pwd`/fabric-ca-files/org2.example.com/admin --id.secret=password</span><br><span class="line">mkdir ./fabric-ca-files/org2.example.com/peer0</span><br><span class="line">fabric-ca-client enroll -u http://peer0.org2.example.com:password@localhost:7054 -H `pwd`/fabric-ca-files/org2.example.com/peer0</span><br></pre></td></tr></table></figure>
 <p>将<a href="mailto:`Admin@org2.example.com" target="_blank" rel="noopener">`Admin@org2.example.com</a>`的证书复制到fabric-ca-files/org2.example.com/peer0/msp/admincerts：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir fabric-ca-files/org2.example.com/peer0/msp/admincerts</span><br><span class="line">cp fabric-ca-files/org2.example.com/admin/msp/signcerts/cert.pem fabric-ca-files/org2.example.com/peer0/msp/admincerts/</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>之前发现直接这么生成的证书，会少东西，需要在每个组织的msp目录下面配置下config.yaml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost msp]# pwd</span><br><span class="line">/data/fabric/fabric-ca-files/gzyb.vaccine.com/msp</span><br><span class="line">[root@localhost msp]# cat config.yaml </span><br><span class="line">NodeOUs:</span><br><span class="line">  Enable: true</span><br><span class="line">  ClientOUIdentifier:</span><br><span class="line">    Certificate: cacerts/localhost-7054.pem</span><br><span class="line">    OrganizationalUnitIdentifier: client</span><br><span class="line">  PeerOUIdentifier:</span><br><span class="line">    Certificate: cacerts/localhost-7054.pem</span><br><span class="line">    OrganizationalUnitIdentifier: peer</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
