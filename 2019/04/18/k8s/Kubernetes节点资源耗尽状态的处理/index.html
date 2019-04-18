@@ -81,13 +81,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/archives/2019/03/index.html">
+<meta name="description" content="最近发现测试环境的k8s集群，总有node利用不上，pod漂移过去之后，启动不了，故仔细排查了一下缘由！ 问题现象12345678[root@master35 scripts]# ./list_pod.sh | grep imisimis-866d46c464-nvz4b                       0/1       ContainerCreating   0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes节点资源耗尽状态的处理">
+<meta property="og:url" content="https://shenshengkun.github.io/2019/04/18/k8s/Kubernetes节点资源耗尽状态的处理/index.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="最近发现测试环境的k8s集群，总有node利用不上，pod漂移过去之后，启动不了，故仔细排查了一下缘由！ 问题现象12345678[root@master35 scripts]# ./list_pod.sh | grep imisimis-866d46c464-nvz4b                       0/1       ContainerCreating   0">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-18T06:34:07.265Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="Kubernetes节点资源耗尽状态的处理">
+<meta name="twitter:description" content="最近发现测试环境的k8s集群，总有node利用不上，pod漂移过去之后，启动不了，故仔细排查了一下缘由！ 问题现象12345678[root@master35 scripts]# ./list_pod.sh | grep imisimis-866d46c464-nvz4b                       0/1       ContainerCreating   0">
 
 
 
@@ -117,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/archives/2019/03/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2019/04/18/k8s/Kubernetes节点资源耗尽状态的处理/">
 
 
 
 
 
-  <title>归档 | 舒宇的博客</title>
+  <title>Kubernetes节点资源耗尽状态的处理 | 舒宇的博客</title>
   
 
 
@@ -142,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -250,142 +254,179 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2019/04/18/k8s/Kubernetes节点资源耗尽状态的处理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Kubernetes节点资源耗尽状态的处理</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-18T14:20:01+08:00">
+                2019-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 16 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/19/python/tornado-电话报警/" itemprop="url">
-              
-                <span itemprop="name">tornado-电话报警</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-19T13:37:01+08:00" content="2019-03-19">
-          03-19
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/19/python/tornado-hello/" itemprop="url">
-              
-                <span itemprop="name">tornado-hello</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-19T10:23:01+08:00" content="2019-03-19">
-          03-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/05/区块链/fabric-ca/" itemprop="url">
-              
-                <span itemprop="name">fabric-ca部署</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-05T10:10:01+08:00" content="2019-03-05">
-          03-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>最近发现测试环境的k8s集群，总有node利用不上，pod漂移过去之后，启动不了，故仔细排查了一下缘由！</p>
+<h1 id="问题现象"><a href="#问题现象" class="headerlink" title="问题现象"></a>问题现象</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@master35 scripts]# ./list_pod.sh | grep imis</span><br><span class="line">imis-866d46c464-nvz4b                       0/1       ContainerCreating   0          3m        &lt;none&gt;          node149</span><br><span class="line"></span><br><span class="line">发现有的pod无法启动，刚开始describe查了下原因，看到，一直在拉镜像状态中，但是3分钟了，也不至于镜像拉不下来啊！</span><br><span class="line"></span><br><span class="line">查看了下node149的状态，发现</span><br><span class="line">Warning: “EvictionThresholdMet Attempting to reclaim nodefs”</span><br><span class="line">发现大概应该是由于磁盘原因造成的，也可以看下kubelet日志，也会报这个类似的错误</span><br></pre></td></tr></table></figure>
+<h1 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@node149 ~]# df -h</span><br><span class="line">Filesystem                Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root        36G  30G   6G  86% /</span><br><span class="line">devtmpfs                  7.8G     0  7.8G   0% /dev</span><br><span class="line">tmpfs                     7.8G     0  7.8G   0% /dev/shm</span><br><span class="line">tmpfs                     7.8G  9.3M  7.8G   1% /run</span><br><span class="line">tmpfs                     7.8G     0  7.8G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                1014M  186M  829M  19% /boot</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">由于这是测试环境，所以docker的目录，默认在/var/lib/docker，没有单独挂载别的目录，这样的话，也没加定时任务清理磁盘，/ 磁盘就会越来越满，现在看是用了86%</span><br></pre></td></tr></table></figure>
+<p>由于某些原因，我们的那个portal pod必须运行于该node上（通过<a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/" target="_blank" rel="noopener">nodeSelector</a>选定node的方式）。在无法扩充根分区size的情况下，为了临时恢复pod运行，我们只能进一步“压榨”node了。于是我们的思路是：通过调整node的eviction threshold值来让node恢复healthy。 </p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>每个node上的kubelet都负责定期采集资源占用数据，并与预设的 threshold值进行比对，如果超过 threshold值，kubelet就会尝试杀掉一些Pod以回收相关资源，对Node进行保护。kubelet关注的资源指标threshold大约有如下几种： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- memory.available</span><br><span class="line">- nodefs.available</span><br><span class="line">- nodefs.inodesFree</span><br><span class="line">- imagefs.available</span><br><span class="line">- imagefs.inodesFree</span><br></pre></td></tr></table></figure>
+<p>每种threshold又分为eviction-soft和eviction-hard两组值。soft和hard的区别在于前者在到达threshold值时会给pod一段时间优雅退出，而后者则崇尚“暴力”，直接杀掉pod，没有任何优雅退出的机会。这里还要提一下nodefs和imagefs的区别： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodefs: 指node自身的存储，存储daemon的运行日志等，一般指root分区/；</span><br><span class="line">imagefs: 指docker daemon用于存储image和容器可写层(writable layer)的磁盘；</span><br></pre></td></tr></table></figure>
+<h1 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h1><p>我们需要为kubelet重新设定nodefs.available的threshold值。怎么做呢？</p>
+<p><a href="https://kubernetes.io/docs/admin/kubelet/" target="_blank" rel="noopener">kubelet</a>是运行于每个kubernetes node上的daemon，它在system boot时由<a href="http://en.wikipedia.org/wiki/Systemd" target="_blank" rel="noopener">systemd</a>拉起:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@master35 ~# ps -ef|grep kubelet</span><br><span class="line">root      5718  5695  0 16:38 pts/3    00:00:00 grep --color=auto kubelet</span><br><span class="line">root     13640     1  4 10:25 ?        00:17:25 /usr/bin/kubelet --kubeconfig=/etc/kubernetes/kubelet.conf --require-kubeconfig=true --pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true --network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin --cluster-dns=10.96.0.10 --cluster-domain=cluster.local --authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt --cadvisor-port=0</span><br></pre></td></tr></table></figure>
+<p>查看一下kubelet service的状态： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master35 scripts]# systemctl status kubelet               </span><br><span class="line">● kubelet.service - kubelet: The Kubernetes Node Agent</span><br><span class="line">   Loaded: loaded (/etc/systemd/system/kubelet.service; enabled; vendor preset: disabled)</span><br><span class="line">  Drop-In: /etc/systemd/system/kubelet.service.d</span><br><span class="line">           └─10-kubeadm.conf</span><br><span class="line">   Active: active (running) since Thu 2018-07-19 21:04:35 CST; 8 months 29 days ago</span><br><span class="line">     Docs: http://kubernetes.io/docs/</span><br><span class="line"> Main PID: 1921 (kubelet)</span><br><span class="line">    Tasks: 19</span><br><span class="line">   Memory: 54.9M</span><br><span class="line">   CGroup: /system.slice/kubelet.service</span><br><span class="line">           └─1921 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --pod-manifest-path=...</span><br><span class="line"></span><br><span class="line">Apr 14 09:26:16 master35 kubelet[1921]: W0414 09:26:16.673359    1921 reflector.go:341] k8s.io/kubernetes/pkg/kubelet/config/apiserver.go:47: watch o...(56737582)</span><br><span class="line">Apr 15 06:36:48 master35 kubelet[1921]: W0415 06:36:48.938194    1921 reflector.go:341] k8s.io/kubernetes/pkg/kubelet/config/apiserver.go:47: watch o...(56940044)</span><br></pre></td></tr></table></figure>
+<p>我们定义一个新的Environment var，比如就叫：KUBELET_EVICTION_POLICY_ARGS 在/etc/systemd/system/kubelet.service.d/10-kubeadm.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Environment=&quot;KUBELET_EVICTION_POLICY_ARGS=--eviction-hard=nodefs.available&lt;5%&quot;</span><br><span class="line">ExecStart=</span><br><span class="line">ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_EXTRA_ARGS $KUBELET_EVICTION_POLICY_ARGS</span><br></pre></td></tr></table></figure>
+<p>这样控制，node的磁盘策略为&lt;5%的硬盘就可以用，不像之前默认的15%就用不了了！</p>
 
       
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/16/中间件/wordpress快速安装/" rel="next" title="wordpress快速安装">
+                <i class="fa fa-chevron-left"></i> wordpress快速安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -393,6 +434,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -413,8 +463,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -484,6 +543,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题现象"><span class="nav-number">1.</span> <span class="nav-text">问题现象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原因分析"><span class="nav-number">2.</span> <span class="nav-text">原因分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决步骤"><span class="nav-number">4.</span> <span class="nav-text">解决步骤</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -631,6 +706,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -659,6 +738,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
