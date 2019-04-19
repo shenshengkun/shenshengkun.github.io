@@ -81,6 +81,14 @@
       </categories>
   </entry>
   <entry>
+    <title><![CDATA[kubectl在shell中的自动补全]]></title>
+    <url>%2F2018%2F05%2F11%2Fk8s%2Fkubectl%E5%9C%A8shell%E4%B8%AD%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%2F</url>
+    <content type="text"><![CDATA[在zsh上设置1source &lt;(kubectl completion zsh) 可以导入到.zshrc中实现自动加载： 1kubectl completion zsh &gt;&gt; ~/.zshrc 键入-n以后，按tab，自动弹出可用的ns： 12➜ admin kubectl -ndefault demo-echo demo-webshell kong kube-public kube-system 在linux上设置1234yum install bash-completionsource /usr/share/bash-completion/bash_completionecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/etc/bash_completion.d/kubectl 在mas上设置-bash12345brew install bash-completion@2export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] &amp;&amp; . /usr/local/etc/profile.d/bash_completion.shecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl]]></content>
+      <categories>
+        <category>k8s</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[k8s基本命令]]></title>
     <url>%2F2018%2F05%2F10%2Fk8s%2Fk8s%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%2F</url>
     <content type="text"><![CDATA[pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ kubectl rollout history deployment/DEPLOYMENT_NAME 跳转到特定修订版1$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N service查看服务1$ kubectl get services 将POD作为服务公开（创建端点）1$ kubectl expose deployment/aa --port=2000 --type=NodePort login$ kubectl exec -ti $1 bash -n product log$ kubectl logs -f $1 -n product]]></content>

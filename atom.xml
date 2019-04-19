@@ -249,6 +249,29 @@
   </entry>
   
   <entry>
+    <title>kubectl在shell中的自动补全</title>
+    <link href="https://shenshengkun.github.io/2018/05/11/k8s/kubectl%E5%9C%A8shell%E4%B8%AD%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8/"/>
+    <id>https://shenshengkun.github.io/2018/05/11/k8s/kubectl在shell中的自动补全/</id>
+    <published>2018-05-11T05:10:01.000Z</published>
+    <updated>2019-04-19T01:37:38.531Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="在zsh上设置"><a href="#在zsh上设置" class="headerlink" title="在zsh上设置"></a>在zsh上设置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source &lt;(kubectl completion zsh)</span><br></pre></td></tr></table></figure><p>可以导入到.zshrc中实现自动加载：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl completion zsh &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure><p>键入-n以后，按tab，自动弹出可用的ns：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  admin kubectl -n</span><br><span class="line">default        demo-echo      demo-webshell  kong           kube-public    kube-system</span><br></pre></td></tr></table></figure><h1 id="在linux上设置"><a href="#在linux上设置" class="headerlink" title="在linux上设置"></a>在linux上设置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install bash-completion</span><br><span class="line">source /usr/share/bash-completion/bash_completion</span><br><span class="line">echo &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrc</span><br><span class="line">kubectl completion bash &gt;/etc/bash_completion.d/kubectl</span><br></pre></td></tr></table></figure><h1 id="在mas上设置-bash"><a href="#在mas上设置-bash" class="headerlink" title="在mas上设置-bash"></a>在mas上设置-bash</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">brew install bash-completion@2</span><br><span class="line">export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d</span><br><span class="line">[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] &amp;&amp; . /usr/local/etc/profile.d/bash_completion.sh</span><br><span class="line">echo &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrc</span><br><span class="line">kubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;在zsh上设置&quot;&gt;&lt;a href=&quot;#在zsh上设置&quot; class=&quot;headerlink&quot; title=&quot;在zsh上设置&quot;&gt;&lt;/a&gt;在zsh上设置&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=
+      
+    
+    </summary>
+    
+      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>k8s基本命令</title>
     <link href="https://shenshengkun.github.io/2018/05/10/k8s/k8s%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/"/>
     <id>https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/</id>
