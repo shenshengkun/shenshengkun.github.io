@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="description" content="在每台机器都配置下mongo配置文件123456789101112[root@mangodb1 conf]# cat mongod.conf dbpath= /data/mongodb/data/logpath=/data/mongodb/logs/mongod.loglogappend=truefork=truemaxConns=2000bind_ip=127.0.0.1,10.92.160.5">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s基本命令">
-<meta property="og:url" content="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/index.html">
+<meta property="og:title" content="mongo副本集配置及一些常用命令">
+<meta property="og:url" content="https://shenshengkun.github.io/2018/09/19/中间件/mongo副本集配置及一些常用命令/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta property="og:description" content="在每台机器都配置下mongo配置文件123456789101112[root@mangodb1 conf]# cat mongod.conf dbpath= /data/mongodb/data/logpath=/data/mongodb/logs/mongod.loglogappend=truefork=truemaxConns=2000bind_ip=127.0.0.1,10.92.160.5">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-28T07:12:16.277Z">
+<meta property="og:updated_time" content="2019-04-26T03:42:34.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k8s基本命令">
-<meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="twitter:title" content="mongo副本集配置及一些常用命令">
+<meta name="twitter:description" content="在每台机器都配置下mongo配置文件123456789101112[root@mangodb1 conf]# cat mongod.conf dbpath= /data/mongodb/data/logpath=/data/mongodb/logs/mongod.loglogappend=truefork=truemaxConns=2000bind_ip=127.0.0.1,10.92.160.5">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2018/09/19/中间件/mongo副本集配置及一些常用命令/">
 
 
 
 
 
-  <title>k8s基本命令 | 舒宇的博客</title>
+  <title>mongo副本集配置及一些常用命令 | 舒宇的博客</title>
   
 
 
@@ -268,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/09/19/中间件/mongo副本集配置及一些常用命令/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -285,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">k8s基本命令</h1>
+          <h1 class="post-title" itemprop="name headline">mongo副本集配置及一些常用命令</h1>
         
 
         <div class="post-meta">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-10T10:10:01+08:00">
-                2018-05-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-19T09:49:10+08:00">
+                2018-09-19
               </time>
             
 
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/k8s/" itemprop="url" rel="index">
-                    <span itemprop="name">k8s</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -357,13 +357,15 @@
       
 
       
-        <h1 id="pods"><a href="#pods" class="headerlink" title="pods"></a>pods</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pods -n pro</span><br><span class="line">$ kubectl get pods --all-namespaces -n pro</span><br><span class="line">$ kubectl get pod aa -o wide -n pro</span><br><span class="line">$ kubectl get pod aa -o yaml -n pro</span><br><span class="line">$ kubectl describe pod aa -n pro</span><br></pre></td></tr></table></figure>
-<h2 id="POD升级和历史"><a href="#POD升级和历史" class="headerlink" title="POD升级和历史"></a>POD升级和历史</h2><p>列出部署历史记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout history deployment/DEPLOYMENT_NAME</span><br></pre></td></tr></table></figure></p>
-<p>跳转到特定修订版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N</span><br></pre></td></tr></table></figure></p>
-<h1 id="service"><a href="#service" class="headerlink" title="service"></a>service</h1><p>查看服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get services</span><br></pre></td></tr></table></figure></p>
-<p>将POD作为服务公开（创建端点）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl expose deployment/aa --port=2000 --type=NodePort</span><br></pre></td></tr></table></figure></p>
-<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><p>$ kubectl exec -ti $1 bash -n product</p>
-<h1 id="log"><a href="#log" class="headerlink" title="log"></a>log</h1><p>$ kubectl logs -f $1 -n product </p>
+        <h1 id="在每台机器都配置下mongo配置文件"><a href="#在每台机器都配置下mongo配置文件" class="headerlink" title="在每台机器都配置下mongo配置文件"></a>在每台机器都配置下mongo配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@mangodb1 conf]# cat mongod.conf </span><br><span class="line">dbpath= /data/mongodb/data/</span><br><span class="line">logpath=/data/mongodb/logs/mongod.log</span><br><span class="line">logappend=true</span><br><span class="line">fork=true</span><br><span class="line">maxConns=2000</span><br><span class="line">bind_ip=127.0.0.1,10.92.160.5（IP或者主机名）</span><br><span class="line">directoryperdb=true</span><br><span class="line">#auth=true</span><br><span class="line">pidfilepath=/data/mongodb/logs/mongod.pid</span><br><span class="line">replSet = rep</span><br><span class="line">#keyFile = /data/mongodb/conf/mongokey</span><br></pre></td></tr></table></figure>
+<h1 id="配置mongo副本集"><a href="#配置mongo副本集" class="headerlink" title="配置mongo副本集"></a>配置mongo副本集</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config = &#123; _id:&quot;rep&quot;,members:[&#123;_id:0,host:&quot;10.92.160.5:27017&quot;&#125;,&#123;_id:1,host:&quot;10.92.160.6:27017&quot;&#125;,&#123;_id:2,host:&quot;10.92.160.7:27017&quot;&#125;]&#125;</span><br><span class="line"></span><br><span class="line">rs.initiate(config);</span><br><span class="line">rs.status(); （查看集群状态的）</span><br></pre></td></tr></table></figure>
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">show dbs 看库</span><br><span class="line">use 库</span><br><span class="line">db.setSlaveOk()</span><br><span class="line">show tables 看表</span><br></pre></td></tr></table></figure>
+<h2 id="创建admin用户"><a href="#创建admin用户" class="headerlink" title="创建admin用户"></a>创建admin用户</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.addUser(&quot;root&quot;,&quot;123456&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="导出表加个-c"><a href="#导出表加个-c" class="headerlink" title="导出表加个-c"></a>导出表加个-c</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/data/mongodb/bin/mongoexport -uroot -p123456 --authenticationDatabase  admin -d gag_shop -c organizationManagerAuthorities -o organizationManagerAuthorities.json</span><br></pre></td></tr></table></figure>
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/data/mongodb/bin/mongoimport -uroot -p123456 --authenticationDatabase  admin  -d open   /root/userInterfaceAuthority.json</span><br></pre></td></tr></table></figure>
+<h2 id="查表某个字段信息"><a href="#查表某个字段信息" class="headerlink" title="查表某个字段信息"></a>查表某个字段信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.表名字.findOne(&#123;&#125;)</span><br><span class="line">db.terminalMonitorInfo.findOne(&#123;&quot;_id&quot; : &quot;086273F59379&quot;&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="清除日志"><a href="#清除日志" class="headerlink" title="清除日志"></a>清除日志</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.runCommand( &#123; dropDatabase: 1 &#125; )   清楚日志，需谨慎，必须得进指定的库里面</span><br><span class="line">或者</span><br><span class="line">echo &quot;db.runCommand(&#123;dropDatabase:1&#125;)&quot; | /home/mongodb/bin/mongo -uprivate -pPrivate 127.0.0.1:27017/gag_log</span><br></pre></td></tr></table></figure>
+<h2 id="导出命令"><a href="#导出命令" class="headerlink" title="导出命令"></a>导出命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/data/server/mongodb/bin/mongoexport -uroot -pNTA3NAa579  --authenticationDatabase  admin -d gag_base -c sysAuthority -q &quot;&#123;&quot;_id&quot; : /new_pro/&#125;&quot; -o new_pro.txt  导出命令</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -388,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/10/虚拟化/rancher升级/" rel="next" title="rancher升级">
-                <i class="fa fa-chevron-left"></i> rancher升级
+              <a href="/2018/05/11/k8s/kubectl在shell中的自动补全/" rel="next" title="kubectl在shell中的自动补全">
+                <i class="fa fa-chevron-left"></i> kubectl在shell中的自动补全
               </a>
             
           </div>
@@ -398,8 +400,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/11/k8s/kubectl在shell中的自动补全/" rel="prev" title="kubectl在shell中的自动补全">
-                kubectl在shell中的自动补全 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/29/python/python删除mongo表/" rel="prev" title="python删除mongo表">
+                python删除mongo表 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -547,7 +549,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pods"><span class="nav-number">1.</span> <span class="nav-text">pods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#POD升级和历史"><span class="nav-number">1.1.</span> <span class="nav-text">POD升级和历史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#service"><span class="nav-number">2.</span> <span class="nav-text">service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#login"><span class="nav-number">3.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log"><span class="nav-number">4.</span> <span class="nav-text">log</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在每台机器都配置下mongo配置文件"><span class="nav-number">1.</span> <span class="nav-text">在每台机器都配置下mongo配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置mongo副本集"><span class="nav-number">2.</span> <span class="nav-text">配置mongo副本集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用命令"><span class="nav-number">3.</span> <span class="nav-text">常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命令"><span class="nav-number">3.1.</span> <span class="nav-text">基本命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建admin用户"><span class="nav-number">3.2.</span> <span class="nav-text">创建admin用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出表加个-c"><span class="nav-number">3.3.</span> <span class="nav-text">导出表加个-c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入"><span class="nav-number">3.4.</span> <span class="nav-text">导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查表某个字段信息"><span class="nav-number">3.5.</span> <span class="nav-text">查表某个字段信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清除日志"><span class="nav-number">3.6.</span> <span class="nav-text">清除日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导出命令"><span class="nav-number">3.7.</span> <span class="nav-text">导出命令</span></a></li></ol></li></ol></div>
             
 
           </div>

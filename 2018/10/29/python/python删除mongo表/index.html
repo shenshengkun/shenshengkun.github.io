@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s基本命令">
-<meta property="og:url" content="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/index.html">
+<meta property="og:title" content="python删除mongo表">
+<meta property="og:url" content="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta property="og:description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-28T07:12:16.277Z">
+<meta property="og:updated_time" content="2019-04-26T03:48:48.191Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k8s基本命令">
-<meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="twitter:title" content="python删除mongo表">
+<meta name="twitter:description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/">
 
 
 
 
 
-  <title>k8s基本命令 | 舒宇的博客</title>
+  <title>python删除mongo表 | 舒宇的博客</title>
   
 
 
@@ -268,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/05/10/k8s/k8s基本命令/">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -285,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">k8s基本命令</h1>
+          <h1 class="post-title" itemprop="name headline">python删除mongo表</h1>
         
 
         <div class="post-meta">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-10T10:10:01+08:00">
-                2018-05-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-29T07:23:01+08:00">
+                2018-10-29
               </time>
             
 
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/k8s/" itemprop="url" rel="index">
-                    <span itemprop="name">k8s</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -357,13 +357,22 @@
       
 
       
-        <h1 id="pods"><a href="#pods" class="headerlink" title="pods"></a>pods</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pods -n pro</span><br><span class="line">$ kubectl get pods --all-namespaces -n pro</span><br><span class="line">$ kubectl get pod aa -o wide -n pro</span><br><span class="line">$ kubectl get pod aa -o yaml -n pro</span><br><span class="line">$ kubectl describe pod aa -n pro</span><br></pre></td></tr></table></figure>
-<h2 id="POD升级和历史"><a href="#POD升级和历史" class="headerlink" title="POD升级和历史"></a>POD升级和历史</h2><p>列出部署历史记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout history deployment/DEPLOYMENT_NAME</span><br></pre></td></tr></table></figure></p>
-<p>跳转到特定修订版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N</span><br></pre></td></tr></table></figure></p>
-<h1 id="service"><a href="#service" class="headerlink" title="service"></a>service</h1><p>查看服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get services</span><br></pre></td></tr></table></figure></p>
-<p>将POD作为服务公开（创建端点）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl expose deployment/aa --port=2000 --type=NodePort</span><br></pre></td></tr></table></figure></p>
-<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><p>$ kubectl exec -ti $1 bash -n product</p>
-<h1 id="log"><a href="#log" class="headerlink" title="log"></a>log</h1><p>$ kubectl logs -f $1 -n product </p>
+        <h1 id="PyMongo"><a href="#PyMongo" class="headerlink" title="PyMongo"></a>PyMongo</h1><p>Python 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。 </p>
+<h2 id="pip-安装"><a href="#pip-安装" class="headerlink" title="pip 安装"></a>pip 安装</h2><p>pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。</p>
+<p>安装 pymongo:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install pymongo</span><br></pre></td></tr></table></figure>
+<p>也可以指定安装的版本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install pymongo==3.5.1</span><br></pre></td></tr></table></figure>
+<p>更新 pymongo 命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install --upgrade pymongo</span><br></pre></td></tr></table></figure>
+<h2 id="easy-install-安装"><a href="#easy-install-安装" class="headerlink" title="easy_install 安装"></a>easy_install 安装</h2><p>旧版的 Python 可以使用 easy_install 来安装，easy_install 也是 Python 包管理工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m easy_install pymongo</span><br></pre></td></tr></table></figure>
+<p>更新 pymongo 命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m easy_install -U pymongo</span><br></pre></td></tr></table></figure>
+<h1 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h1><p>创建数据库需要使用 MongoClient 对象，并且指定连接的 URL 地址和要创建的数据库名。</p>
+<p>如下实例中，我们创建的数据库 aa :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python3</span><br><span class="line"> </span><br><span class="line">import pymongo</span><br><span class="line"> </span><br><span class="line">myclient = pymongo.MongoClient(&quot;mongodb://localhost:27017/&quot;)</span><br><span class="line">mydb = myclient[&quot;aa&quot;]</span><br></pre></td></tr></table></figure>
+<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">#-*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">from pymongo import MongoClient</span><br><span class="line">from datetime import datetime</span><br><span class="line"></span><br><span class="line">def delete(year,month,day):</span><br><span class="line">  try:</span><br><span class="line">    client = MongoClient(&apos;mongodb://192.168.50.223:27017,192.168.50.224:27017,192.168.50.225:27017&apos;)</span><br><span class="line">    db_auth = client.admin</span><br><span class="line">    db_auth.authenticate(&quot;root&quot;, &quot;passwd&quot;)</span><br><span class="line">    db = client.gag_bill</span><br><span class="line">    old_count = db.billInfo.count()</span><br><span class="line">    print (&quot;old_count = %d&quot; % (old_count))</span><br><span class="line">    db.billInfo.remove(&#123;&quot;cTimeStamp&quot;:&#123;&quot;$lte&quot;:datetime(year,month,day,0,0,0,000)&#125;&#125;)</span><br><span class="line">    new_count = db.billInfo.count()</span><br><span class="line">    client.close()</span><br><span class="line">    print (&quot;del_data = %d&quot; %(old_count-new_count))</span><br><span class="line">    print (&quot;new_count = %d&quot; % (new_count))</span><br><span class="line">  except Exception as e:</span><br><span class="line">    print (e)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">  starttime = datetime.now()</span><br><span class="line">  print (&quot;start_time = %s&quot; % (starttime))</span><br><span class="line">  year = starttime.year</span><br><span class="line">  month = starttime.month</span><br><span class="line">  day = starttime.day-4</span><br><span class="line">  delete(year,month,day)</span><br><span class="line">  endtime = datetime.now()</span><br><span class="line">  print (&quot;end_time = %s&quot; % (endtime))</span><br><span class="line">  runtime = (endtime - starttime).seconds</span><br><span class="line">  print (&quot;run_time = %d seconds&quot; % (runtime))</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -388,8 +397,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/10/虚拟化/rancher升级/" rel="next" title="rancher升级">
-                <i class="fa fa-chevron-left"></i> rancher升级
+              <a href="/2018/09/19/中间件/mongo副本集配置及一些常用命令/" rel="next" title="mongo副本集配置及一些常用命令">
+                <i class="fa fa-chevron-left"></i> mongo副本集配置及一些常用命令
               </a>
             
           </div>
@@ -398,8 +407,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/11/k8s/kubectl在shell中的自动补全/" rel="prev" title="kubectl在shell中的自动补全">
-                kubectl在shell中的自动补全 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/21/版本管理工具/jira-安装及破解/" rel="prev" title="jira-安装及破解">
+                jira-安装及破解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -547,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pods"><span class="nav-number">1.</span> <span class="nav-text">pods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#POD升级和历史"><span class="nav-number">1.1.</span> <span class="nav-text">POD升级和历史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#service"><span class="nav-number">2.</span> <span class="nav-text">service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#login"><span class="nav-number">3.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log"><span class="nav-number">4.</span> <span class="nav-text">log</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PyMongo"><span class="nav-number">1.</span> <span class="nav-text">PyMongo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pip-安装"><span class="nav-number">1.1.</span> <span class="nav-text">pip 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-install-安装"><span class="nav-number">1.2.</span> <span class="nav-text">easy_install 安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建数据库"><span class="nav-number">2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除表"><span class="nav-number">3.</span> <span class="nav-text">删除表</span></a></li></ol></div>
             
 
           </div>
