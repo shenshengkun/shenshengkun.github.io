@@ -81,13 +81,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/categories/python/page/2/index.html">
+<meta name="description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python监控es状态">
+<meta property="og:url" content="https://shenshengkun.github.io/2019/04/28/python/python监控es状态/index.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-28T03:18:46.634Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="python监控es状态">
+<meta name="twitter:description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
 
 
 
@@ -117,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/categories/python/page/2/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2019/04/28/python/python监控es状态/">
 
 
 
 
 
-  <title>分类: python | 舒宇的博客</title>
+  <title>python监控es状态 | 舒宇的博客</title>
   
 
 
@@ -142,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -258,135 +262,165 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>python<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2019/04/28/python/python监控es状态/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/02/15/python/python模块-re/" itemprop="url">
-              
-                <span itemprop="name">python模块-re</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">python监控es状态</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:26:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-28T11:04:01+08:00">
+                2019-04-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/15/python/python模块-random/" itemprop="url">
-              
-                <span itemprop="name">python模块-random</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/15/python/python模块-os/" itemprop="url">
-              
-                <span itemprop="name">python模块-os、sys</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/15/python/python模块-logging/" itemprop="url">
-              
-                <span itemprop="name">python模块-logging</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:23:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>用python写一个监控es状态的脚本</p>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><h2 id="监控es的机器"><a href="#监控es的机器" class="headerlink" title="监控es的机器"></a>监控es的机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">配置文件</span><br><span class="line"></span><br><span class="line">[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini</span><br><span class="line">[mail]</span><br><span class="line">name = sy@xxx.com</span><br><span class="line">[tax_es]</span><br><span class="line">cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.9:9200</span><br><span class="line">name_pass = none,none</span><br><span class="line">[analysis_es]</span><br><span class="line">cluster_ip = 192.168.50.24:9200,192.168.50.25:9200</span><br><span class="line">name_pass = none,none</span><br></pre></td></tr></table></figure>
+<h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@Ops-script monitor_elasticsearch]# cat monitor_elastic_cluster.py</span><br><span class="line"></span><br><span class="line">import urllib,socket,time,json</span><br><span class="line">import logging,requests,configparser,os</span><br><span class="line"></span><br><span class="line"># 定义日志格式读取配置文件</span><br><span class="line">cur_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">logging.basicConfig(format=&apos;[ %(asctime)s ] -- %(message)s&apos;,</span><br><span class="line">                    datefmt=&apos;%a, %d %b %Y %H:%M:%S&apos;,</span><br><span class="line">                    filename=cur_path+&quot;/scripts.log&quot;,</span><br><span class="line">                    level=logging.INFO)</span><br><span class="line">config_path = os.path.join(cur_path,&quot;escluster_ip.ini&quot;)</span><br><span class="line">conf = configparser.ConfigParser()</span><br><span class="line">conf.read(config_path)</span><br><span class="line">esgroup = conf.sections()</span><br><span class="line"></span><br><span class="line">def GetClusterIp():</span><br><span class="line">    # 按集群名循环检查,集群名为配置文件中的标题</span><br><span class="line">    for group in esgroup:</span><br><span class="line">        # 获取到 mail 中的邮件地址不再继续循环</span><br><span class="line">        if group == &quot;mail&quot;:</span><br><span class="line">            mailname = conf.get(group,&quot;name&quot;)</span><br><span class="line">            continue</span><br><span class="line">        # 获取到一个集群 ip 后进行 get 请求</span><br><span class="line">        iplist = conf.get(group,&quot;cluster_ip&quot;).split(&quot;,&quot;)</span><br><span class="line">        for esip in iplist:</span><br><span class="line">            url = &quot;http://%s/_cat/health&quot;%esip</span><br><span class="line">            try:</span><br><span class="line">                # 超时时间为 3 秒, request 的请求值不是200的将全部置为400</span><br><span class="line">                # 如果是请求成功,则获取 status 的状态和 status_num 的百分比</span><br><span class="line">                response = requests.get(url,timeout=3)</span><br><span class="line">                request = response.status_code</span><br><span class="line">                status = response.text.split()[3]</span><br><span class="line">                status_num = response.text.split()[-1]</span><br><span class="line">            except:</span><br><span class="line">                request = 400</span><br><span class="line">            # 请求值为 200 后,检查 status 值非 green 状态发送报警邮件,并不在继续检查本集群内的剩余节点</span><br><span class="line">            if request == 200:</span><br><span class="line">                if status != &quot;green&quot;:</span><br><span class="line">                    mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s ,查状态: %s, 状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip为: [ %s ]\n\n检查状态为: %s\n\n状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                    logging.info(mailtitle)</span><br><span class="line">                    os.system(command)</span><br><span class="line">                    break</span><br><span class="line">            # 请求值不是 200 ,报警后继续检查集群内剩余 ip</span><br><span class="line">            else:</span><br><span class="line">                mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s, 请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip: [ %s ]\n\n请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                logging.info(mailtitle)</span><br><span class="line">                os.system(command)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    GetClusterIp()</span><br></pre></td></tr></table></figure>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/19/linux/钉钉定时发送值班人员/" rel="next" title="钉钉定时发送值班人员">
+                <i class="fa fa-chevron-left"></i> 钉钉定时发送值班人员
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/python/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/categories/python/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -394,6 +428,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -414,8 +457,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -485,6 +537,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#监控es的机器"><span class="nav-number">2.1.</span> <span class="nav-text">监控es的机器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本"><span class="nav-number">2.2.</span> <span class="nav-text">脚本</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -632,6 +700,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -660,6 +732,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
