@@ -81,13 +81,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/archives/2017/05/index.html">
+<meta name="description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python模块-序列化">
+<meta property="og:url" content="https://shenshengkun.github.io/2018/02/17/python/python模块-序列化/index.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://shenshengkun.github.io/images/python序列化1.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/python序列化2.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/python序列化3.png">
+<meta property="og:updated_time" content="2019-04-28T06:13:45.358Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="python模块-序列化">
+<meta name="twitter:description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/python序列化1.png">
 
 
 
@@ -117,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/archives/2017/05/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2018/02/17/python/python模块-序列化/">
 
 
 
 
 
-  <title>归档 | 舒宇的博客</title>
+  <title>python模块-序列化 | 舒宇的博客</title>
   
 
 
@@ -142,7 +150,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -258,106 +266,187 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        OK! 目前共计 35 篇日志。 继续努力。
-      </span>
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/02/17/python/python模块-序列化/">
 
-      
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">python模块-序列化</h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-17T16:33:01+08:00">
+                2018-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/21/gitlab/gitlab-ci(二)/" itemprop="url">
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">gitlab-ci自动部署（二）</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-05-21T09:10:30+08:00" content="2017-05-21">
-          05-21
-        </time>
-      </div>
+                
+                
+              
+            </span>
+          
 
-    </header>
-  </article>
+          
+            
+          
 
+          
+          
 
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/20/gitlab/gitlab-ci(一)/" itemprop="url">
-              
-                <span itemprop="name">gitlab-ci自动部署（一）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-05-20T09:05:08+08:00" content="2017-05-20">
-          05-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文记录一些python中序列化的模块</p>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><p>之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">x=&quot;[null,true,false,1]&quot;</span><br><span class="line">print(eval(x)) #报错，无法解析null类型，而json就可以</span><br><span class="line">print(json.loads(x))</span><br></pre></td></tr></table></figure>
+<h2 id="什么是序列化？"><a href="#什么是序列化？" class="headerlink" title="什么是序列化？"></a>什么是序列化？</h2><p>我们把对象(变量)从内存中变成可存储或传输的过程称之为序列化，在Python中叫pickling，在其他语言中也被称之为serialization，marshalling，flattening等等，都是一个意思。</p>
+<h2 id="为什么要序列化？"><a href="#为什么要序列化？" class="headerlink" title="为什么要序列化？"></a>为什么要序列化？</h2><h3 id="持久保存状态"><a href="#持久保存状态" class="headerlink" title="持久保存状态"></a>持久保存状态</h3><p>需知一个软件/程序的执行就在处理一系列状态的变化，在编程语言中，’状态’会以各种各样有结构的数据类型(也可简单的理解为变量)的形式被保存在内存中。</p>
+<p>内存是无法永久保存数据的，当程序运行了一段时间，我们断电或者重启程序，内存中关于这个程序的之前一段时间的数据（有结构）都被清空了。</p>
+<p>在断电或重启程序之前将程序当前内存中所有的数据都保存下来（保存到文件中），以便于下次程序执行能够从文件中载入之前的数据，然后继续执行，这就是序列化。</p>
+<p>具体的来说，你玩使命召唤闯到了第13关，你保存游戏状态，关机走人，下次再玩，还能从上次的位置开始继续闯关。或如，虚拟机状态的挂起等。</p>
+<h3 id="跨平台数据交互"><a href="#跨平台数据交互" class="headerlink" title="跨平台数据交互"></a>跨平台数据交互</h3><p>序列化之后，不仅可以把序列化后的内容写入磁盘，还可以通过网络传输到别的机器上，如果收发的双方约定好实用一种序列化的格式，那么便打破了平台/语言差异化带来的限制，实现了跨平台数据交互。</p>
+<p>反过来，把变量内容从序列化的对象重新读到内存里称之为反序列化，即unpickling。</p>
+<p>如何序列化之json和pickle：</p>
+<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>如果我们要在不同的编程语言之间传递对象，就必须把对象序列化为标准格式，比如XML，但更好的方法是序列化为JSON，因为JSON表示出来就是一个字符串，可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
+<p>JSON表示的对象就是标准的JavaScript语言的对象，JSON和Python内置的数据类型对应如下：</p>
+<p><img src="https://shenshengkun.github.io/images/python序列化1.png" alt=""></p>
+<p><img src="https://shenshengkun.github.io/images/python序列化2.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line"> </span><br><span class="line">dic=&#123;&apos;name&apos;:&apos;alvin&apos;,&apos;age&apos;:23,&apos;sex&apos;:&apos;male&apos;&#125;</span><br><span class="line">print(type(dic))#&lt;class &apos;dict&apos;&gt;</span><br><span class="line"> </span><br><span class="line">j=json.dumps(dic)</span><br><span class="line">print(type(j))#&lt;class &apos;str&apos;&gt;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">f=open(&apos;序列化对象&apos;,&apos;w&apos;)</span><br><span class="line">f.write(j)  #-------------------等价于json.dump(dic,f)</span><br><span class="line">f.close()</span><br><span class="line">#-----------------------------反序列化&lt;br&gt;</span><br><span class="line">import json</span><br><span class="line">f=open(&apos;序列化对象&apos;)</span><br><span class="line">data=json.loads(f.read())#  等价于data=json.load(f)</span><br></pre></td></tr></table></figure>
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">#dct=&quot;&#123;&apos;1&apos;:111&#125;&quot;#json 不认单引号</span><br><span class="line">#dct=str(&#123;&quot;1&quot;:111&#125;)#报错,因为生成的数据还是单引号:&#123;&apos;one&apos;: 1&#125;</span><br><span class="line"></span><br><span class="line">dct=&apos;&#123;&quot;1&quot;:&quot;111&quot;&#125;&apos;</span><br><span class="line">print(json.loads(dct))</span><br><span class="line"></span><br><span class="line">#conclusion:</span><br><span class="line">#        无论数据是怎样创建的，只要满足json格式，就可以json.loads出来,不一定非要dumps的数据才能loads</span><br></pre></td></tr></table></figure>
+<h1 id="pickle"><a href="#pickle" class="headerlink" title="pickle"></a>pickle</h1><p><img src="https://shenshengkun.github.io/images/python序列化3.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import pickle</span><br><span class="line"> </span><br><span class="line">dic=&#123;&apos;name&apos;:&apos;alvin&apos;,&apos;age&apos;:23,&apos;sex&apos;:&apos;male&apos;&#125;</span><br><span class="line"> </span><br><span class="line">print(type(dic))#&lt;class &apos;dict&apos;&gt;</span><br><span class="line"> </span><br><span class="line">j=pickle.dumps(dic)</span><br><span class="line">print(type(j))#&lt;class &apos;bytes&apos;&gt;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">f=open(&apos;序列化对象_pickle&apos;,&apos;wb&apos;)#注意是w是写入str,wb是写入bytes,j是&apos;bytes&apos;</span><br><span class="line">f.write(j)  #-------------------等价于pickle.dump(dic,f)</span><br><span class="line"> </span><br><span class="line">f.close()</span><br><span class="line">#-------------------------反序列化</span><br><span class="line">import pickle</span><br><span class="line">f=open(&apos;序列化对象_pickle&apos;,&apos;rb&apos;)</span><br><span class="line"> </span><br><span class="line">data=pickle.loads(f.read())#  等价于data=pickle.load(f)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print(data[&apos;age&apos;])</span><br></pre></td></tr></table></figure>
+<p>Pickle的问题和所有其他编程语言特有的序列化问题一样，就是它只能用于Python，并且可能不同版本的Python彼此都不兼容，因此，只能用Pickle保存那些不重要的数据，不能成功地反序列化也没关系。</p>
+<h1 id="shelve"><a href="#shelve" class="headerlink" title="shelve"></a>shelve</h1><p>shelve模块比pickle模块简单，只有一个open函数，返回类似字典的对象，可读可写;key必须为字符串，而值可以是python所支持的数据类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import shelve</span><br><span class="line"></span><br><span class="line">f=shelve.open(r&apos;sheve.txt&apos;)</span><br><span class="line"># f[&apos;stu1_info&apos;]=&#123;&apos;name&apos;:&apos;egon&apos;,&apos;age&apos;:18,&apos;hobby&apos;:[&apos;piao&apos;,&apos;smoking&apos;,&apos;drinking&apos;]&#125;</span><br><span class="line"># f[&apos;stu2_info&apos;]=&#123;&apos;name&apos;:&apos;gangdan&apos;,&apos;age&apos;:53&#125;</span><br><span class="line"># f[&apos;school_info&apos;]=&#123;&apos;website&apos;:&apos;http://www.pypy.org&apos;,&apos;city&apos;:&apos;beijing&apos;&#125;</span><br><span class="line"></span><br><span class="line">print(f[&apos;stu1_info&apos;][&apos;hobby&apos;])</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/16/python/python模块-configparser/" rel="next" title="python模块-configparser">
+                <i class="fa fa-chevron-left"></i> python模块-configparser
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/10/虚拟化/rancher升级/" rel="prev" title="rancher升级">
+                rancher升级 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -365,6 +454,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -385,8 +483,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -456,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化"><span class="nav-number">2.</span> <span class="nav-text">序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化？"><span class="nav-number">2.1.</span> <span class="nav-text">什么是序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要序列化？"><span class="nav-number">2.2.</span> <span class="nav-text">为什么要序列化？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#持久保存状态"><span class="nav-number">2.2.1.</span> <span class="nav-text">持久保存状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨平台数据交互"><span class="nav-number">2.2.2.</span> <span class="nav-text">跨平台数据交互</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#json"><span class="nav-number">3.</span> <span class="nav-text">json</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">3.1.</span> <span class="nav-text">注意点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pickle"><span class="nav-number">4.</span> <span class="nav-text">pickle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shelve"><span class="nav-number">5.</span> <span class="nav-text">shelve</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -603,6 +726,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -631,6 +758,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
