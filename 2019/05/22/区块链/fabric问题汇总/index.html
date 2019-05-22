@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
+<meta name="description" content="安装部署fabric测试项目安装问题12npm install probuf的时候报的错fabric依赖的sdk需要依赖c++的编译库，windows也许windows-tools，linux也需要支持的gc++,gc fabric-ca-server 存储私钥么1从mysql中不存储私钥 启动order遇到问题123Failed to initialize local MSP: the supp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python删除mongo表">
-<meta property="og:url" content="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/index.html">
+<meta property="og:title" content="fabric问题汇总">
+<meta property="og:url" content="https://shenshengkun.github.io/2019/05/22/区块链/fabric问题汇总/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
+<meta property="og:description" content="安装部署fabric测试项目安装问题12npm install probuf的时候报的错fabric依赖的sdk需要依赖c++的编译库，windows也许windows-tools，linux也需要支持的gc++,gc fabric-ca-server 存储私钥么1从mysql中不存储私钥 启动order遇到问题123Failed to initialize local MSP: the supp">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-26T03:48:48.191Z">
+<meta property="og:updated_time" content="2019-05-22T05:48:45.617Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python删除mongo表">
-<meta name="twitter:description" content="PyMongoPython 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。  pip 安装pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。 安装 pymongo: 1$ python3 -m pip3 install pymongo 也可以指定安装的版本: 1$ python3 -m pip3">
+<meta name="twitter:title" content="fabric问题汇总">
+<meta name="twitter:description" content="安装部署fabric测试项目安装问题12npm install probuf的时候报的错fabric依赖的sdk需要依赖c++的编译库，windows也许windows-tools，linux也需要支持的gc++,gc fabric-ca-server 存储私钥么1从mysql中不存储私钥 启动order遇到问题123Failed to initialize local MSP: the supp">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/">
+  <link rel="canonical" href="https://shenshengkun.github.io/2019/05/22/区块链/fabric问题汇总/">
 
 
 
 
 
-  <title>python删除mongo表 | 舒宇的博客</title>
+  <title>fabric问题汇总 | 舒宇的博客</title>
   
 
 
@@ -276,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2018/10/29/python/python删除mongo表/">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/2019/05/22/区块链/fabric问题汇总/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -293,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python删除mongo表</h1>
+          <h1 class="post-title" itemprop="name headline">fabric问题汇总</h1>
         
 
         <div class="post-meta">
@@ -305,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-29T07:23:01+08:00">
-                2018-10-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-22T13:04:10+08:00">
+                2019-05-22
               </time>
             
 
@@ -328,8 +328,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/区块链/" itemprop="url" rel="index">
+                    <span itemprop="name">区块链</span>
                   </a>
                 </span>
 
@@ -365,22 +365,42 @@
       
 
       
-        <h1 id="PyMongo"><a href="#PyMongo" class="headerlink" title="PyMongo"></a>PyMongo</h1><p>Python 要连接 MongoDB 需要 MongoDB 驱动，这里我们使用 PyMongo 驱动来连接。 </p>
-<h2 id="pip-安装"><a href="#pip-安装" class="headerlink" title="pip 安装"></a>pip 安装</h2><p>pip 是一个通用的 Python 包管理工具，提供了对 Python 包的查找、下载、安装、卸载的功能。</p>
-<p>安装 pymongo:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install pymongo</span><br></pre></td></tr></table></figure>
-<p>也可以指定安装的版本:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install pymongo==3.5.1</span><br></pre></td></tr></table></figure>
-<p>更新 pymongo 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip3 install --upgrade pymongo</span><br></pre></td></tr></table></figure>
-<h2 id="easy-install-安装"><a href="#easy-install-安装" class="headerlink" title="easy_install 安装"></a>easy_install 安装</h2><p>旧版的 Python 可以使用 easy_install 来安装，easy_install 也是 Python 包管理工具。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m easy_install pymongo</span><br></pre></td></tr></table></figure>
-<p>更新 pymongo 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -m easy_install -U pymongo</span><br></pre></td></tr></table></figure>
-<h1 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h1><p>创建数据库需要使用 MongoClient 对象，并且指定连接的 URL 地址和要创建的数据库名。</p>
-<p>如下实例中，我们创建的数据库 aa :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python3</span><br><span class="line"> </span><br><span class="line">import pymongo</span><br><span class="line"> </span><br><span class="line">myclient = pymongo.MongoClient(&quot;mongodb://localhost:27017/&quot;)</span><br><span class="line">mydb = myclient[&quot;aa&quot;]</span><br></pre></td></tr></table></figure>
-<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">#-*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">from pymongo import MongoClient</span><br><span class="line">from datetime import datetime</span><br><span class="line"></span><br><span class="line">def delete(year,month,day):</span><br><span class="line">  try:</span><br><span class="line">    client = MongoClient(&apos;mongodb://192.168.50.223:27017,192.168.50.224:27017,192.168.50.225:27017&apos;)</span><br><span class="line">    db_auth = client.admin</span><br><span class="line">    db_auth.authenticate(&quot;root&quot;, &quot;passwd&quot;)</span><br><span class="line">    db = client.gag_bill</span><br><span class="line">    old_count = db.billInfo.count()</span><br><span class="line">    print (&quot;old_count = %d&quot; % (old_count))</span><br><span class="line">    db.billInfo.remove(&#123;&quot;cTimeStamp&quot;:&#123;&quot;$lte&quot;:datetime(year,month,day,0,0,0,000)&#125;&#125;)</span><br><span class="line">    new_count = db.billInfo.count()</span><br><span class="line">    client.close()</span><br><span class="line">    print (&quot;del_data = %d&quot; %(old_count-new_count))</span><br><span class="line">    print (&quot;new_count = %d&quot; % (new_count))</span><br><span class="line">  except Exception as e:</span><br><span class="line">    print (e)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">  starttime = datetime.now()</span><br><span class="line">  print (&quot;start_time = %s&quot; % (starttime))</span><br><span class="line">  year = starttime.year</span><br><span class="line">  month = starttime.month</span><br><span class="line">  day = starttime.day-4</span><br><span class="line">  delete(year,month,day)</span><br><span class="line">  endtime = datetime.now()</span><br><span class="line">  print (&quot;end_time = %s&quot; % (endtime))</span><br><span class="line">  runtime = (endtime - starttime).seconds</span><br><span class="line">  print (&quot;run_time = %d seconds&quot; % (runtime))</span><br></pre></td></tr></table></figure>
+        <h1 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h1><h2 id="fabric测试项目安装问题"><a href="#fabric测试项目安装问题" class="headerlink" title="fabric测试项目安装问题"></a>fabric测试项目安装问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install probuf的时候报的错</span><br><span class="line">fabric依赖的sdk需要依赖c++的编译库，windows也许windows-tools，linux也需要支持的gc++,gc</span><br></pre></td></tr></table></figure>
+<h2 id="fabric-ca-server-存储私钥么"><a href="#fabric-ca-server-存储私钥么" class="headerlink" title="fabric-ca-server 存储私钥么"></a>fabric-ca-server 存储私钥么</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从mysql中不存储私钥</span><br></pre></td></tr></table></figure>
+<h2 id="启动order遇到问题"><a href="#启动order遇到问题" class="headerlink" title="启动order遇到问题"></a>启动order遇到问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Failed to initialize local MSP: the supplied identity is not valid: x509: certificate signed by unknown authority</span><br><span class="line"></span><br><span class="line">原因：实体的证书不是组织的证书签发的</span><br></pre></td></tr></table></figure>
+<h2 id="docker-compose创建报错"><a href="#docker-compose创建报错" class="headerlink" title="docker-compose创建报错"></a>docker-compose创建报错</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[blocksProvider] DeliverBlocks -&gt; ERRO 039 [vaccinechannel] Got error &amp;&#123;FORBIDDEN&#125;</span><br><span class="line"></span><br><span class="line">解决办法： 需要在组织的msp中增加config.yaml</span><br></pre></td></tr></table></figure>
+<h1 id="应用过程中问题"><a href="#应用过程中问题" class="headerlink" title="应用过程中问题"></a>应用过程中问题</h1><h2 id="Peer或者Orderer不通"><a href="#Peer或者Orderer不通" class="headerlink" title="Peer或者Orderer不通"></a>Peer或者Orderer不通</h2><p>当不通的时候，先确认域名对应的IP是否正确，然后用telnet检查服务端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping peer0.org1.example.com</span><br><span class="line">telnet peer0.org1.example.com 7051</span><br></pre></td></tr></table></figure>
+<p>如果不通，检查一下/etc/hosts中是否设置了域名和IP的对应关系是否正确。</p>
+<p>如果还是不通，看一下系统有没有防火墙，7051端口有没有被防火墙禁止。</p>
+<h2 id="目标Peer上的Docker没有启动，导致合约实例化失败"><a href="#目标Peer上的Docker没有启动，导致合约实例化失败" class="headerlink" title="目标Peer上的Docker没有启动，导致合约实例化失败"></a>目标Peer上的Docker没有启动，导致合约实例化失败</h2><p>实例化合约时出错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./peer.sh chaincode instantiate -o orderer.example.com:7050 --tls true --cafile ./tlsca.example.com-cert.pem -C mychannel -n demo -v 0.0.1 -c &apos;&#123;&quot;Args&quot;:[&quot;init&quot;]&#125;&apos; -P &quot;OR(&apos;Org1MSP.member&apos;,&apos;Org2MSP.member&apos;)&quot;</span><br></pre></td></tr></table></figure>
+<p>错误如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Error endorsing chaincode: rpc error: code = Unknown desc = error starting container: Post http://unix.sock/containers/create?name=dev-peer1.org1.example.com-demo-0.0.1: dial unix /var/run/docker.sock: connect: no such file or directory</span><br></pre></td></tr></table></figure>
+<p>这是目标peer上的docker没有启动造成的。</p>
+<h2 id="genesisblock中admin证书错误导致orderer-panic-x509-ECDSA-verification-failure"><a href="#genesisblock中admin证书错误导致orderer-panic-x509-ECDSA-verification-failure" class="headerlink" title="genesisblock中admin证书错误导致orderer panic: x509: ECDSA verification failure"></a>genesisblock中admin证书错误导致orderer panic: x509: ECDSA verification failure</h2><p>orderer在启动的时候报错，直接panic：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-----END CERTIFICATE-----</span><br><span class="line">2018-06-22 14:27:30.462 UTC [orderer/commmon/multichannel] newLedgerResources -&gt; CRIT 04d Error creating channelconfig bundle: initializing channelconfig failed: could not create channel Consortiums sub-group config: setting up the MSP manager failed: the supplied identity is not valid: x509: certificate signed by unknown authority (possibly because of &quot;x509: ECDSA verification failure&quot; while trying to verify candidate authority certificate &quot;ca.org1.example.com&quot;)</span><br><span class="line">panic: Error creating channelconfig bundle: initializing channelconfig failed: could not create channel Consortiums sub-group config: setting up the MSP manager failed: the supplied identity is not valid: x509: certificate signed by unknown authority (possibly because of &quot;x509: ECDSA verification failure&quot; while trying to verify candidate authority certificate &quot;ca.org1.example.com&quot;)</span><br><span class="line"></span><br><span class="line">goroutine 1 [running]:</span><br><span class="line">github.com/hyperledger/fabric/vendor/github.com/op/go-logging.(*Logger).Panicf(0xc4201ee120, 0x108668e, 0x27, 0xc42026af50, 0x1, 0x1)</span><br><span class="line">	/w/workspace/fabric-binaries-x86_64/gopath/src/github.com/hyperledger/fabric/vendor/github.com/op/go-logging/logger.go:194 +0x134</span><br><span class="line">github.com/hyperledger/fabric/orderer/common/multichannel.(*Registrar).newLedgerResources(0xc42010a380, 0xc420138840, 0xc420138840)</span><br><span class="line">	/w/workspace/fabric-binaries-x86_64/gopath/src/github.com/hyperledger/fabric/orderer/common/multichannel/registrar.go:253 +0x391</span><br></pre></td></tr></table></figure>
+<p>怀疑是创世块的原因，用下面的命令将创始块解开：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./genesisblock</span><br></pre></td></tr></table></figure>
+<p>发现比较奇怪的地方，Org1的Admin证书有两个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;groups&quot;: &#123;</span><br><span class="line">  &quot;Org1MSP&quot;: &#123;</span><br><span class="line">  &quot;mod_policy&quot;: &quot;Admins&quot;,</span><br><span class="line">  ...</span><br><span class="line">  &quot;mod_policy&quot;: &quot;Admins&quot;,</span><br><span class="line">  &quot;value&quot;: &#123;</span><br><span class="line">  &quot;config&quot;: &#123;</span><br><span class="line">  &quot;admins&quot;: [</span><br><span class="line">  &quot;LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNHVENDQWIrZ0F3SUJBZ0lRVXRxQWxlZENzWkErWStWdlZMUTZQakFLQmdncWhrak9QUVFEQWpCek1Rc3cKQ1FZRFZRUUdFd0pWVXpFVE1CRUdBMVVFQ0JNS1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ4TU5VMkZ1SUVaeQpZVzVqYVhOamJ6RVpNQmNHQTFVRUNoTVFiM0puTVM1bGVHRnRjR3hsTG1OdmJURWNNQm9HQTFVRUF4TVRZMkV1CmIzSm5NUzVsZUdGdGNHeGxMbU52YlRBZUZ3MHhPREEyTWpFd05qVTNNekJhRncweU9EQTJNVGd3TmpVM016QmEKTUZzeEN6QUpCZ05WQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFIRXcxVApZVzRnUm5KaGJtTnBjMk52TVI4d0hRWURWUVFEREJaQlpHMXBia0J2Y21jeExtVjRZVzF3YkdVdVkyOXRNRmt3CkV3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFRVp3cUhTVmxxRGNKNC9aVSt0YnB5RVBSTkl5ellMdTMKRGlRVUZOMklBZm5vVGhjTjRmY3Y4c2dsdXUxcnpJYUVHSFRFLzd0TC9EdEg2U3Fjd2tOQkthTk5NRXN3RGdZRApWUjBQQVFIL0JBUURBZ2VBTUF3R0ExVWRFd0VCL3dRQ01BQXdLd1lEVlIwakJDUXdJb0FnbkpjYVVLVFlseVJxCjcyckk4QXNINHNVZHB0ZytWY3IvbHkxZlp3QndrOEF3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUloQUsvRXh6NlYKRVYwUFl4M1BQbitPMysvODQrdXFEVkZ2Q1ZRUEVNcU1yV3dkQWlBNVVqTDcyb2drTHB3UUtGZ1ptdTJqRmtPWApSVnhpY0htLzZCR3htelFRc1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==&quot;,</span><br><span class="line">  &quot;LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNGVENDQWJ5Z0F3SUJBZ0lRU3E0VzJ1SEVqbHdXZHdGY21WNUlpekFLQmdncWhrak9QUVFEQWpCek1Rc3cKQ1FZRFZRUUdFd0pWVXpFVE1CRUdBMVVFQ0JNS1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ4TU5VMkZ1SUVaeQpZVzVqYVhOamJ6RVpNQmNHQTFVRUNoTVFiM0puTVM1bGVHRnRjR3hsTG1OdmJURWNNQm9HQTFVRUF4TVRZMkV1CmIzSm5NUzVsZUdGdGNHeGxMbU52YlRBZUZ3MHhPREEyTWpFd056VXdNVEZhRncweU9EQTJNVGd3TnpVd01URmEKTUZneEN6QUpCZ05WQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFIRXcxVApZVzRnUm5KaGJtTnBjMk52TVJ3d0dnWURWUVFERXhOallTNXZjbWN4TG1WNFlXMXdiR1V1WTI5dE1Ga3dFd1lICktvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUVxNHl6K0tqSTR2ZmtObzQ0bWp0Q25HQ2cwLzA3L2Y5VW1sZlEKMlpSZWtHN2lyVm1QY0N6YnRVVEcvTFJjbndVemgyaFMvZkg5cGxvZEM4a1pwSlpXQzZOTk1Fc3dEZ1lEVlIwUApBUUgvQkFRREFnZUFNQXdHQTFVZEV3RUIvd1FDTUFBd0t3WURWUjBqQkNRd0lvQWdPc1NNQ2VqcnBOMnBhNEZSCnBOMVE2eXJkVHJleXNGY0Q1Ym9TcVNzSnFLNHdDZ1lJS29aSXpqMEVBd0lEUndBd1JBSWdCQWo1Q3l2cEFhU0kKaTh4anpVVHZxbUt5dmxSOFFPeExBUTAvVi9jRGpTNENJRVg3V1lnZzYwTFUwTy9LNEpmVVpiQmoyNHRBbTkxcgpkQmczN21IZHZVcSsKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=&quot;</span><br><span class="line">  ],</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<p>将上面的两大行字符串分别用base64解码得到证书，然后用openssl命令查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;LS0tLS1CRUdJTiBDRVJUSU....tLS0tCg==&quot; |base64 -D &gt;a.cert</span><br><span class="line">openssl x509 -in a.cert -text</span><br></pre></td></tr></table></figure>
+<p>第一个证书正确：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"> Subject: C=US, ST=California, L=San Francisco, CN=Admin@org1.example.com</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>查看第二行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;LS0tLS1CRUdJTi....tLS0tLQo=&quot; |base64 -D &gt;b.cert</span><br><span class="line">openssl x509 -in b.cert -text</span><br></pre></td></tr></table></figure>
+<p>发现第二个证书是CA证书，不是用户证书！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Subject: C=US, ST=California, L=San Francisco, CN=ca.org1.example.com</span><br></pre></td></tr></table></figure>
+<p>检查生成genesisblock时使用的configtx.yaml文件，发现configtx.yaml中配置的msp目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MSPDir: ./certs/peerOrganizations/org1.example.com/msp</span><br></pre></td></tr></table></figure>
+<p>msp的admincerts子目录中，多出了一个ca证书：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls ./certs/peerOrganizations/org1.example.com/msp/admincerts/</span><br><span class="line">Admin@org1.example.com-cert.pem ca.org1.example.com-cert.pem</span><br></pre></td></tr></table></figure>
+<p>把多出的ca证书删除。</p>
+<h2 id="残留数据导致orderer启动失败"><a href="#残留数据导致orderer启动失败" class="headerlink" title="残留数据导致orderer启动失败"></a>残留数据导致orderer启动失败</h2><p>启动orderer的时候报错，orderer直接panic：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2018-06-21 11:01:47.892 CST [orderer/commmon/multichannel] newLedgerResources -&gt; CRIT 052 Error creating channelconfig bundle: initializing channelconfig failed: could not create channel Orderer sub-group config: setting up the MSP manager failed: the supplied identity is not valid: x509: certificate signed by unknown authority (possibly because of &quot;x509: ECDSA verification failure&quot; while trying to verify candidate authority certificate &quot;ca.example.com&quot;)</span><br><span class="line">panic: Error creating channelconfig bundle: initializing channelconfig failed: could not create channel Orderer sub-group config: setting up the MSP manager failed: the supplied identity is not valid: x509: certificate signed by unknown authority (possibly because of &quot;x509: ECDSA verification failure&quot; while trying to verify candidate authority certificate &quot;ca.example.com&quot;)</span><br></pre></td></tr></table></figure>
+<p>排查发现，部署orderer的机器上以前部署过orderer，并且orderer.yaml中配置的数据路径<code>/opt/app/fabric/orderer/data</code>中残留了以前的数据。</p>
+<p>将/opt/app/fabric/orderer/data中的文件都删除后，问题解决。</p>
 
       
     </div>
@@ -405,8 +425,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/19/中间件/mongo副本集配置及一些常用命令/" rel="next" title="mongo副本集配置及一些常用命令">
-                <i class="fa fa-chevron-left"></i> mongo副本集配置及一些常用命令
+              <a href="/2019/05/22/k8s/prometheus添加验证登录/" rel="next" title="Prometheus添加验证登录">
+                <i class="fa fa-chevron-left"></i> Prometheus添加验证登录
               </a>
             
           </div>
@@ -414,10 +434,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/21/版本管理工具/jira-安装及破解/" rel="prev" title="jira-安装及破解">
-                jira-安装及破解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -564,7 +580,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PyMongo"><span class="nav-number">1.</span> <span class="nav-text">PyMongo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pip-安装"><span class="nav-number">1.1.</span> <span class="nav-text">pip 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-install-安装"><span class="nav-number">1.2.</span> <span class="nav-text">easy_install 安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建数据库"><span class="nav-number">2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除表"><span class="nav-number">3.</span> <span class="nav-text">删除表</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装部署"><span class="nav-number">1.</span> <span class="nav-text">安装部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fabric测试项目安装问题"><span class="nav-number">1.1.</span> <span class="nav-text">fabric测试项目安装问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fabric-ca-server-存储私钥么"><span class="nav-number">1.2.</span> <span class="nav-text">fabric-ca-server 存储私钥么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动order遇到问题"><span class="nav-number">1.3.</span> <span class="nav-text">启动order遇到问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-compose创建报错"><span class="nav-number">1.4.</span> <span class="nav-text">docker-compose创建报错</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用过程中问题"><span class="nav-number">2.</span> <span class="nav-text">应用过程中问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Peer或者Orderer不通"><span class="nav-number">2.1.</span> <span class="nav-text">Peer或者Orderer不通</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标Peer上的Docker没有启动，导致合约实例化失败"><span class="nav-number">2.2.</span> <span class="nav-text">目标Peer上的Docker没有启动，导致合约实例化失败</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#genesisblock中admin证书错误导致orderer-panic-x509-ECDSA-verification-failure"><span class="nav-number">2.3.</span> <span class="nav-text">genesisblock中admin证书错误导致orderer panic: x509: ECDSA verification failure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#残留数据导致orderer启动失败"><span class="nav-number">2.4.</span> <span class="nav-text">残留数据导致orderer启动失败</span></a></li></ol></li></ol></div>
             
 
           </div>
