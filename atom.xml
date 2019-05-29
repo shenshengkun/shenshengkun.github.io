@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2019-05-27T09:50:59.820Z</updated>
+  <updated>2019-05-29T01:16:54.984Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>tomcat报SEVERE Error listenerStart</title>
+    <link href="https://shenshengkun.github.io/2019/05/28/%E4%B8%AD%E9%97%B4%E4%BB%B6/tomcat%E5%90%AF%E5%8A%A8%E6%8A%A5%E9%94%99/"/>
+    <id>https://shenshengkun.github.io/2019/05/28/中间件/tomcat启动报错/</id>
+    <published>2019-05-28T09:49:10.000Z</published>
+    <updated>2019-05-29T01:16:54.984Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>启动tomcat时报错，错误信息如下： </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.catalina.core.StandardContext startInternal</span><br><span class="line">SEVERE: Error listenerStart</span><br><span class="line">org.apache.catalina.core.StandardContext startInternal</span><br><span class="line">SEVERE: Context [/projectname] startup failed due to previous errors</span><br></pre></td></tr></table></figure><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>在<code>WEB-INF/classes</code>目录下新建一个文件叫<code>logging.properties</code>，内容如下 </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">handlers = org.apache.juli.FileHandler, java.util.logging.ConsoleHandler  </span><br><span class="line">org.apache.juli.FileHandler.level = FINE  </span><br><span class="line">org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs  </span><br><span class="line">org.apache.juli.FileHandler.prefix = error-debug.   </span><br><span class="line">java.util.logging.ConsoleHandler.level = FINE  </span><br><span class="line">java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter</span><br></pre></td></tr></table></figure><p>之后，重启tomcat查看日志，就可以看到是由于数据库连接或者jdk版本不兼容等原因导致的</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;p&gt;启动tomcat时报错，错误信息如下： &lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
+      
+    
+    </summary>
+    
+      <category term="中间件" scheme="https://shenshengkun.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>k8s强制删除</title>
@@ -453,29 +477,6 @@
     </summary>
     
       <category term="中间件" scheme="https://shenshengkun.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>kubectl在shell中的自动补全</title>
-    <link href="https://shenshengkun.github.io/2018/05/11/k8s/kubectl%E5%9C%A8shell%E4%B8%AD%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8/"/>
-    <id>https://shenshengkun.github.io/2018/05/11/k8s/kubectl在shell中的自动补全/</id>
-    <published>2018-05-11T05:10:01.000Z</published>
-    <updated>2019-04-19T01:37:38.531Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="在zsh上设置"><a href="#在zsh上设置" class="headerlink" title="在zsh上设置"></a>在zsh上设置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source &lt;(kubectl completion zsh)</span><br></pre></td></tr></table></figure><p>可以导入到.zshrc中实现自动加载：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl completion zsh &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure><p>键入-n以后，按tab，自动弹出可用的ns：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  admin kubectl -n</span><br><span class="line">default        demo-echo      demo-webshell  kong           kube-public    kube-system</span><br></pre></td></tr></table></figure><h1 id="在linux上设置"><a href="#在linux上设置" class="headerlink" title="在linux上设置"></a>在linux上设置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install bash-completion</span><br><span class="line">source /usr/share/bash-completion/bash_completion</span><br><span class="line">echo &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrc</span><br><span class="line">kubectl completion bash &gt;/etc/bash_completion.d/kubectl</span><br></pre></td></tr></table></figure><h1 id="在mas上设置-bash"><a href="#在mas上设置-bash" class="headerlink" title="在mas上设置-bash"></a>在mas上设置-bash</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">brew install bash-completion@2</span><br><span class="line">export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d</span><br><span class="line">[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] &amp;&amp; . /usr/local/etc/profile.d/bash_completion.sh</span><br><span class="line">echo &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrc</span><br><span class="line">kubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;在zsh上设置&quot;&gt;&lt;a href=&quot;#在zsh上设置&quot; class=&quot;headerlink&quot; title=&quot;在zsh上设置&quot;&gt;&lt;/a&gt;在zsh上设置&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=
-      
-    
-    </summary>
-    
-      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
     
     
   </entry>
