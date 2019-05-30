@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="摘要SQLite，是一款轻型的数据库，是遵守ACID的关系型数据库管理系统，它包含在一个相对小的C库中。它是D.RichardHipp建立的公有领域项目。它的设计目标是嵌入式的，而且目前已经在很多嵌入式产品中使用了它，它占用资源非常的低，在嵌入式设备中，可能只需要几百K的内存就够了。它能够支持Windows/Linux/Unix等等主流的操作系统，同时能够跟很多程序语言相结合，比如 Tcl、C#、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python模块-sqlite3基础">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/8df26b6b.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="摘要SQLite，是一款轻型的数据库，是遵守ACID的关系型数据库管理系统，它包含在一个相对小的C库中。它是D.RichardHipp建立的公有领域项目。它的设计目标是嵌入式的，而且目前已经在很多嵌入式产品中使用了它，它占用资源非常的低，在嵌入式设备中，可能只需要几百K的内存就够了。它能够支持Windows/Linux/Unix等等主流的操作系统，同时能够跟很多程序语言相结合，比如 Tcl、C#、">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-30T02:29:19.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python模块-sqlite3基础">
+<meta name="twitter:description" content="摘要SQLite，是一款轻型的数据库，是遵守ACID的关系型数据库管理系统，它包含在一个相对小的C库中。它是D.RichardHipp建立的公有领域项目。它的设计目标是嵌入式的，而且目前已经在很多嵌入式产品中使用了它，它占用资源非常的低，在嵌入式设备中，可能只需要几百K的内存就够了。它能够支持Windows/Linux/Unix等等主流的操作系统，同时能够跟很多程序语言相结合，比如 Tcl、C#、">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/8df26b6b.html">
+
+
+
+
+
+  <title>python模块-sqlite3基础 | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/8df26b6b.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python模块-sqlite3基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T10:33:01+08:00">
+                2018-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>SQLite，是一款轻型的数据库，是遵守ACID的关系型数据库管理系统，它包含在一个相对小的C库中。它是D.RichardHipp建立的公有领域项目。它的设计目标是嵌入式的，而且目前已经在很多嵌入式产品中使用了它，它占用资源非常的低，在嵌入式设备中，可能只需要几百K的内存就够了。它能够支持Windows/Linux/Unix等等主流的操作系统，同时能够跟很多程序语言相结合，比如 Tcl、C#、PHP、Java、Python等，还有ODBC接口，同样比起Mysql、PostgreSQL这两款开源的世界著名数据库管理系统来讲，它的处理速度比他们都快。SQLite第一个Alpha版本诞生于2000年5月。 至2015年已经有15个年头，SQLite也迎来了一个版本 SQLite 3已经发布。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>SQLite3 可使用 sqlite3 模块与 Python 进行集成。sqlite3 模块是由 Gerhard Haring 编写的。它提供了一个与 PEP 249 描述的 DB-API 2.0 规范兼容的 SQL 接口。您不需要单独安装该模块，因为 Python 2.5.x 以上版本默认自带了该模块。</p>
+<p>为了使用 sqlite3 模块，您首先必须创建一个表示数据库的连接对象，然后您可以有选择地创建光标对象，这将帮助您执行所有的 SQL 语句。</p>
+<h1 id="Python-sqlite3-模块-API"><a href="#Python-sqlite3-模块-API" class="headerlink" title="Python sqlite3 模块 API"></a>Python sqlite3 模块 API</h1><p>以下是重要的 sqlite3 模块程序，可以满足您在 Python 程序中使用 SQLite 数据库的需求。如果您需要了解更多细节，请查看 Python sqlite3 模块的官方文档。</p>
+<h2 id="sqlite3-connect-database-timeout-other-optional-arguments"><a href="#sqlite3-connect-database-timeout-other-optional-arguments" class="headerlink" title="sqlite3.connect(database [,timeout ,other optional arguments])"></a>sqlite3.connect(database [,timeout ,other optional arguments])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">该 API 打开一个到 SQLite 数据库文件 database 的链接。您可以使用 &quot;:memory:&quot; 来在 RAM 中打开一个到 database 的数据库连接，而不是在磁盘上打开。如果数据库成功打开，则返回一个连接对象。</span><br><span class="line">当一个数据库被多个连接访问，且其中一个修改了数据库，此时 SQLite 数据库被锁定，直到事务提交。timeout 参数表示连接等待锁定的持续时间，直到发生异常断开连接。timeout 参数默认是 5.0（5 秒）。</span><br><span class="line">如果给定的数据库名称 filename 不存在，则该调用将创建一个数据库。如果您不想在当前目录中创建数据库，那么您可以指定带有路径的文件名，这样您就能在任意地方创建数据库。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-cursor-cursorClass"><a href="#connection-cursor-cursorClass" class="headerlink" title="connection.cursor([cursorClass])"></a>connection.cursor([cursorClass])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程创建一个 cursor，将在 Python 数据库编程中用到。该方法接受一个单一的可选的参数 cursorClass。如果提供了该参数，则它必须是一个扩展自 sqlite3.Cursor 的自定义的 cursor 类。</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-execute-sql-optional-parameters"><a href="#cursor-execute-sql-optional-parameters" class="headerlink" title="cursor.execute(sql [, optional parameters])"></a>cursor.execute(sql [, optional parameters])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">该例程执行一个 SQL 语句。该 SQL 语句可以被参数化（即使用占位符代替 SQL 文本）。sqlite3 模块支持两种类型的占位符：问号和命名占位符（命名样式）。</span><br><span class="line">例如：cursor.execute(&quot;insert into people values (?, ?)&quot;, (who, age))</span><br></pre></td></tr></table></figure>
+<h2 id="connection-execute-sql-optional-parameters"><a href="#connection-execute-sql-optional-parameters" class="headerlink" title="connection.execute(sql [, optional parameters])"></a>connection.execute(sql [, optional parameters])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程是上面执行的由光标（cursor）对象提供的方法的快捷方式，它通过调用光标（cursor）方法创建了一个中间的光标对象，然后通过给定的参数调用光标的 execute 方法。</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-executemany-sql-seq-of-parameters"><a href="#cursor-executemany-sql-seq-of-parameters" class="headerlink" title="cursor.executemany(sql, seq_of_parameters)"></a>cursor.executemany(sql, seq_of_parameters)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程对 seq_of_parameters 中的所有参数或映射执行一个 SQL 命令。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-executemany-sql-parameters"><a href="#connection-executemany-sql-parameters" class="headerlink" title="connection.executemany(sql[, parameters])"></a>connection.executemany(sql[, parameters])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程是一个由调用光标（cursor）方法创建的中间的光标对象的快捷方式，然后通过给定的参数调用光标的 executemany 方法。</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-executescript-sql-script"><a href="#cursor-executescript-sql-script" class="headerlink" title="cursor.executescript(sql_script)"></a>cursor.executescript(sql_script)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程一旦接收到脚本，会执行多个 SQL 语句。它首先执行 COMMIT 语句，然后执行作为参数传入的 SQL 脚本。所有的 SQL 语句应该用分号（;）分隔。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-executescript-sql-script"><a href="#connection-executescript-sql-script" class="headerlink" title="connection.executescript(sql_script)"></a>connection.executescript(sql_script)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程是一个由调用光标（cursor）方法创建的中间的光标对象的快捷方式，然后通过给定的参数调用光标的 executescript 方法。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-total-changes"><a href="#connection-total-changes" class="headerlink" title="connection.total_changes()"></a>connection.total_changes()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程返回自数据库连接打开以来被修改、插入或删除的数据库总行数。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-commit"><a href="#connection-commit" class="headerlink" title="connection.commit()"></a>connection.commit()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该方法提交当前的事务。如果您未调用该方法，那么自您上一次调用 commit() 以来所做的任何动作对其他数据库连接来说是不可见的。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-rollback"><a href="#connection-rollback" class="headerlink" title="connection.rollback()"></a>connection.rollback()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该方法回滚自上一次调用 commit() 以来对数据库所做的更改。</span><br></pre></td></tr></table></figure>
+<h2 id="connection-close"><a href="#connection-close" class="headerlink" title="connection.close()"></a>connection.close()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该方法关闭数据库连接。请注意，这不会自动调用 commit()。如果您之前未调用 commit() 方法，就直接关闭数据库连接，您所做的所有更改将全部丢失！</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-fetchone"><a href="#cursor-fetchone" class="headerlink" title="cursor.fetchone()"></a>cursor.fetchone()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该方法获取查询结果集中的下一行，返回一个单一的序列，当没有更多可用的数据时，则返回 None。</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-fetchmany-size-cursor-arraysize"><a href="#cursor-fetchmany-size-cursor-arraysize" class="headerlink" title="cursor.fetchmany([size=cursor.arraysize])"></a>cursor.fetchmany([size=cursor.arraysize])</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该方法获取查询结果集中的下一行组，返回一个列表。当没有更多的可用的行时，则返回一个空的列表。该方法尝试获取由 size 参数指定的尽可能多的行。</span><br></pre></td></tr></table></figure>
+<h2 id="cursor-fetchall"><a href="#cursor-fetchall" class="headerlink" title="cursor.fetchall()"></a>cursor.fetchall()</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该例程获取查询结果集中所有（剩余）的行，返回一个列表。当没有可用的行时，则返回一个空的列表。</span><br></pre></td></tr></table></figure>
+<h1 id="操作方式"><a href="#操作方式" class="headerlink" title="操作方式"></a>操作方式</h1><h2 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h2><p>下面的 Python 代码显示了如何连接到一个现有的数据库。如果数据库不存在，那么它就会被创建，最后将返回一个数据库对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line"></span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line">在这里，您也可以把数据库名称复制为特定的名称 :memory:，这样就会在 RAM 中创建一个数据库。现在，让我们来运行上面的程序，在当前目录中创建我们的数据库 test.db。您可以根据需要改变路径。保存上面代码到 sqlite.py 文件中，并按如下所示执行。如果数据库成功创建，那么会显示下面所示的消息：</span><br><span class="line">$chmod +x sqlite.py</span><br><span class="line">$./sqlite.py</span><br><span class="line">Open database successfully</span><br></pre></td></tr></table></figure>
+<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p>下面的 Python 代码段将用于在先前创建的数据库中创建一个表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line"></span><br><span class="line">conn.execute(&apos;&apos;&apos;CREATE TABLE COMPANY</span><br><span class="line">       (ID INT PRIMARY KEY     NOT NULL,</span><br><span class="line">       NAME           TEXT    NOT NULL,</span><br><span class="line">       AGE            INT     NOT NULL,</span><br><span class="line">       ADDRESS        CHAR(50),</span><br><span class="line">       SALARY         REAL);&apos;&apos;&apos;)</span><br><span class="line">print &quot;Table created successfully&quot;;</span><br><span class="line"></span><br><span class="line">conn.close()</span><br><span class="line">上述程序执行时，它会在 test.db 中创建 COMPANY 表，并显示下面所示的消息：</span><br><span class="line">Opened database successfully</span><br><span class="line">Table created successfully</span><br></pre></td></tr></table></figure>
+<h2 id="INSERT-操作"><a href="#INSERT-操作" class="headerlink" title="INSERT 操作"></a>INSERT 操作</h2><p>下面的 Python 程序显示了如何在上面创建的 COMPANY 表中创建记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \</span><br><span class="line">      VALUES (1, &apos;Paul&apos;, 32, &apos;California&apos;, 20000.00 )&quot;);</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \</span><br><span class="line">      VALUES (2, &apos;Allen&apos;, 25, &apos;Texas&apos;, 15000.00 )&quot;);</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \</span><br><span class="line">      VALUES (3, &apos;Teddy&apos;, 23, &apos;Norway&apos;, 20000.00 )&quot;);</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \</span><br><span class="line">      VALUES (4, &apos;Mark&apos;, 25, &apos;Rich-Mond &apos;, 65000.00 )&quot;);</span><br><span class="line"></span><br><span class="line">conn.commit()</span><br><span class="line">print &quot;Records created successfully&quot;;</span><br><span class="line">conn.close()</span><br><span class="line">上述程序执行时，它会在 COMPANY 表中创建给定记录，并会显示以下两行：</span><br><span class="line">Opened database successfully</span><br><span class="line">Records created successfully</span><br></pre></td></tr></table></figure>
+<h2 id="SELECT-操作"><a href="#SELECT-操作" class="headerlink" title="SELECT 操作"></a>SELECT 操作</h2><p>下面的 Python 程序显示了如何从前面创建的 COMPANY 表中获取并显示记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line"></span><br><span class="line">cursor = conn.execute(&quot;SELECT id, name, address, salary  from COMPANY&quot;)</span><br><span class="line">for row in cursor:</span><br><span class="line">   print &quot;ID = &quot;, row[0]</span><br><span class="line">   print &quot;NAME = &quot;, row[1]</span><br><span class="line">   print &quot;ADDRESS = &quot;, row[2]</span><br><span class="line">   print &quot;SALARY = &quot;, row[3], &quot;\n&quot;</span><br><span class="line"></span><br><span class="line">print &quot;Operation done successfully&quot;;</span><br><span class="line">conn.close()</span><br><span class="line">上述程序执行时，它会产生以下结果：</span><br><span class="line">Opened database successfully</span><br><span class="line">ID =  1</span><br><span class="line">NAME =  Paul</span><br><span class="line">ADDRESS =  California</span><br><span class="line">SALARY =  20000.0</span><br><span class="line"></span><br><span class="line">ID =  2</span><br><span class="line">NAME =  Allen</span><br><span class="line">ADDRESS =  Texas</span><br><span class="line">SALARY =  15000.0</span><br><span class="line"></span><br><span class="line">ID =  3</span><br><span class="line">NAME =  Teddy</span><br><span class="line">ADDRESS =  Norway</span><br><span class="line">SALARY =  20000.0</span><br><span class="line"></span><br><span class="line">ID =  4</span><br><span class="line">NAME =  Mark</span><br><span class="line">ADDRESS =  Rich-Mond</span><br><span class="line">SALARY =  65000.0</span><br><span class="line"></span><br><span class="line">Operation done successfully</span><br></pre></td></tr></table></figure>
+<h2 id="UPDATE-操作"><a href="#UPDATE-操作" class="headerlink" title="UPDATE 操作"></a>UPDATE 操作</h2><p>下面的 Python 代码显示了如何使用 UPDATE 语句来更新任何记录，然后从 COMPANY 表中获取并显示更新的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;UPDATE COMPANY set SALARY = 25000.00 where ID=1&quot;)</span><br><span class="line">conn.commit()</span><br><span class="line">print &quot;Total number of rows updated :&quot;, conn.total_changes</span><br><span class="line"></span><br><span class="line">cursor = conn.execute(&quot;SELECT id, name, address, salary  from COMPANY&quot;)</span><br><span class="line">for row in cursor:</span><br><span class="line">   print &quot;ID = &quot;, row[0]</span><br><span class="line">   print &quot;NAME = &quot;, row[1]</span><br><span class="line">   print &quot;ADDRESS = &quot;, row[2]</span><br><span class="line">   print &quot;SALARY = &quot;, row[3], &quot;\n&quot;</span><br><span class="line"></span><br><span class="line">print &quot;Operation done successfully&quot;;</span><br><span class="line">conn.close()</span><br><span class="line">上述程序执行时，它会产生以下结果：</span><br><span class="line">Opened database successfully</span><br><span class="line">Total number of rows updated : 1</span><br><span class="line">ID =  1</span><br><span class="line">NAME =  Paul</span><br><span class="line">ADDRESS =  California</span><br><span class="line">SALARY =  25000.0</span><br><span class="line"></span><br><span class="line">ID =  2</span><br><span class="line">NAME =  Allen</span><br><span class="line">ADDRESS =  Texas</span><br><span class="line">SALARY =  15000.0</span><br><span class="line"></span><br><span class="line">ID =  3</span><br><span class="line">NAME =  Teddy</span><br><span class="line">ADDRESS =  Norway</span><br><span class="line">SALARY =  20000.0</span><br><span class="line"></span><br><span class="line">ID =  4</span><br><span class="line">NAME =  Mark</span><br><span class="line">ADDRESS =  Rich-Mond</span><br><span class="line">SALARY =  65000.0</span><br><span class="line"></span><br><span class="line">Operation done successfully</span><br></pre></td></tr></table></figure>
+<h2 id="DELETE-操作"><a href="#DELETE-操作" class="headerlink" title="DELETE 操作"></a>DELETE 操作</h2><p>下面的 Python 代码显示了如何使用 DELETE 语句删除任何记录，然后从 COMPANY 表中获取并显示剩余的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(&apos;test.db&apos;)</span><br><span class="line">print &quot;Opened database successfully&quot;;</span><br><span class="line"></span><br><span class="line">conn.execute(&quot;DELETE from COMPANY where ID=2;&quot;)</span><br><span class="line">conn.commit()</span><br><span class="line">print &quot;Total number of rows deleted :&quot;, conn.total_changes</span><br><span class="line"></span><br><span class="line">cursor = conn.execute(&quot;SELECT id, name, address, salary  from COMPANY&quot;)</span><br><span class="line">for row in cursor:</span><br><span class="line">   print &quot;ID = &quot;, row[0]</span><br><span class="line">   print &quot;NAME = &quot;, row[1]</span><br><span class="line">   print &quot;ADDRESS = &quot;, row[2]</span><br><span class="line">   print &quot;SALARY = &quot;, row[3], &quot;\n&quot;</span><br><span class="line"></span><br><span class="line">print &quot;Operation done successfully&quot;;</span><br><span class="line">conn.close()</span><br><span class="line">上述程序执行时，它会产生以下结果：</span><br><span class="line">Opened database successfully</span><br><span class="line">Total number of rows deleted : 1</span><br><span class="line">ID =  1</span><br><span class="line">NAME =  Paul</span><br><span class="line">ADDRESS =  California</span><br><span class="line">SALARY =  20000.0</span><br><span class="line"></span><br><span class="line">ID =  3</span><br><span class="line">NAME =  Teddy</span><br><span class="line">ADDRESS =  Norway</span><br><span class="line">SALARY =  20000.0</span><br><span class="line"></span><br><span class="line">ID =  4</span><br><span class="line">NAME =  Mark</span><br><span class="line">ADDRESS =  Rich-Mond</span><br><span class="line">SALARY =  65000.0</span><br><span class="line"></span><br><span class="line">Operation done successfully</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/6f65a2ef.html" rel="next" title="python模块-xml、yaml">
+                <i class="fa fa-chevron-left"></i> python模块-xml、yaml
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/df5a27ca.html" rel="prev" title="rancher升级">
+                rancher升级 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-sqlite3-模块-API"><span class="nav-number">3.</span> <span class="nav-text">Python sqlite3 模块 API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite3-connect-database-timeout-other-optional-arguments"><span class="nav-number">3.1.</span> <span class="nav-text">sqlite3.connect(database [,timeout ,other optional arguments])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-cursor-cursorClass"><span class="nav-number">3.2.</span> <span class="nav-text">connection.cursor([cursorClass])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-execute-sql-optional-parameters"><span class="nav-number">3.3.</span> <span class="nav-text">cursor.execute(sql [, optional parameters])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-execute-sql-optional-parameters"><span class="nav-number">3.4.</span> <span class="nav-text">connection.execute(sql [, optional parameters])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-executemany-sql-seq-of-parameters"><span class="nav-number">3.5.</span> <span class="nav-text">cursor.executemany(sql, seq_of_parameters)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-executemany-sql-parameters"><span class="nav-number">3.6.</span> <span class="nav-text">connection.executemany(sql[, parameters])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-executescript-sql-script"><span class="nav-number">3.7.</span> <span class="nav-text">cursor.executescript(sql_script)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-executescript-sql-script"><span class="nav-number">3.8.</span> <span class="nav-text">connection.executescript(sql_script)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-total-changes"><span class="nav-number">3.9.</span> <span class="nav-text">connection.total_changes()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-commit"><span class="nav-number">3.10.</span> <span class="nav-text">connection.commit()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-rollback"><span class="nav-number">3.11.</span> <span class="nav-text">connection.rollback()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-close"><span class="nav-number">3.12.</span> <span class="nav-text">connection.close()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-fetchone"><span class="nav-number">3.13.</span> <span class="nav-text">cursor.fetchone()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-fetchmany-size-cursor-arraysize"><span class="nav-number">3.14.</span> <span class="nav-text">cursor.fetchmany([size=cursor.arraysize])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cursor-fetchall"><span class="nav-number">3.15.</span> <span class="nav-text">cursor.fetchall()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作方式"><span class="nav-number">4.</span> <span class="nav-text">操作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接数据库"><span class="nav-number">4.1.</span> <span class="nav-text">连接数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建表"><span class="nav-number">4.2.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INSERT-操作"><span class="nav-number">4.3.</span> <span class="nav-text">INSERT 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELECT-操作"><span class="nav-number">4.4.</span> <span class="nav-text">SELECT 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UPDATE-操作"><span class="nav-number">4.5.</span> <span class="nav-text">UPDATE 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DELETE-操作"><span class="nav-number">4.6.</span> <span class="nav-text">DELETE 操作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
