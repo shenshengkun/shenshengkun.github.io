@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="k8s证书的三种方式 cfssl easyrsa openssl  本文使用cfssl签发证书 安装 cfssl 工具集123456789101112mkdir -p /opt/k8s/cert &amp;amp;&amp;amp; cd /opt/k8swget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64mv cfssl_linux-amd64 /opt/k8s/b">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T07:27:17.269Z">
+<meta property="og:updated_time" content="2019-06-05T08:51:30.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-cfssl证书">
 <meta name="twitter:description" content="k8s证书的三种方式 cfssl easyrsa openssl  本文使用cfssl签发证书 安装 cfssl 工具集123456789101112mkdir -p /opt/k8s/cert &amp;amp;&amp;amp; cd /opt/k8swget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64mv cfssl_linux-amd64 /opt/k8s/b">
@@ -397,7 +397,6 @@
 <h2 id="生成-CA-证书和私钥"><a href="#生成-CA-证书和私钥" class="headerlink" title="生成 CA 证书和私钥"></a>生成 CA 证书和私钥</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">cfssl gencert -initca ca-csr.json | cfssljson -bare ca</span><br></pre></td></tr></table></figure>
 <h1 id="分发证书文件"><a href="#分发证书文件" class="headerlink" title="分发证书文件"></a>分发证书文件</h1><p>将生成的 CA 证书、秘钥文件、配置文件拷贝到<strong>所有节点</strong>的 <code>/etc/kubernetes/cert</code> 目录下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">for node_ip in $&#123;NODE_IPS[@]&#125;</span><br><span class="line">  do</span><br><span class="line">    echo &quot;&gt;&gt;&gt; $&#123;node_ip&#125;&quot;</span><br><span class="line">    ssh root@$&#123;node_ip&#125; &quot;mkdir -p /etc/kubernetes/cert&quot;</span><br><span class="line">    scp ca*.pem ca-config.json root@$&#123;node_ip&#125;:/etc/kubernetes/cert</span><br><span class="line">  done</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">https://github.com/opsnull/follow-me-install-kubernetes-cluster</a> </p>
 
       
     </div>

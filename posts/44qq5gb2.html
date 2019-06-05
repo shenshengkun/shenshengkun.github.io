@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="安装依赖包1234567source /opt/k8s/bin/environment.shfor node_ip in $&amp;#123;NODE_IPS[@]&amp;#125;  do    echo &amp;quot;&amp;gt;&amp;gt;&amp;gt; $&amp;#123;node_ip&amp;#125;&amp;quot;    ssh root@$&amp;#123;node_ip&amp;#125; &amp;quot;yum install -y ep">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T07:52:44.018Z">
+<meta property="og:updated_time" content="2019-06-05T08:52:25.087Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-node节点">
 <meta name="twitter:description" content="安装依赖包1234567source /opt/k8s/bin/environment.shfor node_ip in $&amp;#123;NODE_IPS[@]&amp;#125;  do    echo &amp;quot;&amp;gt;&amp;gt;&amp;gt; $&amp;#123;node_ip&amp;#125;&amp;quot;    ssh root@$&amp;#123;node_ip&amp;#125; &amp;quot;yum install -y ep">
@@ -479,7 +479,6 @@
 <h2 id="检查启动结果"><a href="#检查启动结果" class="headerlink" title="检查启动结果"></a>检查启动结果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">for node_ip in $&#123;NODE_IPS[@]&#125;</span><br><span class="line">  do</span><br><span class="line">    echo &quot;&gt;&gt;&gt; $&#123;node_ip&#125;&quot;</span><br><span class="line">    ssh root@$&#123;node_ip&#125; &quot;systemctl status kube-proxy|grep Active&quot;</span><br><span class="line">  done</span><br></pre></td></tr></table></figure>
 <p>确保状态为 <code>active (running)</code></p>
 <h2 id="查看-ipvs-路由规则"><a href="#查看-ipvs-路由规则" class="headerlink" title="查看 ipvs 路由规则"></a>查看 ipvs 路由规则</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">for node_ip in $&#123;NODE_IPS[@]&#125;</span><br><span class="line">  do</span><br><span class="line">    echo &quot;&gt;&gt;&gt; $&#123;node_ip&#125;&quot;</span><br><span class="line">    ssh root@$&#123;node_ip&#125; &quot;/usr/sbin/ipvsadm -ln&quot;</span><br><span class="line">  done</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">https://github.com/opsnull/follow-me-install-kubernetes-cluster</a> </p>
 
       
     </div>

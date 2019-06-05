@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="nginx代理基于 nginx 代理的 kube-apiserver 高可用方案1234- 控制节点的 kube-controller-manager、kube-scheduler 是多实例部署，所以只要有一个实例正常，就可以保证高可用；- 集群内的 Pod 使用 K8S 服务域名 kubernetes 访问 kube-apiserver， kube-dns 会自动解析出多个 kube-apise">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T07:27:44.101Z">
+<meta property="og:updated_time" content="2019-06-05T08:52:01.693Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-apiserver集群">
 <meta name="twitter:description" content="nginx代理基于 nginx 代理的 kube-apiserver 高可用方案1234- 控制节点的 kube-controller-manager、kube-scheduler 是多实例部署，所以只要有一个实例正常，就可以保证高可用；- 集群内的 Pod 使用 K8S 服务域名 kubernetes 访问 kube-apiserver， kube-dns 会自动解析出多个 kube-apise">
@@ -490,7 +490,6 @@
 <h2 id="打印-kube-apiserver-写入-etcd-的数据"><a href="#打印-kube-apiserver-写入-etcd-的数据" class="headerlink" title="打印 kube-apiserver 写入 etcd 的数据"></a>打印 kube-apiserver 写入 etcd 的数据</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">ETCDCTL_API=3 etcdctl \</span><br><span class="line">    --endpoints=$&#123;ETCD_ENDPOINTS&#125; \</span><br><span class="line">    --cacert=/opt/k8s/work/ca.pem \</span><br><span class="line">    --cert=/opt/k8s/work/etcd.pem \</span><br><span class="line">    --key=/opt/k8s/work/etcd-key.pem \</span><br><span class="line">    get /registry/ --prefix --keys-only</span><br></pre></td></tr></table></figure>
 <h2 id="授予-kube-apiserver-访问-kubelet-API-的权限"><a href="#授予-kube-apiserver-访问-kubelet-API-的权限" class="headerlink" title="授予 kube-apiserver 访问 kubelet API 的权限"></a>授予 kube-apiserver 访问 kubelet API 的权限</h2><p>在执行 kubectl exec、run、logs 等命令时，apiserver 会将请求转发到 kubelet 的 https 端口。这里定义 RBAC 规则，授权 apiserver 使用的证书（kubernetes.pem）用户名（CN：kuberntes）访问 kubelet API 的权限：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create clusterrolebinding kube-apiserver:kubelet-apis --clusterrole=system:kubelet-api-admin --user kubernetes</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">https://github.com/opsnull/follow-me-install-kubernetes-cluster</a> </p>
 
       
     </div>

@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="简介ETCD 是一个高可用的分布式键值数据库，可用于服务发现。ETCD 采用 raft 一致性算法，基于 Go 语言实现。 1234567特点简单：安装配置使用简单，提供 HTTP API 安全：支持 SSL 证书 可靠：采用 raft 算法，实现分布式系统数据的可用性和一致性 kubernetes 使用 etcd 存储所有运行数据  下载和分发 etcd 二进制文件123cd /opt/k8s/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T07:27:26.757Z">
+<meta property="og:updated_time" content="2019-06-05T08:51:39.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-etcd集群">
 <meta name="twitter:description" content="简介ETCD 是一个高可用的分布式键值数据库，可用于服务发现。ETCD 采用 raft 一致性算法，基于 Go 语言实现。 1234567特点简单：安装配置使用简单，提供 HTTP API 安全：支持 SSL 证书 可靠：采用 raft 算法，实现分布式系统数据的可用性和一致性 kubernetes 使用 etcd 存储所有运行数据  下载和分发 etcd 二进制文件123cd /opt/k8s/">
@@ -414,7 +414,6 @@
 <p>结果为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# ETCDCTL_API=3 /opt/k8s/bin/etcdctl \</span><br><span class="line">&gt;   -w table --cacert=/etc/kubernetes/cert/ca.pem \</span><br><span class="line">&gt;   --cert=/etc/etcd/cert/etcd.pem \</span><br><span class="line">&gt;   --key=/etc/etcd/cert/etcd-key.pem \</span><br><span class="line">&gt;   --endpoints=$&#123;ETCD_ENDPOINTS&#125; endpoint status</span><br><span class="line">+----------------------------+------------------+---------+---------+-----------+-----------+------------+</span><br><span class="line">|          ENDPOINT          |        ID        | VERSION | DB SIZE | IS LEADER | RAFT TERM | RAFT INDEX |</span><br><span class="line">+----------------------------+------------------+---------+---------+-----------+-----------+------------+</span><br><span class="line">| https://192.168.6.101:2379 | 77fff77a6e7d24c5 |  3.3.13 |  864 kB |      true |         8 |      41721 |</span><br><span class="line">| https://192.168.6.102:2379 |  e82e7402173c61e |  3.3.13 |  872 kB |     false |         8 |      41721 |</span><br><span class="line">+----------------------------+------------------+---------+---------+-----------+-----------+------------+</span><br></pre></td></tr></table></figure>
 <p>可以看到6.101为leader</p>
-<p>参考：<a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">https://github.com/opsnull/follow-me-install-kubernetes-cluster</a> </p>
 
       
     </div>
