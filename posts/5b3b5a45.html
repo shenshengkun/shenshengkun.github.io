@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-30T02:29:19.199Z">
+<meta property="og:updated_time" content="2019-06-06T02:14:25.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s基本命令">
 <meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
@@ -383,8 +383,8 @@
 <p>跳转到特定修订版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N</span><br></pre></td></tr></table></figure></p>
 <h1 id="service"><a href="#service" class="headerlink" title="service"></a>service</h1><p>查看服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get services</span><br></pre></td></tr></table></figure></p>
 <p>将POD作为服务公开（创建端点）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl expose deployment/aa --port=2000 --type=NodePort</span><br></pre></td></tr></table></figure></p>
-<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><p>$ kubectl exec -ti $1 bash -n product</p>
-<h1 id="log"><a href="#log" class="headerlink" title="log"></a>log</h1><p>$ kubectl logs -f $1 -n product </p>
+<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -ti 1 bash -n product</span><br></pre></td></tr></table></figure>
+<h1 id="log"><a href="#log" class="headerlink" title="log"></a>log</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs -f 1 -n product</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -505,7 +505,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
