@@ -257,6 +257,14 @@
       </categories>
   </entry>
   <entry>
+    <title><![CDATA[k8s拉取Harbor私有镜像]]></title>
+    <url>%2Fposts%2F5trce44e.html</url>
+    <content type="text"><![CDATA[secret介绍1Secret是用来保存小片敏感数据的k8s资源，例如密码，token，或者秘钥。这类数据当然也可以存放在Pod或者镜像中，但是放在Secret中是为了更方便的控制如何使用数据，并减少暴露的风险。 创建先在服务器上登录 Harbor 仓库 123docker login registry.sy.com输入账号密码 查看登录的秘钥数据 12登录成功后会在当前用户下生成 .docker/config.json 文件cat ~/.docker/config.json 12再对上面的 config.json 进行base64加密cat ~/.docker/config.json |base64 -w 0 创建 secret.yaml 文件 1234567apiVersion: v1kind: Secretmetadata: name: logintype: kubernetes.io/dockerconfigjsondata: .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJ0Y2xvdWQuaHViIjogewoJCQkiYXV0aCI6ICJZV1J0YVc0NlNHRnlZbTl5TVRJek5EVT0iCgkJfQoJfSwKCSJIdHRwSGVhZGVycyI6IHsKCQkiVXNlci1BZ2VudCI6ICJEb2NrZXItQ2xpZW50LzE3LjA5LjAtY2UgKGxpbnV4KSIKCX0KfQ== 1kubectl create -f secret.yaml]]></content>
+      <categories>
+        <category>k8s</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[kubectl在shell中的自动补全]]></title>
     <url>%2Fposts%2F4ddce2e2.html</url>
     <content type="text"><![CDATA[在zsh上设置1source &lt;(kubectl completion zsh) 可以导入到.zshrc中实现自动加载： 1kubectl completion zsh &gt;&gt; ~/.zshrc 键入-n以后，按tab，自动弹出可用的ns： 12➜ admin kubectl -ndefault demo-echo demo-webshell kong kube-public kube-system 在linux上设置1234yum install bash-completionsource /usr/share/bash-completion/bash_completionecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/etc/bash_completion.d/kubectl 在mas上设置-bash12345brew install bash-completion@2export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] &amp;&amp; . /usr/local/etc/profile.d/bash_completion.shecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl]]></content>

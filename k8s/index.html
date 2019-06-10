@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
 
@@ -81,17 +83,17 @@
 
 
 
-<meta name="description" content="基础k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s强制删除 Kubernetes节点资源耗尽状态的处理 kubectl在shell中的自动补全 k8s基本命令 k8s角色  prometheus监控">
+<meta name="description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s拉取Harbor私有镜像 Kubernetes节点资源耗尽状态的处理 k8s强制删除 k8s角色">
 <meta property="og:type" content="website">
 <meta property="og:title" content="k8s">
 <meta property="og:url" content="https://shenshengkun.github.io/k8s/index.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="基础k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s强制删除 Kubernetes节点资源耗尽状态的处理 kubectl在shell中的自动补全 k8s基本命令 k8s角色  prometheus监控">
+<meta property="og:description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s拉取Harbor私有镜像 Kubernetes节点资源耗尽状态的处理 k8s强制删除 k8s角色">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-10T03:24:15.220Z">
+<meta property="og:updated_time" content="2019-06-10T08:52:12.814Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s">
-<meta name="twitter:description" content="基础k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s强制删除 Kubernetes节点资源耗尽状态的处理 kubectl在shell中的自动补全 k8s基本命令 k8s角色  prometheus监控">
+<meta name="twitter:description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s拉取Harbor私有镜像 Kubernetes节点资源耗尽状态的处理 k8s强制删除 k8s角色">
 
 
 
@@ -289,7 +291,7 @@
       <div class="post-body">
         
         
-          <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h1 id="k8s1-14安装"><a href="#k8s1-14安装" class="headerlink" title="k8s1.14安装"></a>k8s1.14安装</h1><ul>
+          <h1 id="k8s1-14安装"><a href="#k8s1-14安装" class="headerlink" title="k8s1.14安装"></a>k8s1.14安装</h1><ul>
 <li><a href="https://shenshengkun.github.io/posts/9c775ab5.html">系统初始化</a></li>
 <li><a href="https://shenshengkun.github.io/posts/8d664qf5.html">cfssl证书</a></li>
 <li><a href="https://shenshengkun.github.io/posts/7dqa4nb2.html">etcd集群</a></li>
@@ -301,10 +303,11 @@
 <li><a href="https://shenshengkun.github.io/posts/d3554aa2.html">metrics-server</a></li>
 </ul>
 <h1 id="k8s用法"><a href="#k8s用法" class="headerlink" title="k8s用法"></a>k8s用法</h1><ul>
-<li><a href="https://shenshengkun.github.io/posts/267edcc5.html">k8s强制删除</a></li>
-<li><a href="https://shenshengkun.github.io/posts/a54106c5.html">Kubernetes节点资源耗尽状态的处理</a></li>
-<li><a href="https://shenshengkun.github.io/posts/4ddce2e2.html">kubectl在shell中的自动补全</a></li>
 <li><a href="https://shenshengkun.github.io/posts/5b3b5a45.html">k8s基本命令</a></li>
+<li><a href="https://shenshengkun.github.io/posts/4ddce2e2.html">kubectl在shell中的自动补全</a></li>
+<li><a href="https://shenshengkun.github.io/posts/5trce44e.html">k8s拉取Harbor私有镜像</a></li>
+<li><a href="https://shenshengkun.github.io/posts/a54106c5.html">Kubernetes节点资源耗尽状态的处理</a></li>
+<li><a href="https://shenshengkun.github.io/posts/267edcc5.html">k8s强制删除</a></li>
 <li><a href="https://shenshengkun.github.io/posts/65aa44f.html">k8s角色</a></li>
 </ul>
 <h1 id="prometheus监控"><a href="#prometheus监控" class="headerlink" title="prometheus监控"></a>prometheus监控</h1><ul>
@@ -387,7 +390,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -450,7 +453,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s1-14安装"><span class="nav-number">2.</span> <span class="nav-text">k8s1.14安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s用法"><span class="nav-number">3.</span> <span class="nav-text">k8s用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prometheus监控"><span class="nav-number">4.</span> <span class="nav-text">prometheus监控</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s1-14安装"><span class="nav-number">1.</span> <span class="nav-text">k8s1.14安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s用法"><span class="nav-number">2.</span> <span class="nav-text">k8s用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prometheus监控"><span class="nav-number">3.</span> <span class="nav-text">prometheus监控</span></a></li></ol></div>
             
 
           </div>
