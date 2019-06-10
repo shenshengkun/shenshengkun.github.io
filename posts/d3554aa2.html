@@ -81,13 +81,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/categories/python/page/2/index.html">
+<meta name="description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s1.14集群部署-metrics-server">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/d3554aa2.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-10T03:22:59.745Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="k8s1.14集群部署-metrics-server">
+<meta name="twitter:description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
 
 
 
@@ -117,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/categories/python/page/2/">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/d3554aa2.html">
 
 
 
 
 
-  <title>分类: python | 舒宇的博客</title>
+  <title>k8s1.14集群部署-metrics-server | 舒宇的博客</title>
   
 
 
@@ -142,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -266,213 +270,187 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>python<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/d3554aa2.html">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/posts/263d2024.html" itemprop="url">
-              
-                <span itemprop="name">python模块-hashlib加密</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">k8s1.14集群部署-metrics-server</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T17:44:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-10T11:16:01+08:00">
+                2019-06-10
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/5d959c43.html" itemprop="url">
-              
-                <span itemprop="name">python模块-time、datetime</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T14:25:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/e1b5539d.html" itemprop="url">
-              
-                <span itemprop="name">python模块-shutl</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:28:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/4333f888.html" itemprop="url">
-              
-                <span itemprop="name">python模块-re</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:26:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/1901393b.html" itemprop="url">
-              
-                <span itemprop="name">python模块-random</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/5d02f982.html" itemprop="url">
-              
-                <span itemprop="name">python模块-os、sys</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/8d289766.html" itemprop="url">
-              
-                <span itemprop="name">python模块-logging</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:23:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。</p>
+<p>从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不再被维护。</p>
+<p>替代方案如下：</p>
+<ol>
+<li>用于支持自动扩缩容的 CPU/memory HPA metrics：metrics-server；</li>
+<li>通用的监控方案：使用第三方可以获取 Prometheus 格式监控指标的监控系统，如 Prometheus Operator；</li>
+<li>事件传输：使用第三方工具来传输、归档 kubernetes events；</li>
+</ol>
+<p>Kubernetes Dashboard 还不支持 metrics-server（PR：<a href="https://github.com/kubernetes/dashboard/pull/3504" target="_blank" rel="noopener">#3504</a>），如果使用 metrics-server 替代 Heapster，将无法在 dashboard 中以图形展示 Pod 的内存和 CPU 情况，需要通过 Prometheus、Grafana 等监控方案来弥补。</p>
+<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work/</span><br><span class="line">git clone https://github.com/kubernetes-incubator/metrics-server.git</span><br><span class="line">cd metrics-server/deploy/1.8+/</span><br><span class="line">ls</span><br><span class="line">aggregated-metrics-reader.yaml  auth-delegator.yaml  auth-reader.yaml  metrics-apiservice.yaml  metrics-server-deployment.yaml  metrics-server-service.yaml  resource-reader.yaml</span><br></pre></td></tr></table></figure>
+<h2 id="修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数："><a href="#修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数：" class="headerlink" title="修改 metrics-server-deployment.yaml 文件，为 metrics-server 添加三个命令行参数："></a>修改 <code>metrics-server-deployment.yaml</code> 文件，为 metrics-server 添加三个命令行参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: metrics-server</span><br><span class="line">  namespace: kube-system</span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: metrics-server</span><br><span class="line">  namespace: kube-system</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: metrics-server</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      k8s-app: metrics-server</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      name: metrics-server</span><br><span class="line">      labels:</span><br><span class="line">        k8s-app: metrics-server</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: metrics-server</span><br><span class="line">      volumes:</span><br><span class="line">      # mount in tmp so we can safely use from-scratch images and/or read-only containers</span><br><span class="line">      - name: tmp-dir</span><br><span class="line">        emptyDir: &#123;&#125;</span><br><span class="line">      containers:</span><br><span class="line">      - name: metrics-server</span><br><span class="line">        image: mirrorgooglecontainers/metrics-server-amd64:v0.3.3</span><br><span class="line">        command:</span><br><span class="line">        - /metrics-server</span><br><span class="line">        - --metric-resolution=30s</span><br><span class="line">        - --requestheader-allowed-names=aggregator</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - name: tmp-dir</span><br><span class="line">          mountPath: /tmp</span><br></pre></td></tr></table></figure>
+<ul>
+<li>–metric-resolution=30s：从 kubelet 采集数据的周期；</li>
+<li>–requestheader-allowed-names=aggregator：允许请求 metrics-server API 的用户名，该名称与 kube-apiserver 的 <code>--proxy-client-cert-file</code> 指定的证书 CN 一致；</li>
+<li>–kubelet-preferred-address-types：优先使用 InternalIP 来访问 kubelet，这样可以避免节点名称<strong>没有 DNS 解析</strong>记录时，通过节点名称调用节点 kubelet API 失败的情况（未配置时默认的情况）；</li>
+</ul>
+<h2 id="修改apiserver参数："><a href="#修改apiserver参数：" class="headerlink" title="修改apiserver参数："></a>修改apiserver参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/systemd/system</span><br><span class="line"></span><br><span class="line">vim kube-apiserver.service</span><br><span class="line"></span><br><span class="line">--requestheader-allowed-names=&quot;aggregator&quot;</span><br></pre></td></tr></table></figure>
+<p>重启apiserver</p>
+<h2 id="部署-metrics-server："><a href="#部署-metrics-server：" class="headerlink" title="部署 metrics-server："></a>部署 metrics-server：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work/metrics-server/deploy/1.8+/</span><br><span class="line">kubectl create -f .</span><br></pre></td></tr></table></figure>
+<h2 id="使用-kubectl-top-命令查看集群节点资源使用情况"><a href="#使用-kubectl-top-命令查看集群节点资源使用情况" class="headerlink" title="使用 kubectl top 命令查看集群节点资源使用情况"></a>使用 kubectl top 命令查看集群节点资源使用情况</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 1.8+]# kubectl top node</span><br><span class="line">NAME    CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   </span><br><span class="line">node1   117m         5%     2217Mi          57%       </span><br><span class="line">node2   147m         7%     2680Mi          69%</span><br></pre></td></tr></table></figure>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/77sa4nc2.html" rel="next" title="k8s1.14集群部署-coredns">
+                <i class="fa fa-chevron-left"></i> k8s1.14集群部署-coredns
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/python/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/categories/python/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -480,6 +458,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -500,8 +487,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -571,6 +567,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数："><span class="nav-number">2.1.</span> <span class="nav-text">修改 metrics-server-deployment.yaml 文件，为 metrics-server 添加三个命令行参数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改apiserver参数："><span class="nav-number">2.2.</span> <span class="nav-text">修改apiserver参数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署-metrics-server："><span class="nav-number">2.3.</span> <span class="nav-text">部署 metrics-server：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-kubectl-top-命令查看集群节点资源使用情况"><span class="nav-number">2.4.</span> <span class="nav-text">使用 kubectl top 命令查看集群节点资源使用情况</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -738,6 +750,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -766,6 +782,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
