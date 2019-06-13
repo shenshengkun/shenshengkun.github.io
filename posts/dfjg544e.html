@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="摘要本文记录一下python中处理配置文件的模块 ConfigParser用于对特定的配置进行操作，当前模块的名称在 python 3.x 版本中变更为 configparser。 12345678910111213# 注释1; 注释2[section1]k1 = v1k2:v2user=egonage=18is_admin=truesalary=31[section2]k1 = v1 读取123">
+<meta name="description" content="介绍我们经常都需要为我们的应用程序配置一些特殊的数据，比如密钥、Token 、数据库连接地址或者其他私密的信息。你的应用可能会使用一些特定的配置文件进行配置，比如settings.py文件，或者我们可以在应用的业务逻辑中读取环境变量或者某些标志来处理配置信息。 当然你可以直接将这些应用配置信息直接硬编码到你的应用程序中去，对于一个小型的应用，这或许是可以接受的，但是，对于一个相对较大的应用程序或者">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python模块-configparser">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/cf57e5aa.html">
+<meta property="og:title" content="k8s的ConfigMap">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/dfjg544e.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="摘要本文记录一下python中处理配置文件的模块 ConfigParser用于对特定的配置进行操作，当前模块的名称在 python 3.x 版本中变更为 configparser。 12345678910111213# 注释1; 注释2[section1]k1 = v1k2:v2user=egonage=18is_admin=truesalary=31[section2]k1 = v1 读取123">
+<meta property="og:description" content="介绍我们经常都需要为我们的应用程序配置一些特殊的数据，比如密钥、Token 、数据库连接地址或者其他私密的信息。你的应用可能会使用一些特定的配置文件进行配置，比如settings.py文件，或者我们可以在应用的业务逻辑中读取环境变量或者某些标志来处理配置信息。 当然你可以直接将这些应用配置信息直接硬编码到你的应用程序中去，对于一个小型的应用，这或许是可以接受的，但是，对于一个相对较大的应用程序或者">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-30T02:29:19.186Z">
+<meta property="og:updated_time" content="2019-06-13T08:39:39.259Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python模块-configparser">
-<meta name="twitter:description" content="摘要本文记录一下python中处理配置文件的模块 ConfigParser用于对特定的配置进行操作，当前模块的名称在 python 3.x 版本中变更为 configparser。 12345678910111213# 注释1; 注释2[section1]k1 = v1k2:v2user=egonage=18is_admin=truesalary=31[section2]k1 = v1 读取123">
+<meta name="twitter:title" content="k8s的ConfigMap">
+<meta name="twitter:description" content="介绍我们经常都需要为我们的应用程序配置一些特殊的数据，比如密钥、Token 、数据库连接地址或者其他私密的信息。你的应用可能会使用一些特定的配置文件进行配置，比如settings.py文件，或者我们可以在应用的业务逻辑中读取环境变量或者某些标志来处理配置信息。 当然你可以直接将这些应用配置信息直接硬编码到你的应用程序中去，对于一个小型的应用，这或许是可以接受的，但是，对于一个相对较大的应用程序或者">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/cf57e5aa.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/dfjg544e.html">
 
 
 
 
 
-  <title>python模块-configparser | 舒宇的博客</title>
+  <title>k8s的ConfigMap | 舒宇的博客</title>
   
 
 
@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/cf57e5aa.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dfjg544e.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -301,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python模块-configparser</h1>
+          <h1 class="post-title" itemprop="name headline">k8s的ConfigMap</h1>
         
 
         <div class="post-meta">
@@ -313,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-16T11:33:01+08:00">
-                2018-02-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-14T15:20:01+08:00">
+                2018-06-14
               </time>
             
 
@@ -336,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -378,14 +378,35 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文记录一下python中处理配置文件的模块</p>
-<h1 id="ConfigParser"><a href="#ConfigParser" class="headerlink" title="ConfigParser"></a>ConfigParser</h1><p>用于对特定的配置进行操作，当前模块的名称在 python 3.x 版本中变更为 configparser。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 注释1</span><br><span class="line">; 注释2</span><br><span class="line"></span><br><span class="line">[section1]</span><br><span class="line">k1 = v1</span><br><span class="line">k2:v2</span><br><span class="line">user=egon</span><br><span class="line">age=18</span><br><span class="line">is_admin=true</span><br><span class="line">salary=31</span><br><span class="line"></span><br><span class="line">[section2]</span><br><span class="line">k1 = v1</span><br></pre></td></tr></table></figure>
-<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import configparser</span><br><span class="line"></span><br><span class="line">config=configparser.ConfigParser()</span><br><span class="line">config.read(&apos;a.cfg&apos;)</span><br><span class="line"></span><br><span class="line">#查看所有的标题</span><br><span class="line">res=config.sections() #[&apos;section1&apos;, &apos;section2&apos;]</span><br><span class="line">print(res)</span><br><span class="line"></span><br><span class="line">#查看标题section1下所有key=value的key</span><br><span class="line">options=config.options(&apos;section1&apos;)</span><br><span class="line">print(options) #[&apos;k1&apos;, &apos;k2&apos;, &apos;user&apos;, &apos;age&apos;, &apos;is_admin&apos;, &apos;salary&apos;]</span><br><span class="line"></span><br><span class="line">#查看标题section1下所有key=value的(key,value)格式</span><br><span class="line">item_list=config.items(&apos;section1&apos;)</span><br><span class="line">print(item_list) #[(&apos;k1&apos;, &apos;v1&apos;), (&apos;k2&apos;, &apos;v2&apos;), (&apos;user&apos;, &apos;egon&apos;), (&apos;age&apos;, &apos;18&apos;), (&apos;is_admin&apos;, &apos;true&apos;), (&apos;salary&apos;, &apos;31&apos;)]</span><br><span class="line"></span><br><span class="line">#查看标题section1下user的值=&gt;字符串格式</span><br><span class="line">val=config.get(&apos;section1&apos;,&apos;user&apos;)</span><br><span class="line">print(val) #egon</span><br><span class="line"></span><br><span class="line">#查看标题section1下age的值=&gt;整数格式</span><br><span class="line">val1=config.getint(&apos;section1&apos;,&apos;age&apos;)</span><br><span class="line">print(val1) #18</span><br><span class="line"></span><br><span class="line">#查看标题section1下is_admin的值=&gt;布尔值格式</span><br><span class="line">val2=config.getboolean(&apos;section1&apos;,&apos;is_admin&apos;)</span><br><span class="line">print(val2) #True</span><br><span class="line"></span><br><span class="line">#查看标题section1下salary的值=&gt;浮点型格式</span><br><span class="line">val3=config.getfloat(&apos;section1&apos;,&apos;salary&apos;)</span><br><span class="line">print(val3) #31.0</span><br></pre></td></tr></table></figure>
-<h2 id="改写"><a href="#改写" class="headerlink" title="改写"></a>改写</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import configparser</span><br><span class="line"></span><br><span class="line">config=configparser.ConfigParser()</span><br><span class="line">config.read(&apos;a.cfg&apos;,encoding=&apos;utf-8&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#删除整个标题section2</span><br><span class="line">config.remove_section(&apos;section2&apos;)</span><br><span class="line"></span><br><span class="line">#删除标题section1下的某个k1和k2</span><br><span class="line">config.remove_option(&apos;section1&apos;,&apos;k1&apos;)</span><br><span class="line">config.remove_option(&apos;section1&apos;,&apos;k2&apos;)</span><br><span class="line"></span><br><span class="line">#判断是否存在某个标题</span><br><span class="line">print(config.has_section(&apos;section1&apos;))</span><br><span class="line"></span><br><span class="line">#判断标题section1下是否有user</span><br><span class="line">print(config.has_option(&apos;section1&apos;,&apos;&apos;))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#添加一个标题</span><br><span class="line">config.add_section(&apos;egon&apos;)</span><br><span class="line"></span><br><span class="line">#在标题egon下添加name=egon,age=18的配置</span><br><span class="line">config.set(&apos;egon&apos;,&apos;name&apos;,&apos;egon&apos;)</span><br><span class="line">config.set(&apos;egon&apos;,&apos;age&apos;,18) #报错,必须是字符串</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#最后将修改的内容写入文件,完成最终的修改</span><br><span class="line">config.write(open(&apos;a.cfg&apos;,&apos;w&apos;))</span><br></pre></td></tr></table></figure>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#类似这样的配置文件，一块一块的分类</span><br><span class="line">[DEFAULT]</span><br><span class="line">ServerAliveInterval = 45</span><br><span class="line">Compression = yes</span><br><span class="line">CompressionLevel = 9</span><br><span class="line">ForwardX11 = yes</span><br><span class="line"> </span><br><span class="line">[bitbucket.org]</span><br><span class="line">User = hg</span><br><span class="line"> </span><br><span class="line">[topsecret.server.com]</span><br><span class="line">Port = 50022</span><br><span class="line">ForwardX11 = no</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#生成类似格式的文件</span><br><span class="line">import configparser</span><br><span class="line"></span><br><span class="line">config = configparser.ConfigParser()</span><br><span class="line">config[&quot;DEFAULT&quot;] = &#123;&apos;ServerAliveInterval&apos;: &apos;45&apos;,</span><br><span class="line">                      &apos;Compression&apos;: &apos;yes&apos;,</span><br><span class="line">                     &apos;CompressionLevel&apos;: &apos;9&apos;&#125;</span><br><span class="line"></span><br><span class="line">config[&apos;bitbucket.org&apos;] = &#123;&#125;</span><br><span class="line">config[&apos;bitbucket.org&apos;][&apos;User&apos;] = &apos;hg&apos;</span><br><span class="line">config[&apos;topsecret.server.com&apos;] = &#123;&#125;</span><br><span class="line">topsecret = config[&apos;topsecret.server.com&apos;]</span><br><span class="line">topsecret[&apos;Host Port&apos;] = &apos;50022&apos;     # mutates the parser</span><br><span class="line">topsecret[&apos;ForwardX11&apos;] = &apos;no&apos;  # same here</span><br><span class="line">config[&apos;DEFAULT&apos;][&apos;ForwardX11&apos;] = &apos;yes&apos;</span><br><span class="line">with open(&apos;example.ini&apos;, &apos;w&apos;) as configfile:</span><br><span class="line">   config.write(configfile)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#删除（创建一个新文件，并删除bitbucket.org）</span><br><span class="line">import configparser</span><br><span class="line">config = configparser.ConfigParser()</span><br><span class="line">config.sections()</span><br><span class="line"></span><br><span class="line">config.read(&apos;example.ini&apos;)</span><br><span class="line">rec = config.remove_section(&quot;bitbucket.org&quot;)#删除该项</span><br><span class="line">config.write(open(&quot;example.cfg&quot;,&quot;w&quot;))</span><br><span class="line">[DEFAULT]</span><br><span class="line">compressionlevel = 9</span><br><span class="line">compression = yes</span><br><span class="line">serveraliveinterval = 45</span><br><span class="line">forwardx11 = yes</span><br><span class="line"></span><br><span class="line">[topsecret.server.com]</span><br><span class="line">host port = 50022</span><br><span class="line">forwardx11 = no</span><br></pre></td></tr></table></figure>
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>我们经常都需要为我们的应用程序配置一些特殊的数据，比如密钥、Token 、数据库连接地址或者其他私密的信息。你的应用可能会使用一些特定的配置文件进行配置，比如<code>settings.py</code>文件，或者我们可以在应用的业务逻辑中读取环境变量或者某些标志来处理配置信息。</p>
+<p>当然你可以直接将这些应用配置信息直接硬编码到你的应用程序中去，对于一个小型的应用，这或许是可以接受的，但是，对于一个相对较大的应用程序或者微服务的话，硬编码就会变得难以管理了。比如你现在有10个微服务，都连接了数据库A，如果现在需要更改数据库A的连接地址的话，就需要修改10个地方，显然这是难以忍受的。</p>
+<p>当然，我们可以使用环境变量和统一的配置文件来解决这个问题，当我们想改变配置的时候，只需要更改环境变量或者配置文件就可以了，但是对于微服务来说的话，这也是比较麻烦的一件事情，Docker 允许我们在 Dockerfile 中指定环境变量，但是如果我们需要在不同的容器中引用相同的数据呢，如果我们的应用程序是运行在集群上的时候，对于配置主机的环境变量也是难以管理的了 （秘钥用secret）</p>
+<h1 id="configMap用法"><a href="#configMap用法" class="headerlink" title="configMap用法"></a>configMap用法</h1><h2 id="configMap应用场景"><a href="#configMap应用场景" class="headerlink" title="configMap应用场景"></a>configMap应用场景</h2><ul>
+<li>生成为容器内的环境变量</li>
+<li>设置容器的启动命令的启动参数 (需要设置为环境变量）</li>
+<li>以Volume的形式挂载为容器内部的文件或目录</li>
+</ul>
+<h2 id="configMap创建"><a href="#configMap创建" class="headerlink" title="configMap创建"></a>configMap创建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConfigMap以一个或多个key:value的形式保存在Kubernetes系统中供应用使用，既可以用于表示一个变量的值(例如apploglevel=info)，也可以用于表示一个完整配置文件的内容(server.xml=&lt;?xml..&gt;..)</span><br></pre></td></tr></table></figure>
+<h2 id="ConfigMap创建方式"><a href="#ConfigMap创建方式" class="headerlink" title="ConfigMap创建方式"></a>ConfigMap创建方式</h2><ul>
+<li>通过直接在命令行中指定configmap参数创建，即–from-literal</li>
+<li>通过指定文件创建，即将一个配置文件创建为一个ConfigMap –from-file=&lt;文件&gt;</li>
+<li>通过指定目录创建，即将一个目录下的所有配置文件创建为一个ConfigMap，–from-file=&lt;目录&gt;</li>
+<li>事先写好标准的configmap的yaml文件，然后kubectl create -f 创建</li>
+</ul>
+<h3 id="–from-literal方式创建"><a href="#–from-literal方式创建" class="headerlink" title="–from-literal方式创建"></a>–from-literal方式创建</h3><p>创建configMap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap nginx-config --from-literal=nginx_port=80 --from-literal=server_name=sy.com</span><br></pre></td></tr></table></figure>
+<p>替换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap nginx-config --from-literal=nginx_port=8080 -o yaml --dry-run | kubectl replace -f -</span><br></pre></td></tr></table></figure>
+<h3 id="–from-file方式创建"><a href="#–from-file方式创建" class="headerlink" title="–from-file方式创建"></a>–from-file方式创建</h3><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><h2 id="Pod使用configMap"><a href="#Pod使用configMap" class="headerlink" title="Pod使用configMap"></a>Pod使用configMap</h2><ul>
+<li>使用env方式<ul>
+<li>当configMap修改时，内部环境变量不会动态改变</li>
+</ul>
+</li>
+<li>使用volumeMount方式<ul>
+<li>修改configMap环境变量随之变化</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -410,8 +431,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/a58affda.html" rel="next" title="python模块-执行系统命令">
-                <i class="fa fa-chevron-left"></i> python模块-执行系统命令
+              <a href="/posts/4ddce2e2.html" rel="next" title="kubectl在shell中的自动补全">
+                <i class="fa fa-chevron-left"></i> kubectl在shell中的自动补全
               </a>
             
           </div>
@@ -420,8 +441,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/79185f44.html" rel="prev" title="python模块-序列化">
-                python模块-序列化 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/5trce44e.html" rel="prev" title="k8s拉取Harbor私有镜像">
+                k8s拉取Harbor私有镜像 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -569,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConfigParser"><span class="nav-number">2.</span> <span class="nav-text">ConfigParser</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取"><span class="nav-number">2.1.</span> <span class="nav-text">读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改写"><span class="nav-number">2.2.</span> <span class="nav-text">改写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">2.3.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#configMap用法"><span class="nav-number">2.</span> <span class="nav-text">configMap用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#configMap应用场景"><span class="nav-number">2.1.</span> <span class="nav-text">configMap应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configMap创建"><span class="nav-number">2.2.</span> <span class="nav-text">configMap创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConfigMap创建方式"><span class="nav-number">2.3.</span> <span class="nav-text">ConfigMap创建方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#–from-literal方式创建"><span class="nav-number">2.3.1.</span> <span class="nav-text">–from-literal方式创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–from-file方式创建"><span class="nav-number">2.3.2.</span> <span class="nav-text">–from-file方式创建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">2.4.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pod使用configMap"><span class="nav-number">2.5.</span> <span class="nav-text">Pod使用configMap</span></a></li></ol></li></ol></div>
             
 
           </div>

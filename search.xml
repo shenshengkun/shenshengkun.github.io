@@ -281,6 +281,14 @@
       </categories>
   </entry>
   <entry>
+    <title><![CDATA[k8s的ConfigMap]]></title>
+    <url>%2Fposts%2Fdfjg544e.html</url>
+    <content type="text"><![CDATA[介绍我们经常都需要为我们的应用程序配置一些特殊的数据，比如密钥、Token 、数据库连接地址或者其他私密的信息。你的应用可能会使用一些特定的配置文件进行配置，比如settings.py文件，或者我们可以在应用的业务逻辑中读取环境变量或者某些标志来处理配置信息。 当然你可以直接将这些应用配置信息直接硬编码到你的应用程序中去，对于一个小型的应用，这或许是可以接受的，但是，对于一个相对较大的应用程序或者微服务的话，硬编码就会变得难以管理了。比如你现在有10个微服务，都连接了数据库A，如果现在需要更改数据库A的连接地址的话，就需要修改10个地方，显然这是难以忍受的。 当然，我们可以使用环境变量和统一的配置文件来解决这个问题，当我们想改变配置的时候，只需要更改环境变量或者配置文件就可以了，但是对于微服务来说的话，这也是比较麻烦的一件事情，Docker 允许我们在 Dockerfile 中指定环境变量，但是如果我们需要在不同的容器中引用相同的数据呢，如果我们的应用程序是运行在集群上的时候，对于配置主机的环境变量也是难以管理的了 （秘钥用secret） configMap用法configMap应用场景 生成为容器内的环境变量 设置容器的启动命令的启动参数 (需要设置为环境变量） 以Volume的形式挂载为容器内部的文件或目录 configMap创建1ConfigMap以一个或多个key:value的形式保存在Kubernetes系统中供应用使用，既可以用于表示一个变量的值(例如apploglevel=info)，也可以用于表示一个完整配置文件的内容(server.xml=&lt;?xml..&gt;..) ConfigMap创建方式 通过直接在命令行中指定configmap参数创建，即–from-literal 通过指定文件创建，即将一个配置文件创建为一个ConfigMap –from-file=&lt;文件&gt; 通过指定目录创建，即将一个目录下的所有配置文件创建为一个ConfigMap，–from-file=&lt;目录&gt; 事先写好标准的configmap的yaml文件，然后kubectl create -f 创建 –from-literal方式创建创建configMap 1kubectl create configmap nginx-config --from-literal=nginx_port=80 --from-literal=server_name=sy.com 替换 1kubectl create configmap nginx-config --from-literal=nginx_port=8080 -o yaml --dry-run | kubectl replace -f - –from-file方式创建注意Pod使用configMap 使用env方式 当configMap修改时，内部环境变量不会动态改变 使用volumeMount方式 修改configMap环境变量随之变化]]></content>
+      <categories>
+        <category>k8s</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[kubectl在shell中的自动补全]]></title>
     <url>%2Fposts%2F4ddce2e2.html</url>
     <content type="text"><![CDATA[在zsh上设置1source &lt;(kubectl completion zsh) 可以导入到.zshrc中实现自动加载： 1kubectl completion zsh &gt;&gt; ~/.zshrc 键入-n以后，按tab，自动弹出可用的ns： 12➜ admin kubectl -ndefault demo-echo demo-webshell kong kube-public kube-system 在linux上设置1234yum install bash-completionsource /usr/share/bash-completion/bash_completionecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/etc/bash_completion.d/kubectl 在mas上设置-bash12345brew install bash-completion@2export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] &amp;&amp; . /usr/local/etc/profile.d/bash_completion.shecho &apos;source &lt;(kubectl completion bash)&apos; &gt;&gt;~/.bashrckubectl completion bash &gt;/usr/local/etc/bash_completion.d/kubectl]]></content>
