@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
+<meta name="description" content="摘要一般情况下我们部署的 POD 是通过集群自动调度选择某个节点的，默认情况下调度器考虑的是资源足够，并且负载尽量平均，但是有的时候我们需要能够更加细粒度的去控制 POD 的调度，比如我们内部的一些服务 gitlab 之类的也是跑在Kubernetes集群上的，我们就不希望对外的一些服务和内部的服务跑在同一个节点上了，害怕内部服务对外部的服务产生影响；有的时候呢我们两个服务直接交流比较频繁，又希望">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python模块-序列化">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/79185f44.html">
+<meta property="og:title" content="k8s的亲和性">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/oigg664a.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
+<meta property="og:description" content="摘要一般情况下我们部署的 POD 是通过集群自动调度选择某个节点的，默认情况下调度器考虑的是资源足够，并且负载尽量平均，但是有的时候我们需要能够更加细粒度的去控制 POD 的调度，比如我们内部的一些服务 gitlab 之类的也是跑在Kubernetes集群上的，我们就不希望对外的一些服务和内部的服务跑在同一个节点上了，害怕内部服务对外部的服务产生影响；有的时候呢我们两个服务直接交流比较频繁，又希望">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-31T02:46:30.302Z">
+<meta property="og:updated_time" content="2019-06-17T06:36:16.698Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python模块-序列化">
-<meta name="twitter:description" content="摘要本文记录一些python中序列化的模块 序列化之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。 1234import jsonx=&amp;quot;[null,true,fals">
+<meta name="twitter:title" content="k8s的亲和性">
+<meta name="twitter:description" content="摘要一般情况下我们部署的 POD 是通过集群自动调度选择某个节点的，默认情况下调度器考虑的是资源足够，并且负载尽量平均，但是有的时候我们需要能够更加细粒度的去控制 POD 的调度，比如我们内部的一些服务 gitlab 之类的也是跑在Kubernetes集群上的，我们就不希望对外的一些服务和内部的服务跑在同一个节点上了，害怕内部服务对外部的服务产生影响；有的时候呢我们两个服务直接交流比较频繁，又希望">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/79185f44.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/oigg664a.html">
 
 
 
 
 
-  <title>python模块-序列化 | 舒宇的博客</title>
+  <title>k8s的亲和性 | 舒宇的博客</title>
   
 
 
@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/79185f44.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/oigg664a.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -301,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python模块-序列化</h1>
+          <h1 class="post-title" itemprop="name headline">k8s的亲和性</h1>
         
 
         <div class="post-meta">
@@ -313,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-17T16:33:01+08:00">
-                2018-02-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-15T18:20:01+08:00">
+                2018-06-15
               </time>
             
 
@@ -336,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -378,25 +378,81 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文记录一些python中序列化的模块</p>
-<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><p>之前我们学习过用eval内置方法可以将一个字符串转成python对象，不过，eval方法是有局限性的，对于普通的数据类型，json.loads和eval都能用，但遇到特殊类型的时候，eval就不管用了,所以eval的重点还是通常用来执行一个字符串表达式，并返回表达式的值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">x=&quot;[null,true,false,1]&quot;</span><br><span class="line">print(eval(x)) #报错，无法解析null类型，而json就可以</span><br><span class="line">print(json.loads(x))</span><br></pre></td></tr></table></figure>
-<h2 id="什么是序列化？"><a href="#什么是序列化？" class="headerlink" title="什么是序列化？"></a>什么是序列化？</h2><p>我们把对象(变量)从内存中变成可存储或传输的过程称之为序列化，在Python中叫pickling，在其他语言中也被称之为serialization，marshalling，flattening等等，都是一个意思。</p>
-<h2 id="为什么要序列化？"><a href="#为什么要序列化？" class="headerlink" title="为什么要序列化？"></a>为什么要序列化？</h2><h3 id="持久保存状态"><a href="#持久保存状态" class="headerlink" title="持久保存状态"></a>持久保存状态</h3><p>需知一个软件/程序的执行就在处理一系列状态的变化，在编程语言中，’状态’会以各种各样有结构的数据类型(也可简单的理解为变量)的形式被保存在内存中。</p>
-<p>内存是无法永久保存数据的，当程序运行了一段时间，我们断电或者重启程序，内存中关于这个程序的之前一段时间的数据（有结构）都被清空了。</p>
-<p>在断电或重启程序之前将程序当前内存中所有的数据都保存下来（保存到文件中），以便于下次程序执行能够从文件中载入之前的数据，然后继续执行，这就是序列化。</p>
-<p>具体的来说，你玩使命召唤闯到了第13关，你保存游戏状态，关机走人，下次再玩，还能从上次的位置开始继续闯关。或如，虚拟机状态的挂起等。</p>
-<h3 id="跨平台数据交互"><a href="#跨平台数据交互" class="headerlink" title="跨平台数据交互"></a>跨平台数据交互</h3><p>序列化之后，不仅可以把序列化后的内容写入磁盘，还可以通过网络传输到别的机器上，如果收发的双方约定好实用一种序列化的格式，那么便打破了平台/语言差异化带来的限制，实现了跨平台数据交互。</p>
-<p>反过来，把变量内容从序列化的对象重新读到内存里称之为反序列化，即unpickling。</p>
-<p>如何序列化之json和pickle：</p>
-<h1 id="json"><a href="#json" class="headerlink" title="json"></a>json</h1><p>如果我们要在不同的编程语言之间传递对象，就必须把对象序列化为标准格式，比如XML，但更好的方法是序列化为JSON，因为JSON表示出来就是一个字符串，可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
-<p>JSON表示的对象就是标准的JavaScript语言的对象，JSON和Python内置的数据类型对应如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line"> </span><br><span class="line">dic=&#123;&apos;name&apos;:&apos;alvin&apos;,&apos;age&apos;:23,&apos;sex&apos;:&apos;male&apos;&#125;</span><br><span class="line">print(type(dic))#&lt;class &apos;dict&apos;&gt;</span><br><span class="line"> </span><br><span class="line">j=json.dumps(dic)</span><br><span class="line">print(type(j))#&lt;class &apos;str&apos;&gt;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">f=open(&apos;序列化对象&apos;,&apos;w&apos;)</span><br><span class="line">f.write(j)  #-------------------等价于json.dump(dic,f)</span><br><span class="line">f.close()</span><br><span class="line">#-----------------------------反序列化&lt;br&gt;</span><br><span class="line">import json</span><br><span class="line">f=open(&apos;序列化对象&apos;)</span><br><span class="line">data=json.loads(f.read())#  等价于data=json.load(f)</span><br></pre></td></tr></table></figure>
-<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">#dct=&quot;&#123;&apos;1&apos;:111&#125;&quot;#json 不认单引号</span><br><span class="line">#dct=str(&#123;&quot;1&quot;:111&#125;)#报错,因为生成的数据还是单引号:&#123;&apos;one&apos;: 1&#125;</span><br><span class="line"></span><br><span class="line">dct=&apos;&#123;&quot;1&quot;:&quot;111&quot;&#125;&apos;</span><br><span class="line">print(json.loads(dct))</span><br><span class="line"></span><br><span class="line">#conclusion:</span><br><span class="line">#        无论数据是怎样创建的，只要满足json格式，就可以json.loads出来,不一定非要dumps的数据才能loads</span><br></pre></td></tr></table></figure>
-<h1 id="pickle"><a href="#pickle" class="headerlink" title="pickle"></a>pickle</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import pickle</span><br><span class="line"> </span><br><span class="line">dic=&#123;&apos;name&apos;:&apos;alvin&apos;,&apos;age&apos;:23,&apos;sex&apos;:&apos;male&apos;&#125;</span><br><span class="line"> </span><br><span class="line">print(type(dic))#&lt;class &apos;dict&apos;&gt;</span><br><span class="line"> </span><br><span class="line">j=pickle.dumps(dic)</span><br><span class="line">print(type(j))#&lt;class &apos;bytes&apos;&gt;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">f=open(&apos;序列化对象_pickle&apos;,&apos;wb&apos;)#注意是w是写入str,wb是写入bytes,j是&apos;bytes&apos;</span><br><span class="line">f.write(j)  #-------------------等价于pickle.dump(dic,f)</span><br><span class="line"> </span><br><span class="line">f.close()</span><br><span class="line">#-------------------------反序列化</span><br><span class="line">import pickle</span><br><span class="line">f=open(&apos;序列化对象_pickle&apos;,&apos;rb&apos;)</span><br><span class="line"> </span><br><span class="line">data=pickle.loads(f.read())#  等价于data=pickle.load(f)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print(data[&apos;age&apos;])</span><br></pre></td></tr></table></figure>
-<p>Pickle的问题和所有其他编程语言特有的序列化问题一样，就是它只能用于Python，并且可能不同版本的Python彼此都不兼容，因此，只能用Pickle保存那些不重要的数据，不能成功地反序列化也没关系。</p>
-<h1 id="shelve"><a href="#shelve" class="headerlink" title="shelve"></a>shelve</h1><p>shelve模块比pickle模块简单，只有一个open函数，返回类似字典的对象，可读可写;key必须为字符串，而值可以是python所支持的数据类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import shelve</span><br><span class="line"></span><br><span class="line">f=shelve.open(r&apos;sheve.txt&apos;)</span><br><span class="line"># f[&apos;stu1_info&apos;]=&#123;&apos;name&apos;:&apos;egon&apos;,&apos;age&apos;:18,&apos;hobby&apos;:[&apos;piao&apos;,&apos;smoking&apos;,&apos;drinking&apos;]&#125;</span><br><span class="line"># f[&apos;stu2_info&apos;]=&#123;&apos;name&apos;:&apos;gangdan&apos;,&apos;age&apos;:53&#125;</span><br><span class="line"># f[&apos;school_info&apos;]=&#123;&apos;website&apos;:&apos;http://www.pypy.org&apos;,&apos;city&apos;:&apos;beijing&apos;&#125;</span><br><span class="line"></span><br><span class="line">print(f[&apos;stu1_info&apos;][&apos;hobby&apos;])</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>一般情况下我们部署的 POD 是通过集群自动调度选择某个节点的，默认情况下调度器考虑的是资源足够，并且负载尽量平均，但是有的时候我们需要能够更加细粒度的去控制 POD 的调度，比如我们内部的一些服务 gitlab 之类的也是跑在<code>Kubernetes</code>集群上的，我们就不希望对外的一些服务和内部的服务跑在同一个节点上了，害怕内部服务对外部的服务产生影响；有的时候呢我们两个服务直接交流比较频繁，又希望能够将这两个服务的 POD 调度到同样的节点上。这就需要用到 Kubernetes 里面的一个概念：亲和性，亲和性主要分为两类：<code>nodeAffinity</code>和<code>podAffinity</code>。 </p>
+<h1 id="nodeSelector"><a href="#nodeSelector" class="headerlink" title="nodeSelector"></a>nodeSelector</h1><p>我们知道<code>label</code>是<code>kubernetes</code>中一个非常重要的概念，用户可以非常灵活的利用 label 来管理集群中的资源，比如最常见的一个就是 service 通过匹配 label 去选择 POD 的。而 POD 的调度也可以根据节点的 label 进行特定的部署。</p>
+<p>我们可以通过下面的命令查看我们的 node 的 label：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# kubectl get nodes --show-labels</span><br><span class="line">NAME    STATUS   ROLES    AGE   VERSION   LABELS</span><br><span class="line">node1   Ready    &lt;none&gt;   10d   v1.14.2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node1,kubernetes.io/os=linux</span><br><span class="line">node2   Ready    &lt;none&gt;   10d   v1.14.2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node2,kubernetes.io/os=linux</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# kubectl label nodes node1 source=sy</span><br><span class="line">node/node1 labeled</span><br><span class="line">[root@node1 ~]# kubectl get nodes --show-labels    </span><br><span class="line">NAME    STATUS   ROLES    AGE   VERSION   LABELS</span><br><span class="line">node1   Ready    &lt;none&gt;   10d   v1.14.2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node1,kubernetes.io/os=linux,source=sy</span><br><span class="line">node2   Ready    &lt;none&gt;   10d   v1.14.2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node2,kubernetes.io/os=linux</span><br></pre></td></tr></table></figure>
+<p>我们可以通过上面的<code>--show-labels</code>参数可以查看上述标签是否生效。当 node 被打上了相关标签后，在调度的时候就可以使用这些标签了，只需要在 POD 的 spec 字段中添加<code>nodeSelector</code>字段，里面是我们需要被调度的节点的 label。例如，下面是我们之前的一个默认的 busybox POD 的 YAML 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: busybox-pod</span><br><span class="line">  name: test-busybox</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - command:</span><br><span class="line">    - sleep</span><br><span class="line">    - &quot;3600&quot;</span><br><span class="line">    image: busybox</span><br><span class="line">    imagePullPolicy: Always</span><br><span class="line">    name: test-busybox</span><br></pre></td></tr></table></figure>
+<p>然后我需要让上面的 POD 被调度到140的节点上，那么最简单的方法就是去匹配140上面的 label，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: busybox-pod</span><br><span class="line">  name: test-busybox</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - command:</span><br><span class="line">    - sleep</span><br><span class="line">    - &quot;3600&quot;</span><br><span class="line">    image: busybox</span><br><span class="line">    imagePullPolicy: Always</span><br><span class="line">    name: test-busybox</span><br><span class="line">  nodeSelector:</span><br><span class="line">    source: sy</span><br></pre></td></tr></table></figure>
+<h1 id="nodeAffinity"><a href="#nodeAffinity" class="headerlink" title="nodeAffinity"></a>nodeAffinity</h1><p><code>nodeAffinity</code>就是节点亲和性，相对应的是<code>Anti-Affinity</code>，就是反亲和性，这种方法比上面的<code>nodeSelector</code>更加灵活，它可以进行一些简单的逻辑组合了，不只是简单的相等匹配。 调度可以分成软策略和硬策略两种方式，软策略就是如果你没有满足调度要求的节点的话，POD 就会忽略这条规则，继续完成调度过程，说白了就是<strong>满足条件最好了，没有的话也无所谓了</strong>的策略；而硬策略就比较强硬了，如果没有满足条件的节点的话，就不断重试直到满足条件为止，简单说就是<strong>你必须满足我的要求，不然我就不干</strong>的策略。 <code>nodeAffinity</code>就有两上面两种策略：<code>preferredDuringSchedulingIgnoredDuringExecution</code>和<code>requiredDuringSchedulingIgnoredDuringExecution</code>，前面的就是软策略，后面的就是硬策略。</p>
+<p>如下例子：（<strong>test-node-affinity.yaml</strong>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: with-node-affinity</span><br><span class="line">  labels:</span><br><span class="line">    app: node-affinity-pod</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: with-node-affinity</span><br><span class="line">    image: nginx</span><br><span class="line">  affinity:</span><br><span class="line">    nodeAffinity:</span><br><span class="line">      requiredDuringSchedulingIgnoredDuringExecution:</span><br><span class="line">        nodeSelectorTerms:</span><br><span class="line">        - matchExpressions:</span><br><span class="line">          - key: kubernetes.io/hostname</span><br><span class="line">            operator: NotIn</span><br><span class="line">            values:</span><br><span class="line">            - node1</span><br><span class="line">      preferredDuringSchedulingIgnoredDuringExecution:</span><br><span class="line">      - weight: 1</span><br><span class="line">        preference:</span><br><span class="line">          matchExpressions:</span><br><span class="line">          - key: source</span><br><span class="line">            operator: In</span><br><span class="line">            values:</span><br><span class="line">            - sy</span><br></pre></td></tr></table></figure>
+<p>上面这个 POD 首先是要求 POD 不能运行在node1这个节点上，如果有个节点满足<code>source=sy</code>的话就优先调度到这个节点上，同样的我们可以使用<code>descirbe</code>命令查看具体的调度情况是否满足我们的要求。这里的匹配逻辑是 label 的值在某个列表中，现在<code>Kubernetes</code>提供的操作符有下面的几种：</p>
+<ul>
+<li>In：label 的值在某个列表中</li>
+<li>NotIn：label 的值不在某个列表中</li>
+<li>Gt：label 的值大于某个值</li>
+<li>Lt：label 的值小于某个值</li>
+<li>Exists：某个 label 存在</li>
+<li>DoesNotExist：某个 label 不存在</li>
+</ul>
+<blockquote>
+<p>如果<code>nodeSelectorTerms</code>下面有多个选项的话，满足任何一个条件就可以了；如果<code>matchExpressions</code>有多个选项的话，则必须同时满足这些条件才能正常调度 POD。</p>
+</blockquote>
+<h1 id="podAffinity"><a href="#podAffinity" class="headerlink" title="podAffinity"></a>podAffinity</h1><p>上面两种方式都是让 POD 去选择节点的，有的时候我们也希望能够根据 POD 之间的关系进行调度，<code>Kubernetes</code>在1.4版本引入的<code>podAffinity</code>概念就可以实现我们这个需求。</p>
+<p>和<code>nodeAffinity</code>类似，<code>podAffinity</code>也有<code>requiredDuringSchedulingIgnoredDuringExecution</code>和 <code>preferredDuringSchedulingIgnoredDuringExecution</code>两种调度策略，唯一不同的是如果要使用互斥性，我们需要使用<code>podAntiAffinity</code>字段。 如下例子，我们希望<code>with-pod-affinity</code>和<code>busybox-pod</code>能够就近部署，而不希望和<code>node-affinity-pod</code>部署在同一个拓扑域下面：（<strong>test-pod-affinity.yaml</strong>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: with-pod-affinity</span><br><span class="line">  labels:</span><br><span class="line">    app: pod-affinity-pod</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: with-pod-affinity</span><br><span class="line">    image: nginx</span><br><span class="line">  affinity:</span><br><span class="line">    podAffinity:</span><br><span class="line">      requiredDuringSchedulingIgnoredDuringExecution:</span><br><span class="line">      - labelSelector:</span><br><span class="line">          matchExpressions:</span><br><span class="line">          - key: app</span><br><span class="line">            operator: In</span><br><span class="line">            values:</span><br><span class="line">            - busybox-pod</span><br><span class="line">        topologyKey: kubernetes.io/hostname</span><br><span class="line">    podAntiAffinity:</span><br><span class="line">      preferredDuringSchedulingIgnoredDuringExecution:</span><br><span class="line">      - weight: 1</span><br><span class="line">        podAffinityTerm:</span><br><span class="line">          labelSelector:</span><br><span class="line">            matchExpressions:</span><br><span class="line">            - key: app</span><br><span class="line">              operator: In</span><br><span class="line">              values:</span><br><span class="line">              - node-affinity-pod</span><br><span class="line">          topologyKey: kubernetes.io/hostname</span><br></pre></td></tr></table></figure>
+<p>上面这个例子中的 POD 需要调度到某个指定的主机上，至少有一个节点上运行了这样的 POD：这个 POD 有一个<code>app=busybox-pod</code>的 label。<code>podAntiAffinity</code>则是希望最好不要调度到这样的节点：这个节点上运行了某个 POD，而这个 POD 有<code>app=node-affinity-pod</code>的 label。</p>
+<p>亲和性/反亲和性调度策略比较如下：</p>
+<table>
+<thead>
+<tr>
+<th>调度策略</th>
+<th>匹配标签</th>
+<th>操作符</th>
+<th>拓扑域支持</th>
+<th>调度目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nodeAffinity</td>
+<td>主机</td>
+<td>In, NotIn, Exists, DoesNotExist, Gt, Lt</td>
+<td>否</td>
+<td>指定主机</td>
+</tr>
+<tr>
+<td>podAffinity</td>
+<td>POD</td>
+<td>In, NotIn, Exists, DoesNotExist</td>
+<td>是</td>
+<td>POD与指定POD同一拓扑域</td>
+</tr>
+<tr>
+<td>podAnitAffinity</td>
+<td>POD</td>
+<td>In, NotIn, Exists, DoesNotExist</td>
+<td>是</td>
+<td>POD与指定POD不在同一拓扑域</td>
+</tr>
+</tbody>
+</table>
+<h1 id="污点（Taints）与容忍（tolerations）"><a href="#污点（Taints）与容忍（tolerations）" class="headerlink" title="污点（Taints）与容忍（tolerations）"></a>污点（Taints）与容忍（tolerations）</h1><p>对于<code>nodeAffinity</code>无论是硬策略还是软策略方式，都是调度 POD 到预期节点上，而<code>Taints</code>恰好与之相反，如果一个节点标记为 Taints ，除非 POD 也被标识为可以容忍污点节点，否则该 Taints 节点不会被调度pod。</p>
+<p>比如用户希望把 Master 节点保留给 Kubernetes 系统组件使用，或者把一组具有特殊资源预留给某些 POD，则污点就很有用了，POD 不会再被调度到 taint 标记过的节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl taint nodes node1 key=value:NoSchedule</span><br></pre></td></tr></table></figure>
+<p>如果仍然希望某个 POD 调度到 taint 节点上，则必须在 Spec 中做出<code>Toleration</code>定义，才能调度到该节点，举例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tolerations:</span><br><span class="line">- key: &quot;key&quot;</span><br><span class="line">operator: &quot;Equal&quot;</span><br><span class="line">value: &quot;value&quot;</span><br><span class="line">effect: &quot;NoSchedule&quot;</span><br></pre></td></tr></table></figure>
+<p>effect 共有三个可选项，可按实际需求进行设置：</p>
+<ol>
+<li><code>NoSchedule</code>：POD 不会被调度到标记为 taints 节点。</li>
+<li><code>PreferNoSchedule</code>：NoSchedule 的软策略版本。</li>
+<li><code>NoExecute</code>：该选项意味着一旦 Taint 生效，如该节点内正在运行的 POD 没有对应 Tolerate 设置，会直接被逐出。</li>
+</ol>
+
       
     </div>
     
@@ -420,8 +476,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/cf57e5aa.html" rel="next" title="python模块-configparser">
-                <i class="fa fa-chevron-left"></i> python模块-configparser
+              <a href="/posts/dfjg544e.html" rel="next" title="k8s的ConfigMap">
+                <i class="fa fa-chevron-left"></i> k8s的ConfigMap
               </a>
             
           </div>
@@ -430,8 +486,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/6f65a2ef.html" rel="prev" title="python模块-xml、yaml">
-                python模块-xml、yaml <i class="fa fa-chevron-right"></i>
+              <a href="/posts/5trce44e.html" rel="prev" title="k8s拉取Harbor私有镜像">
+                k8s拉取Harbor私有镜像 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -579,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化"><span class="nav-number">2.</span> <span class="nav-text">序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化？"><span class="nav-number">2.1.</span> <span class="nav-text">什么是序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要序列化？"><span class="nav-number">2.2.</span> <span class="nav-text">为什么要序列化？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#持久保存状态"><span class="nav-number">2.2.1.</span> <span class="nav-text">持久保存状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨平台数据交互"><span class="nav-number">2.2.2.</span> <span class="nav-text">跨平台数据交互</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#json"><span class="nav-number">3.</span> <span class="nav-text">json</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">3.1.</span> <span class="nav-text">注意点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pickle"><span class="nav-number">4.</span> <span class="nav-text">pickle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shelve"><span class="nav-number">5.</span> <span class="nav-text">shelve</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nodeSelector"><span class="nav-number">2.</span> <span class="nav-text">nodeSelector</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nodeAffinity"><span class="nav-number">3.</span> <span class="nav-text">nodeAffinity</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#podAffinity"><span class="nav-number">4.</span> <span class="nav-text">podAffinity</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#污点（Taints）与容忍（tolerations）"><span class="nav-number">5.</span> <span class="nav-text">污点（Taints）与容忍（tolerations）</span></a></li></ol></div>
             
 
           </div>
