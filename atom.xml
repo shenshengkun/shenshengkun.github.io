@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2019-06-20T06:01:26.726Z</updated>
+  <updated>2019-06-20T06:18:22.061Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Kubelet状态更新机制</title>
+    <link href="https://shenshengkun.github.io/posts/dfkdaa65.html"/>
+    <id>https://shenshengkun.github.io/posts/dfkdaa65.html</id>
+    <published>2019-06-18T06:14:01.000Z</published>
+    <updated>2019-06-20T06:18:22.061Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 Down 掉以后，Pod 并不会立即触发重新调度，这实际上就是和 Kubelet 的状态更新机制密切相关的，Kubernetes 提供了一些参数配置来触发重新调度到嗯时间，下面我们来分析下 Kubelet 状态更新的基本流程。</p><ol><li>kubelet 自身会定期更新状态到 apiserver，通过参数<code>--node-status-update-frequency</code>指定上报频率，默认是 10s 上报一次。</li><li>kube-controller-manager 会每隔<code>--node-monitor-period</code>时间去检查 kubelet 的状态，默认是 5s。</li><li>当 node 失联一段时间后，kubernetes 判定 node 为 <code>notready</code> 状态，这段时长通过<code>--node-monitor-grace-period</code>参数配置，默认 40s。</li><li>当 node 失联一段时间后，kubernetes 判定 node 为 <code>unhealthy</code> 状态，这段时长通过<code>--node-startup-grace-period</code>参数配置，默认 1m0s。</li><li>当 node 失联一段时间后，kubernetes 开始删除原 node 上的 pod，这段时长是通过<code>--pod-eviction-timeout</code>参数配置，默认 5m0s。</li></ol><blockquote><p>kube-controller-manager 和 kubelet 是异步工作的，这意味着延迟可能包括任何的网络延迟、apiserver 的延迟、etcd 延迟，一个节点上的负载引起的延迟等等。因此，如果<code>--node-status-update-frequency</code>设置为5s，那么实际上 etcd 中的数据变化会需要 6-7s，甚至更长时间。</p></blockquote><p>Kubelet在更新状态失败时，会进行<code>nodeStatusUpdateRetry</code>次重试，默认为 5 次。</p><p>Kubelet 会在函数<code>tryUpdateNodeStatus</code>中尝试进行状态更新。Kubelet 使用了 Golang 中的<code>http.Client()</code>方法，但是没有指定超时时间，因此，如果 API Server 过载时，当建立 TCP 连接时可能会出现一些故障。</p><p>因此，在<code>nodeStatusUpdateRetry</code> * <code>--node-status-update-frequency</code>时间后才会更新一次节点状态。</p><p>同时，Kubernetes 的 controller manager 将尝试每<code>--node-monitor-period</code>时间周期内检查<code>nodeStatusUpdateRetry</code>次。在<code>--node-monitor-grace-period</code>之后，会认为节点 unhealthy，然后会在<code>--pod-eviction-timeout</code>后删除 Pod。</p><p>kube proxy 有一个 watcher API，一旦 Pod 被驱逐了，kube proxy 将会通知更新节点的 iptables 规则，将 Pod 从 Service 的 Endpoints 中移除，这样就不会访问到来自故障节点的 Pod 了。</p><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>对于这些参数的配置，需要根据不通的集群规模场景来进行配置。</p><h3 id="社区默认的配置"><a href="#社区默认的配置" class="headerlink" title="社区默认的配置"></a>社区默认的配置</h3><table><thead><tr><th>参数</th><th>值</th></tr></thead><tbody><tr><td>–node-status-update-frequency</td><td>10s</td></tr><tr><td>–node-monitor-period</td><td>5s</td></tr><tr><td>–node-monitor-grace-period</td><td>40s</td></tr><tr><td>–pod-eviction-timeout</td><td>5m</td></tr></tbody></table><h3 id="快速更新和快速响应"><a href="#快速更新和快速响应" class="headerlink" title="快速更新和快速响应"></a>快速更新和快速响应</h3><table><thead><tr><th>参数</th><th>值</th></tr></thead><tbody><tr><td>–node-status-update-frequency</td><td>4s</td></tr><tr><td>–node-monitor-period</td><td>2s</td></tr><tr><td>–node-monitor-grace-period</td><td>20s</td></tr><tr><td>–pod-eviction-timeout</td><td>30s</td></tr></tbody></table><p>在这种情况下，Pod 将在 50s 被驱逐，因为该节点在 20s 后被视为Down掉了，<code>--pod-eviction-timeout</code>在 30s 之后发生，但是，这种情况会给 etcd 产生很大的开销，因为每个节点都会尝试每 2s 更新一次状态。</p><p>如果环境有1000个节点，那么每分钟将有15000次节点更新操作，这可能需要大型 etcd 容器甚至是 etcd 的专用节点。</p><blockquote><p>如果我们计算尝试次数，则除法将给出5，但实际上每次尝试的 nodeStatusUpdateRetry 尝试将从3到5。 由于所有组件的延迟，尝试总次数将在15到25之间变化。</p></blockquote><h3 id="中等更新和平均响应"><a href="#中等更新和平均响应" class="headerlink" title="中等更新和平均响应"></a>中等更新和平均响应</h3><table><thead><tr><th>参数</th><th>值</th></tr></thead><tbody><tr><td>–node-status-update-frequency</td><td>20s</td></tr><tr><td>–node-monitor-period</td><td>5s</td></tr><tr><td>–node-monitor-grace-period</td><td>2m</td></tr><tr><td>–pod-eviction-timeout</td><td>1m</td></tr></tbody></table><p>这种场景下会 20s 更新一次 node 状态，controller manager 认为 node 状态不正常之前，会有 2m<em>60⁄20</em>5=30 次的 node 状态更新，Node 状态为 down 之后 1m，就会触发驱逐操作。</p><p>如果有 1000 个节点，1分钟之内就会有 60s/20s*1000=3000 次的节点状态更新操作。</p><h3 id="低更新和慢响应"><a href="#低更新和慢响应" class="headerlink" title="低更新和慢响应"></a>低更新和慢响应</h3><table><thead><tr><th>参数</th><th>值</th></tr></thead><tbody><tr><td>–node-status-update-frequency</td><td>1m</td></tr><tr><td>–node-monitor-period</td><td>5s</td></tr><tr><td>–node-monitor-grace-period</td><td>5m</td></tr><tr><td>–pod-eviction-timeout</td><td>1m</td></tr></tbody></table><p>Kubelet 将会 1m 更新一次节点的状态，在认为不健康之后会有 5m/1m*5=25 次重试更新的机会。Node为不健康的时候，1m 之后 pod开始被驱逐。</p><p>可以有不同的组合，例如快速更新和慢反应以满足特定情况。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;摘要&quot;&gt;&lt;a href=&quot;#摘要&quot; class=&quot;headerlink&quot; title=&quot;摘要&quot;&gt;&lt;/a&gt;摘要&lt;/h1&gt;&lt;p&gt;当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 
+      
+    
+    </summary>
+    
+      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>istio架构与技术</title>
@@ -454,30 +477,6 @@
     </summary>
     
       <category term="区块链" scheme="https://shenshengkun.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>python监控es状态</title>
-    <link href="https://shenshengkun.github.io/posts/71abe607.html"/>
-    <id>https://shenshengkun.github.io/posts/71abe607.html</id>
-    <published>2019-04-28T03:04:01.000Z</published>
-    <updated>2019-05-30T02:29:19.196Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>用python写一个监控es状态的脚本</p><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><h2 id="监控es的机器"><a href="#监控es的机器" class="headerlink" title="监控es的机器"></a>监控es的机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">配置文件</span><br><span class="line"></span><br><span class="line">[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini</span><br><span class="line">[mail]</span><br><span class="line">name = sy@xxx.com</span><br><span class="line">[tax_es]</span><br><span class="line">cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.9:9200</span><br><span class="line">name_pass = none,none</span><br><span class="line">[analysis_es]</span><br><span class="line">cluster_ip = 192.168.50.24:9200,192.168.50.25:9200</span><br><span class="line">name_pass = none,none</span><br></pre></td></tr></table></figure><h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@Ops-script monitor_elasticsearch]# cat monitor_elastic_cluster.py</span><br><span class="line"></span><br><span class="line">import urllib,socket,time,json</span><br><span class="line">import logging,requests,configparser,os</span><br><span class="line"></span><br><span class="line"># 定义日志格式读取配置文件</span><br><span class="line">cur_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">logging.basicConfig(format=&apos;[ %(asctime)s ] -- %(message)s&apos;,</span><br><span class="line">                    datefmt=&apos;%a, %d %b %Y %H:%M:%S&apos;,</span><br><span class="line">                    filename=cur_path+&quot;/scripts.log&quot;,</span><br><span class="line">                    level=logging.INFO)</span><br><span class="line">config_path = os.path.join(cur_path,&quot;escluster_ip.ini&quot;)</span><br><span class="line">conf = configparser.ConfigParser()</span><br><span class="line">conf.read(config_path)</span><br><span class="line">esgroup = conf.sections()</span><br><span class="line"></span><br><span class="line">def GetClusterIp():</span><br><span class="line">    # 按集群名循环检查,集群名为配置文件中的标题</span><br><span class="line">    for group in esgroup:</span><br><span class="line">        # 获取到 mail 中的邮件地址不再继续循环</span><br><span class="line">        if group == &quot;mail&quot;:</span><br><span class="line">            mailname = conf.get(group,&quot;name&quot;)</span><br><span class="line">            continue</span><br><span class="line">        # 获取到一个集群 ip 后进行 get 请求</span><br><span class="line">        iplist = conf.get(group,&quot;cluster_ip&quot;).split(&quot;,&quot;)</span><br><span class="line">        for esip in iplist:</span><br><span class="line">            url = &quot;http://%s/_cat/health&quot;%esip</span><br><span class="line">            try:</span><br><span class="line">                # 超时时间为 3 秒, request 的请求值不是200的将全部置为400</span><br><span class="line">                # 如果是请求成功,则获取 status 的状态和 status_num 的百分比</span><br><span class="line">                response = requests.get(url,timeout=3)</span><br><span class="line">                request = response.status_code</span><br><span class="line">                status = response.text.split()[3]</span><br><span class="line">                status_num = response.text.split()[-1]</span><br><span class="line">            except:</span><br><span class="line">                request = 400</span><br><span class="line">            # 请求值为 200 后,检查 status 值非 green 状态发送报警邮件,并不在继续检查本集群内的剩余节点</span><br><span class="line">            if request == 200:</span><br><span class="line">                if status != &quot;green&quot;:</span><br><span class="line">                    mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s ,查状态: %s, 状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip为: [ %s ]\n\n检查状态为: %s\n\n状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                    logging.info(mailtitle)</span><br><span class="line">                    os.system(command)</span><br><span class="line">                    break</span><br><span class="line">            # 请求值不是 200 ,报警后继续检查集群内剩余 ip</span><br><span class="line">            else:</span><br><span class="line">                mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s, 请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip: [ %s ]\n\n请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                logging.info(mailtitle)</span><br><span class="line">                os.system(command)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    GetClusterIp()</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h1&gt;&lt;p&gt;用python写一个监控es状态的脚本&lt;/p&gt;
-&lt;h1 id=&quot;实例&quot;&gt;&lt;a href=&quot;#实例&quot; class=&quot;headerlink&quot; t
-      
-    
-    </summary>
-    
-      <category term="python" scheme="https://shenshengkun.github.io/categories/python/"/>
     
     
   </entry>
