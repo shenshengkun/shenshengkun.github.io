@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Kubernetes Pod无法删除]]></title>
+    <url>%2Fposts%2Fdk7569vg.html</url>
+    <content type="text"><![CDATA[问题发现在node节点断电 重启后，发现有的pod节点状态不正常，之前的回收策略也都做了，就调研下是什么原因导致的 pod一直处于Terminated: ExitCode 状态 解决直接删除，无法飘移123kubectl delete pod &lt;podname&gt; --namespace=&lt;namspacer&gt; --grace-period=0 --force发现pod无法漂移docker ps -a查看对应docker容器的状态，发现这两个Pod的docker容器处于Dead状态。使用docker rm &lt;container id&gt;，提示Device is Busy，无法删除。 现象是由于systemd服务PrivateTmp=true引起最根本的方法是，当机器加入时，在 docker.service 中加上： 12[Service]MountFlags=slave 关于Systemd的MountFlags1234567MountFlags: 配置Systemd服务的Mount Namespace配置。会影响服务进程上下文中挂载点的信息，即服务是否会继承主机上已有的挂载点，以及如果服务运行时执行了挂载或卸载设备的操作，是否会真实地在主机上产生效果。可选值为shared、slave和privateshared：服务与主机共用一个Mount Namespace，会继承主机挂载点，服务挂载或卸载设备时会真实地反映到主机上slave：服务使用独立的Mount Namespace，会继承主机挂载点，但服务对挂载点的操作只在自己的Namespace内生效，不会反映到主机上private: 服务使用独立的Mount Namespace，在启动时没有任何挂载点，服务对挂载点的操作也不会反映到主机上]]></content>
+      <categories>
+        <category>k8s</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[tomcat8导致文件权限访问不到]]></title>
     <url>%2Fposts%2Fkfkd454f.html</url>
     <content type="text"><![CDATA[问题之前在tomcat 7下文件上传后访问一直没问题，现在tomcat版本升到8.5，在测试文件http上传时，发现所传文件无法通过nginx访问了：报错 403 forbidden 解决看下系统的umask 12345678910cat /etc/profile后发现if [ $UID -gt 199 ] &amp;&amp; [ &quot;`/usr/bin/id -gn`&quot; = &quot;`/usr/bin/id -un`&quot; ]; then umask 002else umask 022fi022是没问题的 看下tomcat的catlina.sh 123456if [ -z &quot;$UMASK&quot; ]; thenUMASK=&quot;0027&quot;fiumask $UMASKtomcat8改成0027了，把这个改成0022就好了]]></content>
