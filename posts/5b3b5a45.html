@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s基本命令">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/5b3b5a45.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-06T02:14:25.086Z">
+<meta property="og:updated_time" content="2019-07-12T02:53:04.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s基本命令">
-<meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ ku">
+<meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 
 
 
@@ -379,6 +379,7 @@
 
       
         <h1 id="pods"><a href="#pods" class="headerlink" title="pods"></a>pods</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pods -n pro</span><br><span class="line">$ kubectl get pods --all-namespaces -n pro</span><br><span class="line">$ kubectl get pod aa -o wide -n pro</span><br><span class="line">$ kubectl get pod aa -o yaml -n pro</span><br><span class="line">$ kubectl describe pod aa -n pro</span><br></pre></td></tr></table></figure>
+<h2 id="不用grep列出node上的pod"><a href="#不用grep列出node上的pod" class="headerlink" title="不用grep列出node上的pod"></a>不用grep列出node上的pod</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods --field-selector spec.nodeName=node04 --all-namespaces</span><br></pre></td></tr></table></figure>
 <h2 id="POD升级和历史"><a href="#POD升级和历史" class="headerlink" title="POD升级和历史"></a>POD升级和历史</h2><p>列出部署历史记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout history deployment/DEPLOYMENT_NAME</span><br></pre></td></tr></table></figure></p>
 <p>跳转到特定修订版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N</span><br></pre></td></tr></table></figure></p>
 <h1 id="service"><a href="#service" class="headerlink" title="service"></a>service</h1><p>查看服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get services</span><br></pre></td></tr></table></figure></p>
@@ -615,7 +616,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pods"><span class="nav-number">1.</span> <span class="nav-text">pods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#POD升级和历史"><span class="nav-number">1.1.</span> <span class="nav-text">POD升级和历史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#service"><span class="nav-number">2.</span> <span class="nav-text">service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#login"><span class="nav-number">3.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log"><span class="nav-number">4.</span> <span class="nav-text">log</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pods"><span class="nav-number">1.</span> <span class="nav-text">pods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不用grep列出node上的pod"><span class="nav-number">1.1.</span> <span class="nav-text">不用grep列出node上的pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POD升级和历史"><span class="nav-number">1.2.</span> <span class="nav-text">POD升级和历史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#service"><span class="nav-number">2.</span> <span class="nav-text">service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#login"><span class="nav-number">3.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log"><span class="nav-number">4.</span> <span class="nav-text">log</span></a></li></ol></div>
             
 
           </div>

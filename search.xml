@@ -363,7 +363,7 @@
   <entry>
     <title><![CDATA[k8s基本命令]]></title>
     <url>%2Fposts%2F5b3b5a45.html</url>
-    <content type="text"><![CDATA[pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro POD升级和历史列出部署历史记录1$ kubectl rollout history deployment/DEPLOYMENT_NAME 跳转到特定修订版1$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N service查看服务1$ kubectl get services 将POD作为服务公开（创建端点）1$ kubectl expose deployment/aa --port=2000 --type=NodePort login1kubectl exec -ti 1 bash -n product log1kubectl logs -f 1 -n product]]></content>
+    <content type="text"><![CDATA[pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kubectl get pods --field-selector spec.nodeName=node04 --all-namespaces POD升级和历史列出部署历史记录1$ kubectl rollout history deployment/DEPLOYMENT_NAME 跳转到特定修订版1$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N service查看服务1$ kubectl get services 将POD作为服务公开（创建端点）1$ kubectl expose deployment/aa --port=2000 --type=NodePort login1kubectl exec -ti 1 bash -n product log1kubectl logs -f 1 -n product]]></content>
       <categories>
         <category>k8s</category>
       </categories>
