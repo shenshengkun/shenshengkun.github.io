@@ -81,13 +81,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/archives/2019/page/3/index.html">
+<meta name="description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph的pg算法">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/fd22jkk6.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://shenshengkun.github.io/images/pg1.png">
+<meta property="og:updated_time" content="2019-07-12T09:49:15.127Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="ceph的pg算法">
+<meta name="twitter:description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/pg1.png">
 
 
 
@@ -117,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/archives/2019/page/3/">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/fd22jkk6.html">
 
 
 
 
 
-  <title>归档 | 舒宇的博客</title>
+  <title>ceph的pg算法 | 舒宇的博客</title>
   
 
 
@@ -142,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -266,390 +272,234 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/fd22jkk6.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">ceph的pg算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-11T17:10:01+08:00">
+                2019-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        好! 目前共计 69 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/267edcc5.html" itemprop="url">
-              
-                <span itemprop="name">k8s强制删除</span>
-              
-            </a>
-        
-      </h2>
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-27T17:43:01+08:00" content="2019-05-27">
-          05-27
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/9c5623c7.html" itemprop="url">
-              
-                <span itemprop="name">fabric问题汇总</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-22T13:04:10+08:00" content="2019-05-22">
-          05-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/239bdf86.html" itemprop="url">
-              
-                <span itemprop="name">Prometheus添加验证登录</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-22T09:38:01+08:00" content="2019-05-22">
-          05-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="PG介绍"><a href="#PG介绍" class="headerlink" title="PG介绍"></a>PG介绍</h1><p>PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。<br>如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的。建议每个OSD上配置50~100个PG。</p>
+<h1 id="计算PG数"><a href="#计算PG数" class="headerlink" title="计算PG数"></a>计算PG数</h1><p>官方推荐如下：</p>
+<p><img src="https://shenshengkun.github.io/images/pg1.png" alt=""></p>
+<p>Ceph集群中的PG总数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PG总数 = (OSD总数 * 100) / 最大副本数</span><br></pre></td></tr></table></figure>
+<p>结果必须舍入到最接近的2的N次方幂的值。</p>
+<p>Ceph集群中每个pool中的PG总数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">存储池PG总数 = (OSD总数 * 100 / 最大副本数) / 池数</span><br></pre></td></tr></table></figure>
+<p>平衡每个存储池中的PG数和每个OSD中的PG数对于降低OSD的方差、避免速度缓慢的恢复再平衡进程是相当重要的。</p>
+<h1 id="修改PG和PGP"><a href="#修改PG和PGP" class="headerlink" title="修改PG和PGP"></a>修改PG和PGP</h1><p>PGP是为了实现定位而设置的PG，它的值应该和PG的总数(即pg_num)保持一致。对于Ceph的一个pool而言，如果增加pg_num，还应该调整pgp_num为同样的值，这样集群才可以开始再平衡。<br>参数pg_num定义了PG的数量，PG映射至OSD。当任意pool的PG数增加时，PG依然保持和源OSD的映射。直至目前，Ceph还未开始再平衡。此时，增加pgp_num的值，PG才开始从源OSD迁移至其他的OSD，正式开始再平衡。PGP，Placement Groups of Placement。</p>
+<p>获取现有的PG数和PGP数值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool get data pg_num</span><br><span class="line"></span><br><span class="line">ceph osd pool get data pgp_num</span><br></pre></td></tr></table></figure>
+<p>检查存储池的副本数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd dump|grep -i size</span><br></pre></td></tr></table></figure>
+<p>计算pg_num和pgp_num</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># pg_num calculation</span><br><span class="line">pg_num = (num_osds * 100) / num_copies</span><br><span class="line">num_up = pow(2, int(log(pg_num,2) + 0.5))</span><br><span class="line">num_down = pow(2, int(log(pg_num,2)))</span><br><span class="line">if abs(pg_num - num_up) &lt;= abs(pg_num - num_down):</span><br><span class="line">    pg_num = num_up</span><br><span class="line">else:</span><br><span class="line">    pg_num = num_down</span><br><span class="line">pgp_num = pg_num</span><br></pre></td></tr></table></figure>
+<p>修改存储池的PG和PGP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool set data pg_num </span><br><span class="line"></span><br><span class="line">ceph osd pool set data pgp_num</span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool ls</span><br><span class="line">ceph osd pool set .rgw.root pg_num 16</span><br><span class="line">ceph osd pool set .rgw.root pgp_num 16</span><br></pre></td></tr></table></figure>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/8d1c645b.html" itemprop="url">
-              
-                <span itemprop="name">nginx基础整理</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-15T15:40:10+08:00" content="2019-05-15">
-          05-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/984b410.html" itemprop="url">
-              
-                <span itemprop="name">区块链浏览器部署</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-09T16:21:10+08:00" content="2019-05-09">
-          05-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/71abe607.html" itemprop="url">
-              
-                <span itemprop="name">python监控es状态</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-28T11:04:01+08:00" content="2019-04-28">
-          04-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/59cdc228.html" itemprop="url">
-              
-                <span itemprop="name">钉钉定时发送值班人员</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-19T14:20:50+08:00" content="2019-04-19">
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/12280181.html" itemprop="url">
-              
-                <span itemprop="name">docker存储驱动</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-18T15:48:50+08:00" content="2019-04-18">
-          04-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/a54106c5.html" itemprop="url">
-              
-                <span itemprop="name">Kubernetes节点资源耗尽状态的处理</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-18T14:20:01+08:00" content="2019-04-18">
-          04-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/5842d4c0.html" itemprop="url">
-              
-                <span itemprop="name">wordpress快速安装</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-16T16:18:50+08:00" content="2019-04-16">
-          04-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/fd22jkk6.html" title="ceph的pg算法">https://shenshengkun.github.io/posts/fd22jkk6.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/dld987c6.html" rel="next" title="ceph对象存储">
+                <i class="fa fa-chevron-left"></i> ceph对象存储
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2019/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2019/">1</a><a class="page-number" href="/archives/2019/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2019/page/4/">4</a><a class="extend next" rel="next" href="/archives/2019/page/4/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -657,6 +507,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -677,8 +536,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -748,6 +616,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PG介绍"><span class="nav-number">1.</span> <span class="nav-text">PG介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算PG数"><span class="nav-number">2.</span> <span class="nav-text">计算PG数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改PG和PGP"><span class="nav-number">3.</span> <span class="nav-text">修改PG和PGP</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -915,6 +799,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -943,6 +831,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 

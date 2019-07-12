@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2019-07-12T08:50:59.533Z</updated>
+  <updated>2019-07-12T09:49:15.127Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ceph的pg算法</title>
+    <link href="https://shenshengkun.github.io/posts/fd22jkk6.html"/>
+    <id>https://shenshengkun.github.io/posts/fd22jkk6.html</id>
+    <published>2019-07-11T09:10:01.000Z</published>
+    <updated>2019-07-12T09:49:15.127Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="PG介绍"><a href="#PG介绍" class="headerlink" title="PG介绍"></a>PG介绍</h1><p>PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。<br>如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的。建议每个OSD上配置50~100个PG。</p><h1 id="计算PG数"><a href="#计算PG数" class="headerlink" title="计算PG数"></a>计算PG数</h1><p>官方推荐如下：</p><p><img src="https://shenshengkun.github.io/images/pg1.png" alt=""></p><p>Ceph集群中的PG总数：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PG总数 = (OSD总数 * 100) / 最大副本数</span><br></pre></td></tr></table></figure><p>结果必须舍入到最接近的2的N次方幂的值。</p><p>Ceph集群中每个pool中的PG总数：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">存储池PG总数 = (OSD总数 * 100 / 最大副本数) / 池数</span><br></pre></td></tr></table></figure><p>平衡每个存储池中的PG数和每个OSD中的PG数对于降低OSD的方差、避免速度缓慢的恢复再平衡进程是相当重要的。</p><h1 id="修改PG和PGP"><a href="#修改PG和PGP" class="headerlink" title="修改PG和PGP"></a>修改PG和PGP</h1><p>PGP是为了实现定位而设置的PG，它的值应该和PG的总数(即pg_num)保持一致。对于Ceph的一个pool而言，如果增加pg_num，还应该调整pgp_num为同样的值，这样集群才可以开始再平衡。<br>参数pg_num定义了PG的数量，PG映射至OSD。当任意pool的PG数增加时，PG依然保持和源OSD的映射。直至目前，Ceph还未开始再平衡。此时，增加pgp_num的值，PG才开始从源OSD迁移至其他的OSD，正式开始再平衡。PGP，Placement Groups of Placement。</p><p>获取现有的PG数和PGP数值：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool get data pg_num</span><br><span class="line"></span><br><span class="line">ceph osd pool get data pgp_num</span><br></pre></td></tr></table></figure><p>检查存储池的副本数</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd dump|grep -i size</span><br></pre></td></tr></table></figure><p>计算pg_num和pgp_num</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># pg_num calculation</span><br><span class="line">pg_num = (num_osds * 100) / num_copies</span><br><span class="line">num_up = pow(2, int(log(pg_num,2) + 0.5))</span><br><span class="line">num_down = pow(2, int(log(pg_num,2)))</span><br><span class="line">if abs(pg_num - num_up) &lt;= abs(pg_num - num_down):</span><br><span class="line">    pg_num = num_up</span><br><span class="line">else:</span><br><span class="line">    pg_num = num_down</span><br><span class="line">pgp_num = pg_num</span><br></pre></td></tr></table></figure><p>修改存储池的PG和PGP</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool set data pg_num </span><br><span class="line"></span><br><span class="line">ceph osd pool set data pgp_num</span><br></pre></td></tr></table></figure><p>例子：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool ls</span><br><span class="line">ceph osd pool set .rgw.root pg_num 16</span><br><span class="line">ceph osd pool set .rgw.root pgp_num 16</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;PG介绍&quot;&gt;&lt;a href=&quot;#PG介绍&quot; class=&quot;headerlink&quot; title=&quot;PG介绍&quot;&gt;&lt;/a&gt;PG介绍&lt;/h1&gt;&lt;p&gt;PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息
+      
+    
+    </summary>
+    
+      <category term="ceph" scheme="https://shenshengkun.github.io/categories/ceph/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>ceph对象存储</title>
@@ -455,29 +478,6 @@
     </summary>
     
       <category term="中间件" scheme="https://shenshengkun.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>k8s强制删除</title>
-    <link href="https://shenshengkun.github.io/posts/267edcc5.html"/>
-    <id>https://shenshengkun.github.io/posts/267edcc5.html</id>
-    <published>2019-05-27T09:43:01.000Z</published>
-    <updated>2019-05-30T02:29:19.201Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="可使用kubectl中的强制删除命令"><a href="#可使用kubectl中的强制删除命令" class="headerlink" title="可使用kubectl中的强制删除命令"></a>可使用kubectl中的强制删除命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 删除POD</span><br><span class="line">kubectl delete pod PODNAME --force --grace-period=0</span><br><span class="line"></span><br><span class="line"># 删除NAMESPACE</span><br><span class="line">kubectl delete namespace NAMESPACENAME --force --grace-period=0</span><br></pre></td></tr></table></figure><p>有时候这种方法也删除不掉，可能是之前删除顺序有问题，没有删干净pod，就删除命名空间，导致删除不掉</p><h1 id="直接从ETCD中删除源数据"><a href="#直接从ETCD中删除源数据" class="headerlink" title="直接从ETCD中删除源数据"></a>直接从ETCD中删除源数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 删除default namespace下的pod名为pod-to-be-deleted-0</span><br><span class="line">ETCDCTL_API=3 etcdctl del /registry/pods/default/pod-to-be-deleted-0</span><br><span class="line"></span><br><span class="line"># 删除需要删除的NAMESPACE</span><br><span class="line">etcdctl del /registry/namespaces/NAMESPACENAME</span><br></pre></td></tr></table></figure><h2 id="添加别名"><a href="#添加别名" class="headerlink" title="添加别名"></a>添加别名</h2><p>上面直接etcd删除，是证书直接能找到时候，如果证书配置方式不一样，就需要手动配一下！</p><p>配置别名etcdctl3，添加证书等参数</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">alias etcdctl3=&apos;docker run --rm -it \</span><br><span class="line">--net host -e ETCDCTL_API=3 \</span><br><span class="line">-v /etc/kubernetes:/etc/kubernetes k8s.gcr.io/etcd:3.3.10 etcdctl \</span><br><span class="line">--cert /etc/kubernetes/pki/etcd/peer.crt \</span><br><span class="line">--key /etc/kubernetes/pki/etcd/peer.key \</span><br><span class="line">--cacert /etc/kubernetes/pki/etcd/ca.crt \</span><br><span class="line">--endpoints https://192.168.3.101:2379,https://192.168.3.102:2379,https://192.168.3.103:2379&apos;</span><br></pre></td></tr></table></figure><p>查询都有哪些daemonsets</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tcdctl3 get /registry/daemonsets/ --prefix --keys-only</span><br><span class="line">/registry/daemonsets/default/testpod</span><br><span class="line">/registry/daemonsets/kube-system/calico-node</span><br><span class="line">/registry/daemonsets/kube-system/kube-proxy</span><br></pre></td></tr></table></figure><p>与kubectl查看的结果一致</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get daemonsets --all-namespaces </span><br><span class="line">NAMESPACE     NAME          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR                 AGE</span><br><span class="line">default       testpod       3         3         3       3            3           &lt;none&gt;                        91m</span><br><span class="line">kube-system   calico-node   3         3         3       3            3           beta.kubernetes.io/os=linux   116m</span><br><span class="line">kube-system   kube-proxy    3         3         3       3            3           &lt;none&gt;                        122m</span><br></pre></td></tr></table></figure><p>在etcd中查询default namespace中的pod</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">etcdctl3 get /registry/pods/default --prefix --keys-only </span><br><span class="line">/registry/pods/default/testpod-5wtb7</span><br><span class="line">/registry/pods/default/testpod-646d8</span><br><span class="line">/registry/pods/default/testpod-t7ps7</span><br></pre></td></tr></table></figure><p>kubectl命令看到结果与etcd中一致</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods -l app=fortest</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">testpod-5wtb7   1/1     Running   0          93m</span><br><span class="line">testpod-646d8   1/1     Running   0          93m</span><br><span class="line">testpod-t7ps7   1/1     Running   0          93m</span><br></pre></td></tr></table></figure><p>在etcd中删除pod testpod-t7ps7</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">etcdctl3 del /registry/pods/default/testpod-t7ps7    </span><br><span class="line">1</span><br></pre></td></tr></table></figure><p>再次查看pod，发现testpod-t7ps7已经没有了</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">testpod-5wtb7   1/1     Running   0          96m</span><br><span class="line">testpod-646d8   1/1     Running   0          96m</span><br><span class="line">testpod-qczvt   1/1     Running   0          17s</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;可使用kubectl中的强制删除命令&quot;&gt;&lt;a href=&quot;#可使用kubectl中的强制删除命令&quot; class=&quot;headerlink&quot; title=&quot;可使用kubectl中的强制删除命令&quot;&gt;&lt;/a&gt;可使用kubectl中的强制删除命令&lt;/h1&gt;&lt;figure c
-      
-    
-    </summary>
-    
-      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
     
     
   </entry>
