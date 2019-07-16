@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenshengkun.github.io/about/index.html</loc>
+    
+    <lastmod>2019-07-16T07:40:52.259Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenshengkun.github.io/ceph/index.html</loc>
     
     <lastmod>2019-07-16T06:09:43.105Z</lastmod>
@@ -345,14 +352,14 @@
   </url>
   
   <url>
-    <loc>https://shenshengkun.github.io/posts/6924c90a.html</loc>
+    <loc>https://shenshengkun.github.io/posts/9afc5d97.html</loc>
     
     <lastmod>2019-05-30T02:29:19.215Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://shenshengkun.github.io/posts/9afc5d97.html</loc>
+    <loc>https://shenshengkun.github.io/posts/6924c90a.html</loc>
     
     <lastmod>2019-05-30T02:29:19.215Z</lastmod>
     
@@ -516,13 +523,6 @@
     <loc>https://shenshengkun.github.io/categories/index.html</loc>
     
     <lastmod>2018-11-07T07:50:14.174Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://shenshengkun.github.io/about/index.html</loc>
-    
-    <lastmod>2018-11-07T03:06:28.724Z</lastmod>
     
   </url>
   
