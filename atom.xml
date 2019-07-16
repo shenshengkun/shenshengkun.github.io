@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2019-07-12T09:49:15.127Z</updated>
+  <updated>2019-07-16T06:04:17.585Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ceph-luminous-bluestore</title>
+    <link href="https://shenshengkun.github.io/posts/78fhjj54.html"/>
+    <id>https://shenshengkun.github.io/posts/78fhjj54.html</id>
+    <published>2019-07-16T09:10:01.000Z</published>
+    <updated>2019-07-16T06:04:17.585Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ceph后端支持多种存储引擎，以插件化的形式来进行管理使用，目前支持filestore，kvstore，memstore以及bluestore</span><br><span class="line"></span><br><span class="line">1）Firestore存在的问题是：</span><br><span class="line">在写数据前需要先写journal，会有一倍的写放大；</span><br><span class="line">若是另外配备SSD盘给journal使用又增加额外的成本；</span><br><span class="line">filestore一开始只是对于SATA/SAS这一类机械盘进行设计的，没有专门针对SSD这一类的Flash介质盘做考虑。</span><br><span class="line"></span><br><span class="line">2）而Bluestore的优势在于：</span><br><span class="line">减少写放大；</span><br><span class="line">针对FLASH介质盘做优化；</span><br><span class="line">直接管理裸盘，进一步减少文件系统部分的开销。</span><br></pre></td></tr></table></figure><h1 id="Bluestore原理说明"><a href="#Bluestore原理说明" class="headerlink" title="Bluestore原理说明"></a>Bluestore原理说明</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">对象可以直接存放在裸盘上，不需要任何文件系统接口。</span><br><span class="line">BlueStore 直接使用一个原始分区，ceph对象将直接写在块设备上，不再需要任何的文件系统；</span><br><span class="line">和osd一起进来的元数据将存储在 一个 名为 RocksDB 的键值对 数据库；</span><br></pre></td></tr></table></figure><h2 id="各层意义"><a href="#各层意义" class="headerlink" title="各层意义"></a>各层意义</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RocksDB ：存储 WAL 日志和元数据（omap）</span><br><span class="line">BlueRocksEnv: 与RocksDB 交互的接口</span><br><span class="line">BlueFS： 一个类似文件系统的 mini C++，使 rocksdb 生效，ENv 接口（存储 RocksDB 日志和 sst 文件）；</span><br><span class="line">因为rocksdb 一般跑在一个文件系统的上层，所以创建了 BlueFS。</span><br></pre></td></tr></table></figure><h2 id="RocksDB-存放的数据类型"><a href="#RocksDB-存放的数据类型" class="headerlink" title="RocksDB 存放的数据类型"></a>RocksDB 存放的数据类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">对象的元数据</span><br><span class="line">write-ahead 日志</span><br><span class="line">ceph omap  数据</span><br><span class="line">allocator metadata(元数据分配器)：决定数据存放位置；此功能可插拔</span><br></pre></td></tr></table></figure><h2 id="默认BlueStore模型"><a href="#默认BlueStore模型" class="headerlink" title="默认BlueStore模型"></a>默认BlueStore模型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一个小分区（XFS或者ext4）,包括ceph files </span><br><span class="line">（init system descriptor,status,id,fsid,keyring 等）和RocksDB 文件</span><br><span class="line">第二个分区是一个原始分区</span><br></pre></td></tr></table></figure><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">每一部分都可以存放在不同的磁盘中，RocksDB WAL 和 DB 可以存放在不同的磁盘或者小分区中</span><br></pre></td></tr></table></figure><h1 id="添加osd"><a href="#添加osd" class="headerlink" title="添加osd"></a>添加osd</h1><h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><p>由于Luminous里默认使用Bluestore，可以直接操作裸盘,data和block-db会使用lv。综合成本及性能，我们把block.db使用ssd的分区，osd仍然使用sas，block.wal不指定. 这里vdb作为osd盘，vdc作为block-db盘</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">首先ssh到各个存储节点，block.db使用的ssd分区,这里node1举例：</span><br><span class="line"># ssh node1</span><br><span class="line"># pvcreate /dev/vdb  # 创建pv, 这里使用的整块磁盘(与后面的分区对比),  pvs 查看pv列表</span><br><span class="line">Physical volume &quot;/dev/vdb&quot; successfully created.</span><br><span class="line"># vgcreate data_vg1 /dev/vdb  # 创建vg,  vgs查看vg列表</span><br><span class="line">Volume group &quot;data_vg1&quot; successfully created</span><br><span class="line"># lvcreate -n data_lv1 -L 1020.00m data_vg1 #创建lv,lvs查看lv列表, -n指定lv名称, -L指定lv的大小,需要小于或者等于vg的VSize</span><br><span class="line">Logical volume &quot;data_lv1&quot; created.</span><br><span class="line"></span><br><span class="line">---------------------------------------------</span><br><span class="line">生产环境一块ssd磁盘会对应多块osd，所以这里也需要把ssd多个分区</span><br><span class="line"># parted /dev/vdc </span><br><span class="line">(parted) mklabel gpt                                                      </span><br><span class="line">(parted) mkpart primary 0% 25%   #因为测试，这里只做了一个占据磁盘25%容量的分区，实际情况根据osd数目划分相应的分区数</span><br><span class="line">(parted) quit</span><br><span class="line"># pvcreate /dev/vdc1  # 创建pv, 这里使用的是磁盘分区, pvs 查看pv列表</span><br><span class="line">Physical volume &quot;/dev/vdc1&quot; successfully created.</span><br><span class="line"># vgcreate block_db_vg1 /dev/vdc1  # 创建vg,  vgs查看vg列表</span><br><span class="line">Volume group &quot;block_db_vg1&quot; successfully created</span><br><span class="line"># lvcreate -n block_db_lv1 -L 1020.00m block_db_vg1  # 创建lv, lvs查看lv列表, -L指定lv的大小，需要小于或者等于 vg的VSize</span><br><span class="line">Logical volume &quot;block_db_lv1&quot; created.</span><br><span class="line"></span><br><span class="line">---------------------------------------------</span><br><span class="line"># 不需要加--bluestore 参数，默认就是使用bluestore方式，data_vg1/data_lv1 是数据盘，block_db_vg1/block_db_lv1是block-db</span><br><span class="line">管理节点执行：</span><br><span class="line">ceph-deploy --overwrite-conf osd create node1 --data data_vg1/data_lv1 --block-db block_db_vg1/block_db_lv1</span><br><span class="line">ceph-deploy --overwrite-conf osd create node2 --data data_vg1/data_lv1 --block-db block_db_vg1/block_db_lv1</span><br></pre></td></tr></table></figure><h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h2><p>创建具有3个逻辑卷的OSD（模拟不同类型的存储介质） </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#pvcreate /dev/sdb</span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br><span class="line">#vgcreate  ceph-pool /dev/sdb</span><br><span class="line">  Volume group &quot;ceph-pool&quot; successfully created</span><br><span class="line">#lvcreate -n osd0.wal -L 1G ceph-pool</span><br><span class="line">  Logical volume &quot;osd0.wal&quot; created.</span><br><span class="line"># lvcreate -n osd0.db -L 1G ceph-pool</span><br><span class="line">  Logical volume &quot;osd0.db&quot; created.</span><br><span class="line"># lvcreate -n osd0 -l 100%FREE ceph-pool</span><br><span class="line">  Logical volume &quot;osd0&quot; created.</span><br></pre></td></tr></table></figure><p>完成逻辑卷的创建后我们就可以创建 OSD 了。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy osd create \</span><br><span class="line">    --data ceph-pool/osd0 \</span><br><span class="line">    --block-db ceph-pool/osd0.db \</span><br><span class="line">    --block-wal ceph-pool/osd0.wal \</span><br><span class="line">    --bluestore node1</span><br></pre></td></tr></table></figure><h2 id="wal-amp-db-的大小问题"><a href="#wal-amp-db-的大小问题" class="headerlink" title="wal&amp; db 的大小问题"></a>wal&amp; db 的大小问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在 ceph bluestore 的情况下，wal 是 RocksDB 的write-ahead log, 相当于之前的 journal 数据，db 是 RocksDB 的metadata 信息。在磁盘选择原则是 block.wal &gt; block.db &gt; block。当然所有的数据也可以放到同一块盘上。</span><br><span class="line">默认情况下， wal 和 db 的大小分别是 512 MB 和 1GB，现在没有一个好的理论值，好像和 ceph 本身承载的数据类型有关系。</span><br><span class="line">值得注意的是，如果所有的数据都在单块盘上，那是没有必要指定 wal &amp;db 的大小的。如果 wal &amp; db 是在不同的盘上，由于 wal/db 一般都会分的比较小，是有满的可能性的。如果满了，这些数据会迁移到下一个快的盘上(wal - db - main)。所以最少不会因为数据满了，而造成无法写入。</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;对比&quot;&gt;&lt;a href=&quot;#对比&quot; class=&quot;headerlink&quot; title=&quot;对比&quot;&gt;&lt;/a&gt;对比&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span 
+      
+    
+    </summary>
+    
+      <category term="ceph" scheme="https://shenshengkun.github.io/categories/ceph/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>ceph的pg算法</title>
@@ -454,30 +477,6 @@
     </summary>
     
       <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>tomcat报SEVERE Error listenerStart</title>
-    <link href="https://shenshengkun.github.io/posts/1b8b1cc1.html"/>
-    <id>https://shenshengkun.github.io/posts/1b8b1cc1.html</id>
-    <published>2019-05-28T09:49:10.000Z</published>
-    <updated>2019-05-30T02:29:19.208Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>启动tomcat时报错，错误信息如下： </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.catalina.core.StandardContext startInternal</span><br><span class="line">SEVERE: Error listenerStart</span><br><span class="line">org.apache.catalina.core.StandardContext startInternal</span><br><span class="line">SEVERE: Context [/projectname] startup failed due to previous errors</span><br></pre></td></tr></table></figure><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>在<code>WEB-INF/classes</code>目录下新建一个文件叫<code>logging.properties</code>，内容如下 </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">handlers = org.apache.juli.FileHandler, java.util.logging.ConsoleHandler  </span><br><span class="line">org.apache.juli.FileHandler.level = FINE  </span><br><span class="line">org.apache.juli.FileHandler.directory = $&#123;catalina.base&#125;/logs  </span><br><span class="line">org.apache.juli.FileHandler.prefix = error-debug.   </span><br><span class="line">java.util.logging.ConsoleHandler.level = FINE  </span><br><span class="line">java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter</span><br></pre></td></tr></table></figure><p>之后，重启tomcat查看日志，就可以看到是由于数据库连接或者jdk版本不兼容等原因导致的</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;p&gt;启动tomcat时报错，错误信息如下： &lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
-      
-    
-    </summary>
-    
-      <category term="中间件" scheme="https://shenshengkun.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
     
   </entry>
