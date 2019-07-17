@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="集群架构12345192.168.10.186   ceph1          admin、mon、mgr、osd、rgw192.168.10.187   ceph2          mon、mgr、osd、rgw 192.168.10.188   ceph3          mon、mgr、osd、rgw 部署1234567891011121314151617181920212223242">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph对象存储集群部署">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/ouy564tra.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="集群架构12345192.168.10.186   ceph1          admin、mon、mgr、osd、rgw192.168.10.187   ceph2          mon、mgr、osd、rgw 192.168.10.188   ceph3          mon、mgr、osd、rgw 部署1234567891011121314151617181920212223242">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://shenshengkun.github.io/images/dash_cluster1.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/dash_cluster2.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/dash_cluster3.png">
+<meta property="og:updated_time" content="2019-07-17T07:38:00.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph对象存储集群部署">
+<meta name="twitter:description" content="集群架构12345192.168.10.186   ceph1          admin、mon、mgr、osd、rgw192.168.10.187   ceph2          mon、mgr、osd、rgw 192.168.10.188   ceph3          mon、mgr、osd、rgw 部署1234567891011121314151617181920212223242">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/dash_cluster1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/ouy564tra.html">
+
+
+
+
+
+  <title>ceph对象存储集群部署 | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/ouy564tra.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ceph对象存储集群部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-17T15:17:01+08:00">
+                2019-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="集群架构"><a href="#集群架构" class="headerlink" title="集群架构"></a>集群架构</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.186   ceph1          admin、mon、mgr、osd、rgw</span><br><span class="line"></span><br><span class="line">192.168.10.187   ceph2          mon、mgr、osd、rgw </span><br><span class="line"></span><br><span class="line">192.168.10.188   ceph3          mon、mgr、osd、rgw</span><br></pre></td></tr></table></figure>
+<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">[root@10dot186 ~]# vim /etc/hosts</span><br><span class="line">192.168.10.186   ceph1</span><br><span class="line">192.168.10.187   ceph2</span><br><span class="line">192.168.10.188   ceph3</span><br><span class="line"></span><br><span class="line">hostnamectl set-hostname ceph1</span><br><span class="line">hostnamectl set-hostname ceph2</span><br><span class="line">hostnamectl set-hostname ceph3</span><br><span class="line"></span><br><span class="line">ntpdate ntp1.aliyun.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ssh-keygen</span><br><span class="line">ssh-copy-id ceph1</span><br><span class="line">ssh-copy-id ceph2</span><br><span class="line">ssh-copy-id ceph3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph1 ~]# vim /etc/yum.repos.d/ceph.repo</span><br><span class="line">[ceph]</span><br><span class="line">name=Ceph packages for $basearch</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-luminous/el7/$basearch</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">priority=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br><span class="line"></span><br><span class="line">[ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-luminous/el7/noarch</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">priority=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br><span class="line"></span><br><span class="line">[ceph-source]</span><br><span class="line">name=Ceph source packages</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-luminous/el7/SRPMS</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br><span class="line">priority=1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">yum makecache</span><br><span class="line">yum update -y</span><br><span class="line">yum install -y ceph-deploy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mkdir /etc/ceph &amp;&amp; cd /etc/ceph</span><br><span class="line">ceph-deploy new ceph1  ceph2 ceph3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum install -y python-setuptools</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在配置文件中增加：</span><br><span class="line">osd_pool_default_size = 3</span><br><span class="line">[mgr]</span><br><span class="line">mgr modules = dashboard</span><br><span class="line">[mon]</span><br><span class="line">mon allow pool delete = true</span><br></pre></td></tr></table></figure>
+<h2 id="mon"><a href="#mon" class="headerlink" title="mon"></a>mon</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy install ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line">ceph-deploy mon create-initial</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     fcb2fa5e-481a-4494-9a27-374048f37113</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum ceph1,ceph2,ceph3</span><br><span class="line">    mgr: no daemons active</span><br><span class="line">    osd: 0 osds: 0 up, 0 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   0 pools, 0 pgs</span><br><span class="line">    objects: 0 objects, 0B</span><br><span class="line">    usage:   0B used, 0B / 0B avail</span><br><span class="line">    pgs:</span><br></pre></td></tr></table></figure>
+<h2 id="mgr"><a href="#mgr" class="headerlink" title="mgr"></a>mgr</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy mgr create ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     fcb2fa5e-481a-4494-9a27-374048f37113</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum ceph1,ceph2,ceph3</span><br><span class="line">    mgr: ceph1(active), standbys: ceph2, ceph3</span><br><span class="line">    osd: 0 osds: 0 up, 0 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   0 pools, 0 pgs</span><br><span class="line">    objects: 0 objects, 0B</span><br><span class="line">    usage:   0B used, 0B / 0B avail</span><br><span class="line">    pgs: </span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">[root@ceph1 ceph]# ceph mgr dump</span><br><span class="line">&#123;</span><br><span class="line">    &quot;epoch&quot;: 4,</span><br><span class="line">    &quot;active_gid&quot;: 4122,</span><br><span class="line">    &quot;active_name&quot;: &quot;ceph1&quot;,</span><br><span class="line">    &quot;active_addr&quot;: &quot;192.168.10.186:6800/22316&quot;,</span><br><span class="line">    &quot;available&quot;: true,</span><br><span class="line">    &quot;standbys&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;gid&quot;: 4129,</span><br><span class="line">            &quot;name&quot;: &quot;ceph2&quot;,</span><br><span class="line">            &quot;available_modules&quot;: [</span><br><span class="line">                &quot;balancer&quot;,</span><br><span class="line">                &quot;dashboard&quot;,</span><br><span class="line">                &quot;influx&quot;,</span><br><span class="line">                &quot;localpool&quot;,</span><br><span class="line">                &quot;prometheus&quot;,</span><br><span class="line">                &quot;restful&quot;,</span><br><span class="line">                &quot;selftest&quot;,</span><br><span class="line">                &quot;status&quot;,</span><br><span class="line">                &quot;zabbix&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;gid&quot;: 4132,</span><br><span class="line">            &quot;name&quot;: &quot;ceph3&quot;,</span><br><span class="line">            &quot;available_modules&quot;: [</span><br><span class="line">                &quot;balancer&quot;,</span><br><span class="line">                &quot;dashboard&quot;,</span><br><span class="line">                &quot;influx&quot;,</span><br><span class="line">                &quot;localpool&quot;,</span><br><span class="line">                &quot;prometheus&quot;,</span><br><span class="line">                &quot;restful&quot;,</span><br><span class="line">                &quot;selftest&quot;,</span><br><span class="line">                &quot;status&quot;,</span><br><span class="line">                &quot;zabbix&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;modules&quot;: [</span><br><span class="line">        &quot;balancer&quot;,</span><br><span class="line">        &quot;restful&quot;,</span><br><span class="line">        &quot;status&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;available_modules&quot;: [</span><br><span class="line">        &quot;balancer&quot;,</span><br><span class="line">        &quot;dashboard&quot;,</span><br><span class="line">        &quot;influx&quot;,</span><br><span class="line">        &quot;localpool&quot;,</span><br><span class="line">        &quot;prometheus&quot;,</span><br><span class="line">        &quot;restful&quot;,</span><br><span class="line">        &quot;selftest&quot;,</span><br><span class="line">        &quot;status&quot;,</span><br><span class="line">        &quot;zabbix&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;services&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line">[root@ceph1 ceph]# ceph mgr module enable dashboard</span><br><span class="line">[root@ceph1 ceph]# ceph mgr dump</span><br><span class="line">&#123;</span><br><span class="line">    &quot;epoch&quot;: 7,</span><br><span class="line">    &quot;active_gid&quot;: 4139,</span><br><span class="line">    &quot;active_name&quot;: &quot;ceph1&quot;,</span><br><span class="line">    &quot;active_addr&quot;: &quot;192.168.10.186:6800/22316&quot;,</span><br><span class="line">    &quot;available&quot;: true,</span><br><span class="line">    &quot;standbys&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;gid&quot;: 4136,</span><br><span class="line">            &quot;name&quot;: &quot;ceph3&quot;,</span><br><span class="line">            &quot;available_modules&quot;: [</span><br><span class="line">                &quot;balancer&quot;,</span><br><span class="line">                &quot;dashboard&quot;,</span><br><span class="line">                &quot;influx&quot;,</span><br><span class="line">                &quot;localpool&quot;,</span><br><span class="line">                &quot;prometheus&quot;,</span><br><span class="line">                &quot;restful&quot;,</span><br><span class="line">                &quot;selftest&quot;,</span><br><span class="line">                &quot;status&quot;,</span><br><span class="line">                &quot;zabbix&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;gid&quot;: 4141,</span><br><span class="line">            &quot;name&quot;: &quot;ceph2&quot;,</span><br><span class="line">            &quot;available_modules&quot;: [</span><br><span class="line">                &quot;balancer&quot;,</span><br><span class="line">                &quot;dashboard&quot;,</span><br><span class="line">                &quot;influx&quot;,</span><br><span class="line">                &quot;localpool&quot;,</span><br><span class="line">                &quot;prometheus&quot;,</span><br><span class="line">                &quot;restful&quot;,</span><br><span class="line">                &quot;selftest&quot;,</span><br><span class="line">                &quot;status&quot;,</span><br><span class="line">                &quot;zabbix&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;modules&quot;: [</span><br><span class="line">        &quot;balancer&quot;,</span><br><span class="line">        &quot;dashboard&quot;,</span><br><span class="line">        &quot;restful&quot;,</span><br><span class="line">        &quot;status&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;available_modules&quot;: [</span><br><span class="line">        &quot;balancer&quot;,</span><br><span class="line">        &quot;dashboard&quot;,</span><br><span class="line">        &quot;influx&quot;,</span><br><span class="line">        &quot;localpool&quot;,</span><br><span class="line">        &quot;prometheus&quot;,</span><br><span class="line">        &quot;restful&quot;,</span><br><span class="line">        &quot;selftest&quot;,</span><br><span class="line">        &quot;status&quot;,</span><br><span class="line">        &quot;zabbix&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;services&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph config-key put mgr/dashboard/server_addr 192.168.6.101</span><br><span class="line">set mgr/dashboard/server_addr</span><br><span class="line">[root@ceph1 ceph]# ceph config-key put mgr/dashboard/server_port 7000</span><br><span class="line">set mgr/dashboard/server_port</span><br><span class="line">[root@ceph1 ~]# netstat -tulnp |grep 7000</span><br><span class="line">tcp        0      0 192.168.6.101:7000      0.0.0.0:*               LISTEN      19836/ceph-mgr</span><br></pre></td></tr></table></figure>
+<p>这时看下danshboard图：</p>
+<p><img src="https://shenshengkun.github.io/images/dash_cluster1.png" alt=""></p>
+<h2 id="osd"><a href="#osd" class="headerlink" title="osd"></a>osd</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">每台机器做逻辑卷</span><br><span class="line">[root@ceph1 ceph]# pvcreate /dev/sdb</span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# vgcreate data_vg1 /dev/sdb</span><br><span class="line">  Volume group &quot;data_vg1&quot; successfully created</span><br><span class="line">  </span><br><span class="line">[root@ceph1 ceph]# lvcreate -n data_lv1 -L 99g data_vg1   </span><br><span class="line">  Logical volume &quot;data_lv1&quot; created.</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ceph-deploy osd create ceph1 --data data_vg1/data_lv1</span><br><span class="line">ceph-deploy osd create ceph2 --data data_vg1/data_lv1</span><br><span class="line">ceph-deploy osd create ceph3 --data data_vg1/data_lv1</span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     fcb2fa5e-481a-4494-9a27-374048f37113</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum ceph1,ceph2,ceph3</span><br><span class="line">    mgr: ceph1(active), standbys: ceph3, ceph2</span><br><span class="line">    osd: 3 osds: 3 up, 3 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   0 pools, 0 pgs</span><br><span class="line">    objects: 0 objects, 0B</span><br><span class="line">    usage:   3.01GiB used, 294GiB / 297GiB avail</span><br><span class="line">    pgs:</span><br></pre></td></tr></table></figure>
+<p>这时看下danshboard图：</p>
+<p><img src="https://shenshengkun.github.io/images/dash_cluster2.png" alt=""></p>
+<h2 id="rgw集群"><a href="#rgw集群" class="headerlink" title="rgw集群"></a>rgw集群</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy install --rgw ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line">ceph-deploy admin ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line">ceph-deploy rgw create ceph1 ceph2 ceph3</span><br><span class="line"></span><br><span class="line">[root@ceph1 ceph]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     fcb2fa5e-481a-4494-9a27-374048f37113</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum ceph1,ceph2,ceph3</span><br><span class="line">    mgr: ceph1(active), standbys: ceph3, ceph2</span><br><span class="line">    osd: 3 osds: 3 up, 3 in</span><br><span class="line">    rgw: 3 daemons active</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   4 pools, 32 pgs</span><br><span class="line">    objects: 191 objects, 3.08KiB</span><br><span class="line">    usage:   3.01GiB used, 294GiB / 297GiB avail</span><br><span class="line">    pgs:     32 active+clean</span><br></pre></td></tr></table></figure>
+<p>这时看下danshboard图：</p>
+<p><img src="https://shenshengkun.github.io/images/dash_cluster3.png" alt=""></p>
+<h2 id="NGINX代理"><a href="#NGINX代理" class="headerlink" title="NGINX代理"></a>NGINX代理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">安装这里就不介绍了</span><br><span class="line"></span><br><span class="line">[root@ceph1 conf.d]# cat cephcloud.dev.goago.cn.conf </span><br><span class="line">        upstream cephcloud.dev.goago.cn  &#123;</span><br><span class="line">        server  192.168.10.186:7480;</span><br><span class="line">        server  192.168.10.187:7480;</span><br><span class="line">        server  192.168.10.188:7480;        </span><br><span class="line">        &#125;</span><br><span class="line">        server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  cephcloud.dev.goago.cn;</span><br><span class="line">        location / &#123;</span><br><span class="line">                        proxy_intercept_errors on;</span><br><span class="line">                        access_log /var/log/nginx/cephcloud_log;</span><br><span class="line">                        proxy_pass http://cephcloud.dev.goago.cn;</span><br><span class="line">                        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">                        proxy_set_header Host $host;</span><br><span class="line">                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">                        proxy_set_header Request_Uri $request_uri;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="s3和swift"><a href="#s3和swift" class="headerlink" title="s3和swift"></a>s3和swift</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">具体安装这里不叙述了，可以看我上篇文章</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">New settings:</span><br><span class="line">  Access Key: M954JYYAOBES65B7UNEZ</span><br><span class="line">  Secret Key: 11MZu3N9vB4S4C4N8U2Ywgkhxro3Xi6K9HPyRQ9v</span><br><span class="line">  Default Region: US</span><br><span class="line">  S3 Endpoint: cephcloud.dev.goago.cn</span><br><span class="line">  DNS-style bucket+hostname:port template for accessing a bucket: %(bucket)s.cephcloud.dev.goago.cn bucket</span><br><span class="line">  Encryption password: 123456</span><br><span class="line">  Path to GPG program: /usr/bin/gpg</span><br><span class="line">  Use HTTPS protocol: False</span><br><span class="line">  HTTP Proxy server name: </span><br><span class="line">  HTTP Proxy server port: 0</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/ouy564tra.html" title="ceph对象存储集群部署">https://shenshengkun.github.io/posts/ouy564tra.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/78fhjj54.html" rel="next" title="ceph-luminous-bluestore">
+                <i class="fa fa-chevron-left"></i> ceph-luminous-bluestore
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集群架构"><span class="nav-number">1.</span> <span class="nav-text">集群架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mon"><span class="nav-number">2.1.</span> <span class="nav-text">mon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mgr"><span class="nav-number">2.2.</span> <span class="nav-text">mgr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#osd"><span class="nav-number">2.3.</span> <span class="nav-text">osd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rgw集群"><span class="nav-number">2.4.</span> <span class="nav-text">rgw集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NGINX代理"><span class="nav-number">2.5.</span> <span class="nav-text">NGINX代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s3和swift"><span class="nav-number">2.6.</span> <span class="nav-text">s3和swift</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+     <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;"></canvas>
+     <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+     <script type="text/javascript" src="/js/src/fireworks.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
