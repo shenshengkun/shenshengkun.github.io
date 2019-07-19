@@ -81,17 +81,19 @@
 
 
 
-<meta name="description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server dashboard helm  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s的ConfigMap k8s亲和性 k8s拉取Harbor私有镜像">
-<meta property="og:type" content="website">
-<meta property="og:title" content="k8s">
-<meta property="og:url" content="https://shenshengkun.github.io/k8s/index.html">
+<meta name="description" content="k8s默认使用的本地存储，集群容灾性差，ceph作为开源的分布式存储系统，与openstack环境搭配使用，已经很多云计算公司运用于生产环境，可靠性得到验证。这里介绍一下在k8s环境下ceph如何使用.  Kubernetes支持后两种存储接口,支持的接入模式如下图:   ceph端新建pool新建一个pool pool_1包含90个pg  1ceph osd pool create pool_1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s上用ceph-rbd存储">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/0ijfj445.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server dashboard helm  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s的ConfigMap k8s亲和性 k8s拉取Harbor私有镜像">
+<meta property="og:description" content="k8s默认使用的本地存储，集群容灾性差，ceph作为开源的分布式存储系统，与openstack环境搭配使用，已经很多云计算公司运用于生产环境，可靠性得到验证。这里介绍一下在k8s环境下ceph如何使用.  Kubernetes支持后两种存储接口,支持的接入模式如下图:   ceph端新建pool新建一个pool pool_1包含90个pg  1ceph osd pool create pool_1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-05T06:02:43.512Z">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s-ceph1.png">
+<meta property="og:updated_time" content="2019-07-19T03:29:49.676Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k8s">
-<meta name="twitter:description" content="k8s1.14安装 系统初始化 cfssl证书 etcd集群 flannel网络、kubectl工具 apiserver集群 controller、schedule node节点 coredns metrics-server dashboard helm  k8s用法 k8s基本命令 kubectl在shell中的自动补全 k8s的ConfigMap k8s亲和性 k8s拉取Harbor私有镜像">
+<meta name="twitter:title" content="k8s上用ceph-rbd存储">
+<meta name="twitter:description" content="k8s默认使用的本地存储，集群容灾性差，ceph作为开源的分布式存储系统，与openstack环境搭配使用，已经很多云计算公司运用于生产环境，可靠性得到验证。这里介绍一下在k8s环境下ceph如何使用.  Kubernetes支持后两种存储接口,支持的接入模式如下图:   ceph端新建pool新建一个pool pool_1包含90个pg  1ceph osd pool create pool_1">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/k8s-ceph1.png">
 
 
 
@@ -121,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/k8s/">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/0ijfj445.html">
 
 
 
 
 
-  <title>k8s | 舒宇的博客</title>
+  <title>k8s上用ceph-rbd存储 | 舒宇的博客</title>
   
 
 
@@ -280,68 +282,226 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/0ijfj445.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">k8s</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <h1 id="k8s1-14安装"><a href="#k8s1-14安装" class="headerlink" title="k8s1.14安装"></a>k8s1.14安装</h1><ul>
-<li><a href="https://shenshengkun.github.io/posts/9c775ab5.html">系统初始化</a></li>
-<li><a href="https://shenshengkun.github.io/posts/8d664qf5.html">cfssl证书</a></li>
-<li><a href="https://shenshengkun.github.io/posts/7dqa4nb2.html">etcd集群</a></li>
-<li><a href="https://shenshengkun.github.io/posts/66ae7fg23.html">flannel网络、kubectl工具</a></li>
-<li><a href="https://shenshengkun.github.io/posts/863q77b5.html">apiserver集群</a></li>
-<li><a href="https://shenshengkun.github.io/posts/544ccaa2.html">controller、schedule</a></li>
-<li><a href="https://shenshengkun.github.io/posts/44qq5gb2.html">node节点</a></li>
-<li><a href="https://shenshengkun.github.io/posts/77sa4nc2.html">coredns</a></li>
-<li><a href="https://shenshengkun.github.io/posts/d3554aa2.html">metrics-server</a></li>
-<li><a href="https://shenshengkun.github.io/posts/c2556dcf.html">dashboard</a></li>
-<li><a href="https://shenshengkun.github.io/posts/dkgg3h4f.html">helm</a></li>
-</ul>
-<h1 id="k8s用法"><a href="#k8s用法" class="headerlink" title="k8s用法"></a>k8s用法</h1><ul>
-<li><a href="https://shenshengkun.github.io/posts/5b3b5a45.html">k8s基本命令</a></li>
-<li><a href="https://shenshengkun.github.io/posts/4ddce2e2.html">kubectl在shell中的自动补全</a></li>
-<li><a href="https://shenshengkun.github.io/posts/dfjg544e.html">k8s的ConfigMap</a></li>
-<li><a href="https://shenshengkun.github.io/posts/oigg664a.html">k8s亲和性</a></li>
-<li><a href="https://shenshengkun.github.io/posts/5trce44e.html">k8s拉取Harbor私有镜像</a></li>
-<li><a href="https://shenshengkun.github.io/posts/a54106c5.html">Kubernetes节点资源耗尽状态的处理</a></li>
-<li><a href="https://shenshengkun.github.io/posts/267edcc5.html">k8s强制删除</a></li>
-<li><a href="https://shenshengkun.github.io/posts/65aa44f.html">k8s角色</a></li>
-<li><a href="https://shenshengkun.github.io/posts/dfkdaa65.html">Kubelet状态更新机制</a></li>
-<li><a href="https://shenshengkun.github.io/posts/dk7569vg.html">Kubernetes Pod无法删除,Docker: Device is busy问题的解决</a></li>
-</ul>
-<h1 id="prometheus监控"><a href="#prometheus监控" class="headerlink" title="prometheus监控"></a>prometheus监控</h1><ul>
-<li><a href="https://shenshengkun.github.io/posts/e2e612d1.html">Prometheus安装</a></li>
-<li><a href="https://shenshengkun.github.io/posts/354cfft6.html">Prometheus删除数据指标</a></li>
-<li><a href="https://shenshengkun.github.io/posts/550bdf86.html">Prometheus监控elasticsearch</a></li>
-<li><a href="https://shenshengkun.github.io/posts/440gqa86.html">Prometheus监控mongo</a></li>
-<li><a href="https://shenshengkun.github.io/posts/239bdf86.html">Prometheus添加验证登录</a></li>
-</ul>
-<h1 id="Istio"><a href="#Istio" class="headerlink" title="Istio"></a>Istio</h1><ul>
-<li><a href="https://shenshengkun.github.io/posts/5a4fga4h.html">istio架构与技术</a></li>
-</ul>
-
+          <h1 class="post-title" itemprop="name headline">k8s上用ceph-rbd存储</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-19T10:10:01+08:00">
+                2019-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>k8s默认使用的本地存储，集群容灾性差，ceph作为开源的分布式存储系统，与openstack环境搭配使用，已经很多云计算公司运用于生产环境，可靠性得到验证。这里介绍一下在k8s环境下ceph如何使用. </p>
+<p>Kubernetes支持后两种存储接口,支持的接入模式如下图: </p>
+<p><img src="https://shenshengkun.github.io/images/k8s-ceph1.png" alt=""></p>
+<h1 id="ceph端"><a href="#ceph端" class="headerlink" title="ceph端"></a>ceph端</h1><h2 id="新建pool"><a href="#新建pool" class="headerlink" title="新建pool"></a>新建pool</h2><p>新建一个pool pool_1包含90个pg </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool create pool_1 90</span><br></pre></td></tr></table></figure>
+<h2 id="RBD块设备"><a href="#RBD块设备" class="headerlink" title="RBD块设备"></a>RBD块设备</h2><p>在ceph集群中新建1个rbd块设备，lun1 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd create pool_1/lun1 --size 10G</span><br></pre></td></tr></table></figure>
+<h2 id="ceph权限控制"><a href="#ceph权限控制" class="headerlink" title="ceph权限控制"></a>ceph权限控制</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">使用ceph-deploy --overwrite-conf admin部署的keyring权限太大，可以自己创建一个keyring client.rdb给块设备客户端node用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ceph auth get-or-create client.rbd mon &apos;allow r&apos; osd &apos;allow class-read object_prefix rbd_children, allow rwx pool=pool_1&apos;  &gt; ceph.client.rbd.keyring</span><br><span class="line"></span><br><span class="line">k8s节点需要安装ceph</span><br><span class="line">yum install ceph-common</span><br><span class="line">echo &apos;rbd&apos; &gt; /etc/modules-load.d/rbd.conf</span><br><span class="line">modprobe rbd</span><br><span class="line">lsmod | grep rbd</span><br><span class="line">rbd                    83640  0 </span><br><span class="line">libceph               306625  1 rbd</span><br><span class="line"></span><br><span class="line">配置文件秘钥传到k8s上</span><br><span class="line">[root@ceph ceph]# scp ceph.client.rbd.keyring 192.168.6.102:/etc/ceph/</span><br><span class="line">root@192.168.6.102&apos;s password: </span><br><span class="line">ceph.client.rdb.keyring                                                                                                       100%   63     8.5KB/s   00:00    </span><br><span class="line">[root@ceph ceph]# scp ceph.conf 192.168.6.102:/etc/ceph/                </span><br><span class="line">root@192.168.6.102&apos;s password: </span><br><span class="line">ceph.conf                                                                                                                       100%  310    25.1KB/s   00:00    </span><br><span class="line">[root@ceph ceph]#</span><br></pre></td></tr></table></figure>
+<h1 id="k8s的node上操作"><a href="#k8s的node上操作" class="headerlink" title="k8s的node上操作"></a>k8s的node上操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# ceph -s --name client.rdb</span><br><span class="line">  cluster:</span><br><span class="line">    id:     cbc04385-1cdf-4512-a3f5-a5b3e8686a05</span><br><span class="line">    health: HEALTH_WARN</span><br><span class="line">            application not enabled on 1 pool(s)</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 1 daemons, quorum ceph</span><br><span class="line">    mgr: ceph(active)</span><br><span class="line">    osd: 1 osds: 1 up, 1 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   1 pools, 90 pgs</span><br><span class="line">    objects: 5 objects, 709B</span><br><span class="line">    usage:   1.00GiB used, 19.0GiB / 20.0GiB avail</span><br><span class="line">    pgs:     90 active+clean</span><br><span class="line">    </span><br><span class="line">警告解决办法：</span><br><span class="line">ceph health detail</span><br><span class="line">ceph osd pool application enable pool_1 rbd</span><br></pre></td></tr></table></figure>
+<h2 id="map设备"><a href="#map设备" class="headerlink" title="map设备"></a>map设备</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># rbd map pool_1/lun1 --name client.rbd</span><br><span class="line">rbd: sysfs write failed</span><br><span class="line">RBD image feature set mismatch. Try disabling features unsupported by the kernel with &quot;rbd feature disable&quot;.</span><br><span class="line">In some cases useful info is found in syslog - try &quot;dmesg | tail&quot;.</span><br><span class="line">rbd: map failed: (6) No such device or address</span><br><span class="line"></span><br><span class="line">解决办法：</span><br><span class="line">在ceph节点上</span><br><span class="line">rbd feature disable pool_1/lun1 exclusive-lock, object-map, fast-diff, deep-flatten</span><br></pre></td></tr></table></figure>
+<h2 id="将块设备挂载在操作系统中进行格式化"><a href="#将块设备挂载在操作系统中进行格式化" class="headerlink" title="将块设备挂载在操作系统中进行格式化"></a>将块设备挂载在操作系统中进行格式化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rbd map pool_1/lun1 --name client.rbd</span><br><span class="line">mkfs.ext4 /dev/rbd0</span><br></pre></td></tr></table></figure>
+<h2 id="创建pv、pvc"><a href="#创建pv、pvc" class="headerlink" title="创建pv、pvc"></a>创建pv、pvc</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">对ceph.client.admin.keyring 的内容进行base64编码</span><br><span class="line">[root@node1 ceph]# ceph auth get-key client.rbd | base64</span><br><span class="line">QVFCTktERmRzeXpKQUJBQVVvVGVvWVYyamxhRi8zNU1hZ2R2dFE9PQ==</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">根据上面的输出，创建secret ceph-client-rbd</span><br><span class="line">[root@node1 ceph]# cat ceph-secret.yml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Secret</span><br><span class="line">metadata:</span><br><span class="line">  name: ceph-client-rbd</span><br><span class="line">type: &quot;kubernetes.io/rbd&quot;  </span><br><span class="line">data:</span><br><span class="line">  key: QVFCTktERmRzeXpKQUJBQVVvVGVvWVYyamxhRi8zNU1hZ2R2dFE9PQ==</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">kubectl apply -f ceph-secret.yml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">创建pv，注意： 这里是user：rbd 而不是user: client.rbd</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# cat pv.yml </span><br><span class="line">kind: PersistentVolume</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  name: ceph-pool1-lun1</span><br><span class="line">spec:</span><br><span class="line">  storageClassName: manual</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce          </span><br><span class="line">  rbd:</span><br><span class="line">    fsType: ext4</span><br><span class="line">    image: lun1</span><br><span class="line">    monitors:</span><br><span class="line">      - &apos;192.168.6.101:6789&apos;</span><br><span class="line">    pool: pool_1</span><br><span class="line">    readOnly: false</span><br><span class="line">    secretRef:</span><br><span class="line">      name: ceph-client-rbd</span><br><span class="line">      namespace: default</span><br><span class="line">    user: rbd</span><br><span class="line">    </span><br><span class="line">[root@node1 ceph]# kubectl apply -f pv.yml </span><br><span class="line">persistentvolume/ceph-pool1-lun1 created</span><br><span class="line">[root@node1 ceph]# kubectl get pv</span><br><span class="line">NAME              CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE</span><br><span class="line">ceph-pool1-lun1   10Gi       RWO            Retain           Available           manual                  4s</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">创建pvc</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# cat pvc.yml </span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  name: pvc1</span><br><span class="line">spec:</span><br><span class="line">  storageClassName: manual</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 10Gi</span><br><span class="line">      </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">[root@node1 ceph]# kubectl apply -f pvc.yml </span><br><span class="line">persistentvolumeclaim/pvc1 created</span><br><span class="line">[root@node1 ceph]# kubectl get pvc</span><br><span class="line">NAME   STATUS   VOLUME            CAPACITY   ACCESS MODES   STORAGECLASS   AGE</span><br><span class="line">pvc1   Bound    ceph-pool1-lun1   10Gi       RWO            manual         7s</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
     
     
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/0ijfj445.html" title="k8s上用ceph-rbd存储">https://shenshengkun.github.io/posts/0ijfj445.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/ouy564tra.html" rel="next" title="ceph对象存储集群部署">
+                <i class="fa fa-chevron-left"></i> ceph对象存储集群部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -469,7 +629,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s1-14安装"><span class="nav-number">1.</span> <span class="nav-text">k8s1.14安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s用法"><span class="nav-number">2.</span> <span class="nav-text">k8s用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prometheus监控"><span class="nav-number">3.</span> <span class="nav-text">prometheus监控</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Istio"><span class="nav-number">4.</span> <span class="nav-text">Istio</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ceph端"><span class="nav-number">1.</span> <span class="nav-text">ceph端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建pool"><span class="nav-number">1.1.</span> <span class="nav-text">新建pool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RBD块设备"><span class="nav-number">1.2.</span> <span class="nav-text">RBD块设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ceph权限控制"><span class="nav-number">1.3.</span> <span class="nav-text">ceph权限控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s的node上操作"><span class="nav-number">2.</span> <span class="nav-text">k8s的node上操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map设备"><span class="nav-number">2.1.</span> <span class="nav-text">map设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将块设备挂载在操作系统中进行格式化"><span class="nav-number">2.2.</span> <span class="nav-text">将块设备挂载在操作系统中进行格式化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建pv、pvc"><span class="nav-number">2.3.</span> <span class="nav-text">创建pv、pvc</span></a></li></ol></li></ol></div>
             
 
           </div>
