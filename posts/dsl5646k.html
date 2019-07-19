@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Ceph 整体状态查看123ceph -s  #ceph状态是否正常，及配置运行状态ceph -w  #实时查看数据写入情况ceph health detail #如果集群有问题，会详细列出具体的pg或者osd monmon相关状态1ceph quorum_status -f json-pretty client 无法链接mon的可能原因 连通性和防火墙规则。在MON主机上修改允许TCP 端口67">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph组件的状态">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/dsl5646k.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="Ceph 整体状态查看123ceph -s  #ceph状态是否正常，及配置运行状态ceph -w  #实时查看数据写入情况ceph health detail #如果集群有问题，会详细列出具体的pg或者osd monmon相关状态1ceph quorum_status -f json-pretty client 无法链接mon的可能原因 连通性和防火墙规则。在MON主机上修改允许TCP 端口67">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-19T06:11:06.640Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph组件的状态">
+<meta name="twitter:description" content="Ceph 整体状态查看123ceph -s  #ceph状态是否正常，及配置运行状态ceph -w  #实时查看数据写入情况ceph health detail #如果集群有问题，会详细列出具体的pg或者osd monmon相关状态1ceph quorum_status -f json-pretty client 无法链接mon的可能原因 连通性和防火墙规则。在MON主机上修改允许TCP 端口67">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/dsl5646k.html">
+
+
+
+
+
+  <title>ceph组件的状态 | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dsl5646k.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ceph组件的状态</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-11T13:10:01+08:00">
+                2019-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Ceph-整体状态查看"><a href="#Ceph-整体状态查看" class="headerlink" title="Ceph 整体状态查看"></a>Ceph 整体状态查看</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph -s  #ceph状态是否正常，及配置运行状态</span><br><span class="line">ceph -w  #实时查看数据写入情况</span><br><span class="line">ceph health detail #如果集群有问题，会详细列出具体的pg或者osd</span><br></pre></td></tr></table></figure>
+<h1 id="mon"><a href="#mon" class="headerlink" title="mon"></a>mon</h1><h2 id="mon相关状态"><a href="#mon相关状态" class="headerlink" title="mon相关状态"></a>mon相关状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph quorum_status -f json-pretty</span><br></pre></td></tr></table></figure>
+<h2 id="client-无法链接mon的可能原因"><a href="#client-无法链接mon的可能原因" class="headerlink" title="client 无法链接mon的可能原因"></a>client 无法链接mon的可能原因</h2><ol>
+<li>连通性和防火墙规则。在MON主机上修改允许TCP 端口6789的访问。</li>
+<li>磁盘空间。每个MON主机上必须有超过5%的空闲磁盘空间使MON和levelDB数据库正常工作。</li>
+<li>MON没有工作或者离开选举，检查如上命令输出结果中的quorum_status和mon_status或者ceph -s 的输出来确定失败的MON进程，尝试重启或者部署一个新的来替代它。</li>
+</ol>
+<h2 id="MON-状态表"><a href="#MON-状态表" class="headerlink" title="MON 状态表"></a>MON 状态表</h2><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>probing</td>
+<td>正在探测态。这意味着MON正在寻找其他的MON。当MON启动时， MON尝试找在monmap定义的其他剩余的MON。在多MON的集群中，直到MON找到足够多的MON构建法定选举人数之前，它一直在这个状态。这意味着如果3个MON中的2个挂掉，剩余的1个MON将一直在probing状态，直到启动其他的MON中的1个为止。</td>
+</tr>
+<tr>
+<td>electing</td>
+<td>正在选举态。这意味着MON正在选举中。这应该很快完成，但有时也会卡在正这，这通常是因为MON主机节点间的时钟偏移导致的.</td>
+</tr>
+<tr>
+<td>synchronizing</td>
+<td>正在同步态。这意味着MON为了加入到法定人数中和集群中其他的MON正在同步.</td>
+</tr>
+<tr>
+<td>leader或peon</td>
+<td>领导态或员工态。这不应该出现。然而有机会出现，一般和时钟偏移有很大关系</td>
+</tr>
+</tbody>
+</table>
+<h3 id="时钟偏移警告"><a href="#时钟偏移警告" class="headerlink" title="时钟偏移警告"></a>时钟偏移警告</h3><p>MON可能被MON节点之间的重要的时钟偏移激烈的影响。这经常会转变为没有明显原因的诡异的行为。为了避免这种问题，应该在MON节点上运行一个时间同步的工具。默认最大容忍的时钟偏移为0.05s，虽然可以修改，但不建议修改，这是官方开发和QA认可的值。私自未经测试修改虽然无数据丢失风险，可能会对MON集群和总体集群健康导致意外的作用。 如果遇到这个告警，同步时钟，在MON上运行NTP的客户端会有帮助。如果经常遇到这个问题，可能是因为使用了远端的NTP服务器，请考虑在内网部署NTP服务器。</p>
+<h1 id="OSD"><a href="#OSD" class="headerlink" title="OSD"></a>OSD</h1><h2 id="OSD-状态表"><a href="#OSD-状态表" class="headerlink" title="OSD 状态表"></a>OSD 状态表</h2><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>up</td>
+<td>osd启动</td>
+</tr>
+<tr>
+<td>down</td>
+<td>osd停止</td>
+</tr>
+<tr>
+<td>in</td>
+<td>osd在集群中</td>
+</tr>
+<tr>
+<td>out</td>
+<td>osd不在集群中，默认OSD down 超过300s,Ceph会标记为out，会触发重新平衡操作</td>
+</tr>
+<tr>
+<td>up &amp; in</td>
+<td>说明该OSD正常运行，且已经承载至少一个PG的数据。这是一个OSD的标准工作状态</td>
+</tr>
+<tr>
+<td>up &amp; out</td>
+<td>说明该OSD正常运行，但并未承载任何PG，其中也没有数据。一个新的OSD刚刚被加入Ceph集群后，便会处于这一状态。而一个出现故障的OSD被修复后，重新加入Ceph集群时，也是处于这一状态</td>
+</tr>
+<tr>
+<td>down &amp; in</td>
+<td>说明该OSD发生异常，但仍然承载着至少一个PG，其中仍然存储着数据。这种状态下的OSD刚刚被发现存在异常，可能仍能恢复正常，也可能会彻底无法工作</td>
+</tr>
+<tr>
+<td>down &amp; out</td>
+<td>说明该OSD已经彻底发生故障，且已经不再承载任何PG</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
+<li>硬盘失败。可以通过系统日志或SMART活动确认。有些有缺陷的硬盘因为密集的有时限的错误修复活动变的很慢。</li>
+<li>网络连接问题。可以使用ping、iperf等普通网络工具进行调试。</li>
+<li>OSD文件存储的磁盘空间不足。 磁盘到85%将会触发HEALTH_WARN告警。磁盘到95%会触发HEALTH_ERR告警，OSD为了避免填满磁盘会停止。</li>
+<li>超过系统资源限制。系统内存应该足够主机上所有的OSD进程，打开文件句柄数和最大线程数也应该是足够的。<br>OSD进程处理心跳的限制导致进程自杀。默认的处理和通信超时不足以执行IO饥饿型的操作，尤其是失败后的恢复。这经常会导致OSD闪断的现象出现。</li>
+</ol>
+<h2 id="暂时关闭pg重新平衡"><a href="#暂时关闭pg重新平衡" class="headerlink" title="暂时关闭pg重新平衡"></a>暂时关闭pg重新平衡</h2><p>在维护操作或解决问题时，不希望在停止一些OSD后，超时的OSD被标记为out后，CRUSH算法自动进行重新平衡操作。需要执行集群关闭out检测命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd set noout</span><br></pre></td></tr></table></figure>
+<p>这样在停止的OSD中的PG会变为降级态。当维护操作完成后，需要先启动停止的OSD，再恢复默认设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd unset noout</span><br></pre></td></tr></table></figure>
+<h2 id="老-慢-请求"><a href="#老-慢-请求" class="headerlink" title="老/慢 请求"></a>老/慢 请求</h2><p>如果一个OSD服务进程很慢地响应请求。它会产生一个请求耗时过久超过30秒的警告提示信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;date&#125; &#123;osd.num&#125; [WRN] 1 slow requests, 1 included below; oldest blocked for &gt; 30.005692 secs</span><br><span class="line">&#123;date&#125; &#123;osd.num&#125;  [WRN] slow request 30.005692 seconds old, received at &#123;date-time&#125;: osd_op(client.4240.0:8 benchmark_data_ceph-1_39426_object7 [write 0~4194304] 0.69848840) v4 currently waiting for subops from [610]</span><br></pre></td></tr></table></figure>
+<ol>
+<li>可能的原因和修复方法包括：</li>
+<li>硬盘故障（检查dmesg的输出信息）；替换为正常的硬盘</li>
+<li>内核文件系统bug（检查dmesg的输出信息确）；升级内核</li>
+<li>集群负载过高（检查系统负载、iostat等）；机器扩容，尝试降低系统负载</li>
+<li>ceph-osd服务进程的的bug；升级ceph或重启OSD</li>
+</ol>
+<h2 id="OSD-闪断"><a href="#OSD-闪断" class="headerlink" title="OSD 闪断"></a>OSD 闪断</h2><p>OSD重启或恢复中后，OSD在peering状态一直闪断。因为IO密集型的任务导致影响心跳检测异常，你可以暂时为集群通过打开nodown noup选项。执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd set nodown </span><br><span class="line">ceph osd set noup  </span><br><span class="line">ceph osd set noout</span><br></pre></td></tr></table></figure>
+<p>当集群健康稳定后，执行如下命令恢复默认值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd unset nodown  </span><br><span class="line">ceph osd unset noup  </span><br><span class="line">ceph osd unset noout</span><br></pre></td></tr></table></figure>
+<h2 id="确认磁盘损坏"><a href="#确认磁盘损坏" class="headerlink" title="确认磁盘损坏"></a>确认磁盘损坏</h2><p>检查日志，执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dmesg | egrep sd[a­]</span><br><span class="line">eg:</span><br><span class="line">dmesg |egrep sda</span><br><span class="line"></span><br><span class="line">通过smartctl提取信息和执行测试检查可疑的设备:</span><br><span class="line">smartctl a /dev/sda</span><br><span class="line"></span><br><span class="line">通过观察响应时间确认。任何磁盘持续显示不常见的值可能会失败：</span><br><span class="line">iostat x /dev/sda</span><br></pre></td></tr></table></figure>
+<p>###替换osd数据磁盘<br>当集群规模比较大，磁盘出硬件故障是一个常态。为了维持集群规模稳定，必须及时的修复因硬盘故障停止的OSD。 因为Ceph采用了多个副本的策略，一般情况下，不需要恢复坏掉硬盘的数据。用一个新硬盘初始化一个OSD即可。操作步骤如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">两种情况：</span><br><span class="line">a. 如果磁盘坏掉osd会标记为down，默认300秒osd会被标记为out，数据会开始迁移。所以我们替换osd数据磁盘，确保数据迁移完成，集群状态是ok。</span><br><span class="line">b. 如果磁盘将要损坏，但还没有坏，仍然是up&amp;in的，则需要先把该osd 设置为out: ceph osd out osd.0,这样集群会把osd.0的数据 rebalancing and copying到其他机器上去。直到整个集群编程active+clean，再进行后续操作</span><br><span class="line"></span><br><span class="line">1. 关闭 osd.0的进程</span><br><span class="line">systemctl stop ceph-osd@0</span><br><span class="line"></span><br><span class="line">2. 删除旧osd信息(osd.0为例)：</span><br><span class="line">ceph osd crush remove osd.0</span><br><span class="line">ceph auth del osd.0</span><br><span class="line">ceph osd rm 0</span><br><span class="line"></span><br><span class="line">3. 创建新osd</span><br><span class="line">a. ceph osd create #会自动生成uuid和osd-number</span><br><span class="line">b. ssh &#123;new_osd_host&#125;</span><br><span class="line">c. sudo mkdir /var/lib/ceph/osd/ceph-&#123;osd-number&#125;  #上一步生成的osd-number</span><br><span class="line">d. 分区 通过parted把osd的磁盘分区为一个分区</span><br><span class="line">e. sudo mkfs -t xfs /dev/&#123;drive&#125; # 上一步分区</span><br><span class="line">f. sudo mount /dev/&#123;sdx&#125; /var/lib/ceph/osd/ceph-&#123;osd-number&#125;</span><br><span class="line">g. ceph-osd -i &#123;osd-number&#125; --mkfs --mkkey   # 初始化osd数据目录</span><br><span class="line">目录必须为空</span><br><span class="line">h. ceph auth add osd.&#123;osd-number&#125; osd &apos;allow *&apos; mon &apos;allow rwx&apos; -i /var/lib/ceph/osd/ceph-&#123;osd-number&#125;/keyring #注册认证key</span><br><span class="line">i. ceph osd crush add osd.&#123;osd-number&#125;# 添加osd到crush map，则该osd可以接受数据了，这个时候osd的状态为 down &amp; in。ceph osd crush add osd.0 1.0 host=bj-yh-ceph-node2</span><br><span class="line">j. systemctl start ceph-osd@&#123;osd-number&#125; # 启动osd进程，数据会rebalancing and migrating 到新的osd上</span><br></pre></td></tr></table></figure>
+<h2 id="替换ssd日志磁盘"><a href="#替换ssd日志磁盘" class="headerlink" title="替换ssd日志磁盘"></a>替换ssd日志磁盘</h2><p>由于我们使用过程中，一块ssd分4个区，给4个osd使用，所以如果ssd日志磁盘坏掉，需要给对应的osd都要操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">1. 设置OSD状态为noout，防止数据重新平衡</span><br><span class="line">ceph osd set noout</span><br><span class="line"></span><br><span class="line">2. 停止osd进程</span><br><span class="line">ssh &#123;ssd所在节点&#125;</span><br><span class="line">systemctl stop ceph-osd@x  #ssd所对应的osds</span><br><span class="line"></span><br><span class="line">3. 日志数据落盘到数据盘</span><br><span class="line">ceph-osd -i &#123;osd-number&#125; --flush-journal #该ssd日志分区所对应的所有osd-number</span><br><span class="line"></span><br><span class="line">4. 删除日志链接</span><br><span class="line">rm -rf /var/lib/ceph/osd/&#123;osd-number&#125;/journal # #该ssd日志分区所对应的所有osd-number</span><br><span class="line"></span><br><span class="line">5. 创建日志链接</span><br><span class="line">ln -s /dev/disk/by-partuuid/&#123;uuid&#125; /var/lib/ceph/osd/ceph-&#123;osd-number&#125;/journal # 注意别把使用中的分区给绑定错了</span><br><span class="line">chown ceph:ceph /var/lib/ceph/osd/ceph-&#123;osd-number&#125;/journal</span><br><span class="line">echo &#123;uuid&#125; &gt; /var/lib/ceph/osd/ceph-&#123;osd-number&#125;/journal_uuid  #前面/dev/disk/by-partuuid/&#123;uuid&#125; uuid</span><br><span class="line"></span><br><span class="line">6. 创建日志</span><br><span class="line">ceph-osd -i &#123;osd-number&#125; --mkjournal</span><br><span class="line"></span><br><span class="line">7. 启动osd进程</span><br><span class="line">systemctl start ceph-osd@&#123;osd-number&#125;</span><br><span class="line"></span><br><span class="line">如果所有osd进程都起来了</span><br><span class="line"></span><br><span class="line">8. 去除noout的标记</span><br><span class="line">ceph osd set noout</span><br></pre></td></tr></table></figure>
+<h1 id="PG"><a href="#PG" class="headerlink" title="PG"></a>PG</h1><p>ceph health detail #正常会返回 ok</p>
+<h2 id="PG-状态表"><a href="#PG-状态表" class="headerlink" title="PG 状态表"></a>PG 状态表</h2><p>正常是active+clean</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>active</td>
+<td>活跃状态。ceph将处理到达这个PG的读写请求</td>
+</tr>
+<tr>
+<td>unactive</td>
+<td>非活跃状态。该PG不能处理读写请求</td>
+</tr>
+<tr>
+<td>clean</td>
+<td>干净状态。Ceph复制PG内所有对象到设定正确的数目</td>
+</tr>
+<tr>
+<td>unclean</td>
+<td>非干净状态。PG不能从上一个失败中恢复</td>
+</tr>
+<tr>
+<td>down</td>
+<td>离线状态。有必需数据的副本挂掉，比如对象所在的3个副本的OSD挂掉，所以PG离线</td>
+</tr>
+<tr>
+<td>degraded</td>
+<td>降级状态。ceph有些对象的副本数目没有达到系统设置，一般是因为有OSD挂掉</td>
+</tr>
+<tr>
+<td>inconsistent</td>
+<td>不一致态。Ceph 清理和深度清理后检测到PG中的对象在副本存在不一致，例如对象的文件大小不一致或recovery结束后一个对象的副本丢失</td>
+</tr>
+<tr>
+<td>peering</td>
+<td>正在同步状态。PG正在执行同步处理</td>
+</tr>
+<tr>
+<td>recovering</td>
+<td>正在恢复状态。Ceph正在执行迁移或同步对象和他们的副本</td>
+</tr>
+<tr>
+<td>incomplete</td>
+<td>未完成状态。实际的副本数少于min_size。Ceph检测到PG正在丢失关于已经写操作的信息，或者没有任何健康的副本。如果遇到这种状态，尝试启动失败的OSD，这些OSD中可能包含需要的信息或者临时调整副本min_size的值到允许恢复。</td>
+</tr>
+<tr>
+<td>stale</td>
+<td>未刷新状态。PG状态没有被任何OSD更新，这说明所有存储这个PG的OSD可能down</td>
+</tr>
+<tr>
+<td>backfilling</td>
+<td>正在后台填充状态。 当一个新的OSD加入集群后，Ceph通过移动一些其他OSD上的PG到新的OSD来达到新的平衡；这个过程完成后，这个OSD可以处理客户端的IO请求。</td>
+</tr>
+<tr>
+<td>remapped</td>
+<td>重新映射状态。PG活动集任何的一个改变，数据发生从老活动集到新活动集的迁移。在迁移期间还是用老的活动集中的主OSD处理客户端请求，一旦迁移完成新活动集中的主OSD开始处理。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="PG-长时间卡在一些状态"><a href="#PG-长时间卡在一些状态" class="headerlink" title="PG 长时间卡在一些状态"></a>PG 长时间卡在一些状态</h2><p>遇到失败后PG进入如 “degraded” 或 “peering”的状态是正常的。通常这些状态指示失败恢复处理过程中的正常继续。然而，一个PG长时间保持在其中一些状态可能是一个更大问题的提示。因此，MON当PG卡在一个非正常态时会警告。 我们特别地检查：</p>
+<ol>
+<li>inactive : PG太长时间不在active态，例如PG长时间不能处理读写请求，通常是peering的问题。</li>
+<li>unclean : PG太长时间不在clean态，例如PG不能完成从上一个失败的恢复，通常是unfound objects导致。</li>
+<li>stale : PG状态未被OSD更新，表示所有存储PG的OSD可能挂掉，一般启动相应的OSD进程即可。</li>
+</ol>
+<p>在MON节点执行如下命令，可以明确列出卡住的PG：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph pg dump_stuck stale</span><br><span class="line">ceph pg dump_stuck inactive</span><br><span class="line">ceph pg dump_stuck unclean</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Ceph清理和深度清理后到PG处于inconsistent态：</span><br><span class="line"></span><br><span class="line">清理操作被用来检查对象的可用性和健康状态。当集群没有IO密集型（例如恢复）的操作时PG被清理，已经执行清理操作再执行IO密集操作，然而清理操作继续。如果清理任务发现任何对象有损坏或者不匹配的数据（校验和检测），它将标记这个对象为不能使用并且需要手动介入和恢复。OSD执行写操作时计算校验和，Ceph并不能武断地决定副本中的哪个校验和是正确的。例如有3个副本的校验和，有1个不同，很容易猜出应该修复的错误副本（从其他副本恢复），但是当有3个不同的校验和或者一些比特错误，我们不能武断的说哪个是好的。这不是一个端到端的数据修正检查。</span><br><span class="line"></span><br><span class="line">手动修复损坏的pg</span><br><span class="line"></span><br><span class="line">1. 找到有不一致对象的PG， 执行如下命令 ceph pg dump | grep inconsistent 或者 ceph health detail</span><br><span class="line">2. 当主副本是正确数据时，执行修复命令。或者通过在OSD的硬盘上手动复制正确的文件覆盖掉错误的文件。 ceph pg repair &#123;pgnum&#125;</span><br><span class="line">   注意：如果主副本错误，应该使用手动修复，如果通过命令修复则会把主副本的错误数据复制到其他副本。</span><br></pre></td></tr></table></figure>
+<h3 id="incomplete-PG"><a href="#incomplete-PG" class="headerlink" title="incomplete PG"></a>incomplete PG</h3><p>这个告警是因为实际副本数少于min_size。可能是由于PG对应的OSD挂掉导致。尝试启动挂掉的OSD。</p>
+<h3 id="stale-PG"><a href="#stale-PG" class="headerlink" title="stale PG"></a>stale PG</h3><p>简单地重启受影响的OSD。当一个OSD不能映射它持有所有的对象时这个问题发生,执行如下操作：</p>
+<ol>
+<li><p>找到PG</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph pg dump_stuck stale</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>映射pg，找到osd：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph pg map &#123;pgname&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启上面的osd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh &#123;osd-node&#125;</span><br><span class="line">systemctl restart ceph-osd@&#123;osd-number&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="peering-和-down-PG"><a href="#peering-和-down-PG" class="headerlink" title="peering 和 down PG"></a>peering 和 down PG</h3><ol>
+<li><p>找到受影响的pg</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph health detail</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下面命令响应结果中的 [“recovery_state”][“blocked”]部分显示peering被停止 的原因,大多数的情况都是一些OSD挂掉。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph pg &#123;pgname&#125; query</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>尝试重启上面挂掉的OSD，如果无法启动，应该为执行如下命令标记为lost，让恢复操作开始。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd lost &#123;osd-number&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="unfound-objects"><a href="#unfound-objects" class="headerlink" title="unfound objects"></a>unfound objects</h3><p>在特殊的失败组合下Ceph会警告unfound objects。这意味着存储集群知道有些对象存在，但是却无法找到它的副本。下面的例子说明这是怎么发生的，有1个PG他映射的的OSD是 1和2：</p>
+<ol>
+<li><p>OSD 1挂掉</p>
+</li>
+<li><p>OSD 2单独处理一些请求</p>
+</li>
+<li><p>OSD 1运行</p>
+</li>
+<li><p>OSD 1和2重新peering，1上丢失的对象在队列中等待恢复</p>
+</li>
+<li><p>在新对象之前被复制之前，OSD2挂掉<br>现在OSD 1知道一些对象存在，但是没有这个副本活的OSD。 这种情况下，到这些对象的IO将被阻塞，集群希望失败的OSD快速地回来。这时假设返回一个IO错误给用户是适当的。<br>修复建议：</p>
+</li>
+<li><p>启动停止的osd</p>
+</li>
+<li><p>如果还无法恢复，你可能只有放弃丢失的对象。执行如下命令回滚或删除对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ceph pg  &#123;pgname&#125;  mark_unfound_lost revert|delete</span><br><span class="line">revert选项：回滚到对象的前一个版本</span><br><span class="line">delete选项：完全删除这个对象</span><br><span class="line">使用这个操作时注意，因为它可能是使预期存在这个对象的程序混乱。</span><br><span class="line">列出带有丢失对象的PG的名字：</span><br><span class="line">ceph pg &#123;pgname&#125; list_missing</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/dsl5646k.html" title="ceph组件的状态">https://shenshengkun.github.io/posts/dsl5646k.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/dld987c6.html" rel="next" title="ceph对象存储">
+                <i class="fa fa-chevron-left"></i> ceph对象存储
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/fd22jkk6.html" rel="prev" title="ceph的pg算法">
+                ceph的pg算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ceph-整体状态查看"><span class="nav-number">1.</span> <span class="nav-text">Ceph 整体状态查看</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mon"><span class="nav-number">2.</span> <span class="nav-text">mon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mon相关状态"><span class="nav-number">2.1.</span> <span class="nav-text">mon相关状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#client-无法链接mon的可能原因"><span class="nav-number">2.2.</span> <span class="nav-text">client 无法链接mon的可能原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MON-状态表"><span class="nav-number">2.3.</span> <span class="nav-text">MON 状态表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时钟偏移警告"><span class="nav-number">2.3.1.</span> <span class="nav-text">时钟偏移警告</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OSD"><span class="nav-number">3.</span> <span class="nav-text">OSD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OSD-状态表"><span class="nav-number">3.1.</span> <span class="nav-text">OSD 状态表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">3.2.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#暂时关闭pg重新平衡"><span class="nav-number">3.3.</span> <span class="nav-text">暂时关闭pg重新平衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#老-慢-请求"><span class="nav-number">3.4.</span> <span class="nav-text">老/慢 请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSD-闪断"><span class="nav-number">3.5.</span> <span class="nav-text">OSD 闪断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确认磁盘损坏"><span class="nav-number">3.6.</span> <span class="nav-text">确认磁盘损坏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换ssd日志磁盘"><span class="nav-number">3.7.</span> <span class="nav-text">替换ssd日志磁盘</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PG"><span class="nav-number">4.</span> <span class="nav-text">PG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PG-状态表"><span class="nav-number">4.1.</span> <span class="nav-text">PG 状态表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PG-长时间卡在一些状态"><span class="nav-number">4.2.</span> <span class="nav-text">PG 长时间卡在一些状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#incomplete-PG"><span class="nav-number">4.2.1.</span> <span class="nav-text">incomplete PG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stale-PG"><span class="nav-number">4.2.2.</span> <span class="nav-text">stale PG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#peering-和-down-PG"><span class="nav-number">4.2.3.</span> <span class="nav-text">peering 和 down PG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unfound-objects"><span class="nav-number">4.2.4.</span> <span class="nav-text">unfound objects</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+     <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;"></canvas>
+     <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+     <script type="text/javascript" src="/js/src/fireworks.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
