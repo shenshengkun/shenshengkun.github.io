@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
+<meta name="description" content="故障现象在测试环境使用kubeadm部署的集群，在运行了一年之后今天，出现k8s api无法调取的现象，使用kubectl命令获取资源均返回如下报错: 12[root@master35 ~]# kubectl get nodesUnable to connect to the server: x509: certificate has expired or is not yet valid 一看报">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python监控es状态">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/71abe607.html">
+<meta property="og:title" content="kubeadm证书以及etcd证书过期处理">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/fk755lfl.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
+<meta property="og:description" content="故障现象在测试环境使用kubeadm部署的集群，在运行了一年之后今天，出现k8s api无法调取的现象，使用kubectl命令获取资源均返回如下报错: 12[root@master35 ~]# kubectl get nodesUnable to connect to the server: x509: certificate has expired or is not yet valid 一看报">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-30T02:29:19.196Z">
+<meta property="og:updated_time" content="2019-07-22T06:55:37.181Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python监控es状态">
-<meta name="twitter:description" content="需求用python写一个监控es状态的脚本 实例监控es的机器1234567891011配置文件[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini[mail]name = sy@xxx.com[tax_es]cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.">
+<meta name="twitter:title" content="kubeadm证书以及etcd证书过期处理">
+<meta name="twitter:description" content="故障现象在测试环境使用kubeadm部署的集群，在运行了一年之后今天，出现k8s api无法调取的现象，使用kubectl命令获取资源均返回如下报错: 12[root@master35 ~]# kubectl get nodesUnable to connect to the server: x509: certificate has expired or is not yet valid 一看报">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/71abe607.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/fk755lfl.html">
 
 
 
 
 
-  <title>python监控es状态 | 舒宇的博客</title>
+  <title>kubeadm证书以及etcd证书过期处理 | 舒宇的博客</title>
   
 
 
@@ -292,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/71abe607.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/fk755lfl.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python监控es状态</h1>
+          <h1 class="post-title" itemprop="name headline">kubeadm证书以及etcd证书过期处理</h1>
         
 
         <div class="post-meta">
@@ -321,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-28T11:04:01+08:00">
-                2019-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-27T14:30:01+08:00">
+                2019-04-27
               </time>
             
 
@@ -344,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -386,9 +386,26 @@
       
 
       
-        <h1 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h1><p>用python写一个监控es状态的脚本</p>
-<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><h2 id="监控es的机器"><a href="#监控es的机器" class="headerlink" title="监控es的机器"></a>监控es的机器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">配置文件</span><br><span class="line"></span><br><span class="line">[root@Ops-script monitor_elasticsearch]# cat escluster_ip.ini</span><br><span class="line">[mail]</span><br><span class="line">name = sy@xxx.com</span><br><span class="line">[tax_es]</span><br><span class="line">cluster_ip = 192.168.50.7:9200,192.168.50.8:9200,192.168.50.9:9200</span><br><span class="line">name_pass = none,none</span><br><span class="line">[analysis_es]</span><br><span class="line">cluster_ip = 192.168.50.24:9200,192.168.50.25:9200</span><br><span class="line">name_pass = none,none</span><br></pre></td></tr></table></figure>
-<h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@Ops-script monitor_elasticsearch]# cat monitor_elastic_cluster.py</span><br><span class="line"></span><br><span class="line">import urllib,socket,time,json</span><br><span class="line">import logging,requests,configparser,os</span><br><span class="line"></span><br><span class="line"># 定义日志格式读取配置文件</span><br><span class="line">cur_path = os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">logging.basicConfig(format=&apos;[ %(asctime)s ] -- %(message)s&apos;,</span><br><span class="line">                    datefmt=&apos;%a, %d %b %Y %H:%M:%S&apos;,</span><br><span class="line">                    filename=cur_path+&quot;/scripts.log&quot;,</span><br><span class="line">                    level=logging.INFO)</span><br><span class="line">config_path = os.path.join(cur_path,&quot;escluster_ip.ini&quot;)</span><br><span class="line">conf = configparser.ConfigParser()</span><br><span class="line">conf.read(config_path)</span><br><span class="line">esgroup = conf.sections()</span><br><span class="line"></span><br><span class="line">def GetClusterIp():</span><br><span class="line">    # 按集群名循环检查,集群名为配置文件中的标题</span><br><span class="line">    for group in esgroup:</span><br><span class="line">        # 获取到 mail 中的邮件地址不再继续循环</span><br><span class="line">        if group == &quot;mail&quot;:</span><br><span class="line">            mailname = conf.get(group,&quot;name&quot;)</span><br><span class="line">            continue</span><br><span class="line">        # 获取到一个集群 ip 后进行 get 请求</span><br><span class="line">        iplist = conf.get(group,&quot;cluster_ip&quot;).split(&quot;,&quot;)</span><br><span class="line">        for esip in iplist:</span><br><span class="line">            url = &quot;http://%s/_cat/health&quot;%esip</span><br><span class="line">            try:</span><br><span class="line">                # 超时时间为 3 秒, request 的请求值不是200的将全部置为400</span><br><span class="line">                # 如果是请求成功,则获取 status 的状态和 status_num 的百分比</span><br><span class="line">                response = requests.get(url,timeout=3)</span><br><span class="line">                request = response.status_code</span><br><span class="line">                status = response.text.split()[3]</span><br><span class="line">                status_num = response.text.split()[-1]</span><br><span class="line">            except:</span><br><span class="line">                request = 400</span><br><span class="line">            # 请求值为 200 后,检查 status 值非 green 状态发送报警邮件,并不在继续检查本集群内的剩余节点</span><br><span class="line">            if request == 200:</span><br><span class="line">                if status != &quot;green&quot;:</span><br><span class="line">                    mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s ,查状态: %s, 状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip为: [ %s ]\n\n检查状态为: %s\n\n状态百分比: %s&quot;%(group,esip,status,status_num)</span><br><span class="line">                    command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                    logging.info(mailtitle)</span><br><span class="line">                    os.system(command)</span><br><span class="line">                    break</span><br><span class="line">            # 请求值不是 200 ,报警后继续检查集群内剩余 ip</span><br><span class="line">            else:</span><br><span class="line">                mailtitle = &quot;elasticsearch集群 [ %s ], ip为:%s, 请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                mailtxt = &quot;elasticsearch集群 [ %s ]\n\nip: [ %s ]\n\n请求超时,请检查端口&quot;%(group,esip)</span><br><span class="line">                command = &quot;echo -e %s%s%s | mail -s %s%s%s %s&quot;%(&apos;&quot;&apos;,mailtxt,&apos;&quot;&apos;,&apos;&quot;&apos;,mailtitle,&apos;&quot;&apos;,mailname)</span><br><span class="line">                logging.info(mailtitle)</span><br><span class="line">                os.system(command)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    GetClusterIp()</span><br></pre></td></tr></table></figure>
+        <h1 id="故障现象"><a href="#故障现象" class="headerlink" title="故障现象"></a>故障现象</h1><p>在测试环境使用kubeadm部署的集群，在运行了一年之后今天，出现k8s api无法调取的现象，使用kubectl命令获取资源均返回如下报错:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master35 ~]# kubectl get nodes</span><br><span class="line">Unable to connect to the server: x509: certificate has expired or is not yet valid</span><br></pre></td></tr></table></figure>
+<p>一看报错，大概率是证书到期了，经过命令一查证书时间，果然是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -text |grep &apos; Not &apos;</span><br></pre></td></tr></table></figure>
+<h1 id="替换apiserver证书"><a href="#替换apiserver证书" class="headerlink" title="替换apiserver证书"></a>替换apiserver证书</h1><p>进入master节点 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/kubernetes</span><br><span class="line"># 备份证书和配置</span><br><span class="line">mkdir ./pki_bak</span><br><span class="line">mkdir ./conf_bak</span><br><span class="line">mv pki/apiserver* ./pki_bak/</span><br><span class="line">mv pki/front-proxy-client.* ./pki_bak/</span><br><span class="line"> mv ./admin.conf ./conf_bak/</span><br><span class="line"> mv ./kubelet.conf ./conf_bak/</span><br><span class="line"> mv ./controller-manager.conf ./conf_bak/</span><br><span class="line"> mv ./scheduler.conf ./conf_bak/</span><br><span class="line"></span><br><span class="line"># 创建证书</span><br><span class="line">kubeadm alpha phase certs apiserver --apiserver-advertise-address $&#123;MASTER_API_SERVER_IP&#125;</span><br><span class="line">kubeadm alpha phase certs apiserver-kubelet-client</span><br><span class="line">kubeadm alpha phase certs front-proxy-client</span><br><span class="line"></span><br><span class="line">会发现谷歌被强，命令执行不上，会报错，所以用配置文件来执行命令</span><br><span class="line">kubeadm alpha phase certs apiserver --config /root/yaml/kubeadm-config.yaml</span><br><span class="line">kubeadm alpha phase certs apiserver-kubelet-client --config /root/yaml/kubeadm-config.yaml</span><br><span class="line">kubeadm alpha phase certs front-proxy-client --config /root/yaml/kubeadm-config.yaml</span><br><span class="line"></span><br><span class="line"># 生成新配置文件</span><br><span class="line">kubeadm alpha phase kubeconfig all --config /root/yaml/kubeadm-config.yaml</span><br><span class="line"></span><br><span class="line"># 将新生成的admin配置文件覆盖掉原本的admin文件</span><br><span class="line">mv $HOME/.kube/config $HOME/.kube/config.old</span><br><span class="line">cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line">chmod 777 $HOME/.kube/config</span><br></pre></td></tr></table></figure>
+<p>完成上方操作后，docker restart重启kube-apiserver,kube-controller,kube-scheduler这3个容器 </p>
+<p>如果有多台master节点，先仿照上方将证书文件和配置文件进行备份，然后将这一台配置完成的master上的证书和配置scp过去</p>
+<h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p>kubectl命令发现还是无法查看资源，检查apiserver的日志: docker logs </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 customresource_discovery_controller.go:156] Shutting down DiscoveryController</span><br><span class="line">1 available_controller.go:266] Shutting down AvailableConditionController</span><br><span class="line">1 crdregistration_controller.go:115] Shutting down crd-autoregister controller</span><br></pre></td></tr></table></figure>
+<p>怀疑是etcd证书的原因</p>
+<h1 id="etcd证书过期处理"><a href="#etcd证书过期处理" class="headerlink" title="etcd证书过期处理"></a>etcd证书过期处理</h1><p>看下etcd证书配置文件，发现是8760h</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> cat config.json</span><br><span class="line">&#123;</span><br><span class="line">&quot;signing&quot;: &#123;</span><br><span class="line">    &quot;default&quot;: &#123;</span><br><span class="line">      &quot;expiry&quot;: &quot;8760h&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">    &quot;profiles&quot;: &#123;</span><br><span class="line">      &quot;kubernetes&quot;: &#123;</span><br><span class="line">        &quot;usages&quot;: [</span><br><span class="line">            &quot;signing&quot;,</span><br><span class="line">            &quot;key encipherment&quot;,</span><br><span class="line">            &quot;server auth&quot;,</span><br><span class="line">            &quot;client auth&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;expiry&quot;: &quot;8760h&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先备份etcd数据:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /var/lib</span><br><span class="line">tar -zvcf etcd.tar.gz etcd/</span><br></pre></td></tr></table></figure>
+<p>修改ca配置文件，将默认证书签署过期时间修改为10年:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@master35 etcd]# cat ca-config.json </span><br><span class="line">&#123;</span><br><span class="line">&quot;signing&quot;: &#123;</span><br><span class="line">&quot;default&quot;: &#123;</span><br><span class="line">  &quot;expiry&quot;: &quot;87600h&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;profiles&quot;: &#123;</span><br><span class="line">  &quot;kubernetes&quot;: &#123;</span><br><span class="line">    &quot;usages&quot;: [</span><br><span class="line">        &quot;signing&quot;,</span><br><span class="line">        &quot;key encipherment&quot;,</span><br><span class="line">        &quot;server auth&quot;,</span><br><span class="line">        &quot;client auth&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;expiry&quot;: &quot;87600h&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成新证书：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#删除过期证书</span><br><span class="line">rm -f /etc/etcd/ssl/*</span><br><span class="line"></span><br><span class="line"># 创建新证书</span><br><span class="line">cfssl gencert -ca=ca.pem   -ca-key=ca-key.pem   -config=config.json   -profile=kubernetes etcd-csr.json | cfssljson -bare etcd</span><br><span class="line">cp etcd.pem etcd-key.pem  ca.pem /etc/etcd/ssl/</span><br><span class="line">#拷贝到其他etcd节点</span><br><span class="line">scp -r /etc/etcd/ssl root@$&#123;other_node&#125;:/etc/etcd/</span><br><span class="line"></span><br><span class="line"># 重启etcd服务(记住，要3个节点一起重启，不然会hang住)</span><br><span class="line">systemctl restart etcd</span><br></pre></td></tr></table></figure>
+<p>etcd替换成功后，再重启kube-apiserver,kube-controller,kube-scheduler这3个容器</p>
 
       
     </div>
@@ -438,7 +455,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/71abe607.html" title="python监控es状态">https://shenshengkun.github.io/posts/71abe607.html</a>
+    <a href="https://shenshengkun.github.io/posts/fk755lfl.html" title="kubeadm证书以及etcd证书过期处理">https://shenshengkun.github.io/posts/fk755lfl.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -460,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/fk755lfl.html" rel="next" title="kubeadm证书以及etcd证书过期处理">
-                <i class="fa fa-chevron-left"></i> kubeadm证书以及etcd证书过期处理
+              <a href="/posts/59cdc228.html" rel="next" title="钉钉定时发送值班人员">
+                <i class="fa fa-chevron-left"></i> 钉钉定时发送值班人员
               </a>
             
           </div>
@@ -470,8 +487,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/984b410.html" rel="prev" title="区块链浏览器部署">
-                区块链浏览器部署 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/71abe607.html" rel="prev" title="python监控es状态">
+                python监控es状态 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -619,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#监控es的机器"><span class="nav-number">2.1.</span> <span class="nav-text">监控es的机器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本"><span class="nav-number">2.2.</span> <span class="nav-text">脚本</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#故障现象"><span class="nav-number">1.</span> <span class="nav-text">故障现象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#替换apiserver证书"><span class="nav-number">2.</span> <span class="nav-text">替换apiserver证书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证"><span class="nav-number">3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#etcd证书过期处理"><span class="nav-number">4.</span> <span class="nav-text">etcd证书过期处理</span></a></li></ol></div>
             
 
           </div>

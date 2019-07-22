@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenshengkun.github.io/k8s/index.html</loc>
+    
+    <lastmod>2019-07-22T06:56:49.337Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://shenshengkun.github.io/posts/fk755lfl.html</loc>
+    
+    <lastmod>2019-07-22T06:55:37.181Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenshengkun.github.io/ceph/index.html</loc>
     
     <lastmod>2019-07-19T06:12:53.119Z</lastmod>
@@ -89,13 +103,6 @@
     <loc>https://shenshengkun.github.io/posts/dk7569vg.html</loc>
     
     <lastmod>2019-07-05T06:59:46.817Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://shenshengkun.github.io/k8s/index.html</loc>
-    
-    <lastmod>2019-07-05T06:02:43.512Z</lastmod>
     
   </url>
   
