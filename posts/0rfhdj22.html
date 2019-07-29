@@ -81,13 +81,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="舒宇的博客">
-<meta property="og:url" content="https://shenshengkun.github.io/archives/2018/02/page/2/index.html">
+<meta name="description" content="前言k8s对ceph rbd模式不支持ReadWriteMany（RWX）,为了满足k8s的灵活性需求,采用支持多点挂载的cephfs工作模式  安装ceph端123456ceph-deploy mds create ceph为cephfs创建存储池ceph osd pool create cephfs_data 8ceph osd pool create  cephfs_metadata 8ce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s上用cephfs存储">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/0rfhdj22.html">
 <meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="前言k8s对ceph rbd模式不支持ReadWriteMany（RWX）,为了满足k8s的灵活性需求,采用支持多点挂载的cephfs工作模式  安装ceph端123456ceph-deploy mds create ceph为cephfs创建存储池ceph osd pool create cephfs_data 8ceph osd pool create  cephfs_metadata 8ce">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-29T07:01:10.799Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="舒宇的博客">
+<meta name="twitter:title" content="k8s上用cephfs存储">
+<meta name="twitter:description" content="前言k8s对ceph rbd模式不支持ReadWriteMany（RWX）,为了满足k8s的灵活性需求,采用支持多点挂载的cephfs工作模式  安装ceph端123456ceph-deploy mds create ceph为cephfs创建存储池ceph osd pool create cephfs_data 8ceph osd pool create  cephfs_metadata 8ce">
 
 
 
@@ -117,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/archives/2018/02/page/2/">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/0rfhdj22.html">
 
 
 
 
 
-  <title>归档 | 舒宇的博客</title>
+  <title>k8s上用cephfs存储 | 舒宇的博客</title>
   
 
 
@@ -142,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -274,145 +278,226 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/0rfhdj22.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">k8s上用cephfs存储</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-22T11:10:01+08:00">
+                2019-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        好! 目前共计 77 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/1901393b.html" itemprop="url">
-              
-                <span itemprop="name">python模块-random</span>
-              
-            </a>
-        
-      </h2>
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T11:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/5d02f982.html" itemprop="url">
-              
-                <span itemprop="name">python模块-os、sys</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:24:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/posts/8d289766.html" itemprop="url">
-              
-                <span itemprop="name">python模块-logging</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-02-15T07:23:01+08:00" content="2018-02-15">
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>k8s对ceph rbd模式不支持<strong>ReadWriteMany（RWX）</strong>,为了满足k8s的灵活性需求,采用支持多点挂载的cephfs工作模式 </p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="ceph端"><a href="#ceph端" class="headerlink" title="ceph端"></a>ceph端</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy mds create ceph</span><br><span class="line"></span><br><span class="line">为cephfs创建存储池</span><br><span class="line">ceph osd pool create cephfs_data 8</span><br><span class="line">ceph osd pool create  cephfs_metadata 8</span><br><span class="line">ceph fs new cephfs cephfs_metadata    cephfs_data</span><br></pre></td></tr></table></figure>
+<p>查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# ceph  fs  ls</span><br><span class="line">name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     cbc04385-1cdf-4512-a3f5-a5b3e8686a05</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 1 daemons, quorum ceph</span><br><span class="line">    mgr: ceph(active)</span><br><span class="line">    mds: cephfs-1/1/1 up  &#123;0=ceph=up:active&#125;</span><br><span class="line">    osd: 1 osds: 1 up, 1 in</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   3 pools, 106 pgs</span><br><span class="line">    objects: 73 objects, 137MiB</span><br><span class="line">    usage:   3.82GiB used, 16.2GiB / 20.0GiB avail</span><br><span class="line">    pgs:     106 active+clean</span><br></pre></td></tr></table></figure>
+<h2 id="k8s挂载ceph"><a href="#k8s挂载ceph" class="headerlink" title="k8s挂载ceph"></a>k8s挂载ceph</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# cat admin.secret </span><br><span class="line">AQA6EzBd5zAwIRAAgs+NyCjoAKuSrQKoFvQi9w==</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# mkdir /mnt/cephfs</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# mount -t ceph 192.168.6.101:6789:/ /mnt/cephfs -o name=admin,secretfile=/etc/ceph/admin.secret</span><br><span class="line"></span><br><span class="line">[root@node1 ceph]# df -h</span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs              2.0G     0  2.0G   0% /dev</span><br><span class="line">tmpfs                 2.0G     0  2.0G   0% /dev/shm</span><br><span class="line">tmpfs                 2.0G  198M  1.8G  10% /run</span><br><span class="line">tmpfs                 2.0G     0  2.0G   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/cl-root    36G   12G   24G  34% /</span><br><span class="line">/dev/sda1            1014M  216M  799M  22% /boot</span><br><span class="line">tmpfs                 2.0G   12K  2.0G   1% /data/k8s/k8s/kubelet/pods/42d3eb88-aaba-11e9-b1ef-005056b1d2de/volumes/kubernetes.io~secret/coredns-token-qklgj</span><br><span class="line">overlay                36G   12G   24G  34% /data/k8s/docker/data/overlay2/f651aa6ff6070b5a3acb8ba0e8d810a1d699a7853e0d3df802851fa64fc2c029/merged</span><br><span class="line">shm                    64M     0   64M   0% /data/k8s/docker/data/containers/531654eae411cc84ed7ed3c2d5e60afa2bd68cca57cf821636369be5869f6f7d/mounts/shm</span><br><span class="line">tmpfs                 2.0G   12K  2.0G   1% /data/k8s/k8s/kubelet/pods/4eb99bd2-aaba-11e9-b1ef-005056b1d2de/volumes/kubernetes.io~secret/default-token-npj5x</span><br><span class="line">overlay                36G   12G   24G  34% /data/k8s/docker/data/overlay2/1707081196a127bbf0f46f57a9a6831c8f6d87a6f92dad5a578375d24eb41580/merged</span><br><span class="line">shm                    64M     0   64M   0% /data/k8s/docker/data/containers/b6b70ef43252b12414afc08562ceb4002467ff700acb01941dce73cf9e40d88a/mounts/shm</span><br><span class="line">overlay                36G   12G   24G  34% /data/k8s/docker/data/overlay2/3ccf15f58beb54a2b59ab2c5c421ac3a8f3f2d5896b5b12430a8f672783eeb84/merged</span><br><span class="line">tmpfs                 396M     0  396M   0% /run/user/0</span><br><span class="line">192.168.6.101:6789:/   20G  3.9G   17G  20% /mnt/cephfs</span><br></pre></td></tr></table></figure>
+<h3 id="创建secret"><a href="#创建secret" class="headerlink" title="创建secret"></a>创建secret</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# cat cephfs-secret.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Secret</span><br><span class="line">metadata:</span><br><span class="line">  name: ceph-secret</span><br><span class="line">data:</span><br><span class="line">  key: QVFBNkV6QmQ1ekF3SVJBQWdzK055Q2pvQUt1U3JRS29GdlFpOXc9PQ==</span><br></pre></td></tr></table></figure>
+<h3 id="pv"><a href="#pv" class="headerlink" title="pv"></a>pv</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# cat cephfs-pv.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: cephfs-pv</span><br><span class="line">  labels:</span><br><span class="line">    pv: cephfs-pv</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 1Gi</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">  cephfs:</span><br><span class="line">    monitors:</span><br><span class="line">      - 192.168.6.101:6789</span><br><span class="line">    user: admin</span><br><span class="line">    secretRef:</span><br><span class="line">      name: ceph-secret</span><br><span class="line">    readOnly: false</span><br><span class="line">  persistentVolumeReclaimPolicy: Delete</span><br></pre></td></tr></table></figure>
+<h3 id="pvc"><a href="#pvc" class="headerlink" title="pvc"></a>pvc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ceph]# cat cephfs-pvc.yaml </span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  name: cephfs-pvc</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 1Gi</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      pv: cephfs-pv</span><br></pre></td></tr></table></figure>
 
       
-
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/0rfhdj22.html" title="k8s上用cephfs存储">https://shenshengkun.github.io/posts/0rfhdj22.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/dl9876la.html" rel="next" title="rbd无法map">
+                <i class="fa fa-chevron-left"></i> rbd无法map
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/dlfl674a.html" rel="prev" title="pxc集群部署">
+                pxc集群部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/02/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2018/02/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -420,6 +505,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDg4Mi8xNzQwNw=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -440,8 +534,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -511,6 +614,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ceph端"><span class="nav-number">2.1.</span> <span class="nav-text">ceph端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k8s挂载ceph"><span class="nav-number">2.2.</span> <span class="nav-text">k8s挂载ceph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建secret"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建secret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pv"><span class="nav-number">2.2.2.</span> <span class="nav-text">pv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pvc"><span class="nav-number">2.2.3.</span> <span class="nav-text">pvc</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -678,6 +797,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
 
   
 
@@ -706,6 +829,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
