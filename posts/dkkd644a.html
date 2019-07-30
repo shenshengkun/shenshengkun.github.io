@@ -81,19 +81,22 @@
 
 
 
-<meta name="description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
+<meta name="description" content="Kubernetes 环境下面使用 Jenkins 有什么好处我们知道持续构建与发布是我们日常工作中必不可少的一个步骤，目前大多公司都采用 Jenkins 集群来搭建符合需求的 CI/CD 流程，然而传统的 Jenkins Slave 一主多从方式会存在一些痛点，比如：  主 Master 发生单点故障时，整个流程都不可用了 每个 Slave 的配置环境不一样，来完成不同语言的编译打包等操作，但是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rbd无法map">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/dl9876la.html">
+<meta property="og:title" content="k8s部署jenkins动态slave">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/dkkd644a.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
+<meta property="og:description" content="Kubernetes 环境下面使用 Jenkins 有什么好处我们知道持续构建与发布是我们日常工作中必不可少的一个步骤，目前大多公司都采用 Jenkins 集群来搭建符合需求的 CI/CD 流程，然而传统的 Jenkins Slave 一主多从方式会存在一些痛点，比如：  主 Master 发生单点故障时，整个流程都不可用了 每个 Slave 的配置环境不一样，来完成不同语言的编译打包等操作，但是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png">
-<meta property="og:updated_time" content="2019-07-22T08:32:24.811Z">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_jenkins1.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_jenkins2.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_jenkins3.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_jenkins4.png">
+<meta property="og:updated_time" content="2019-07-30T08:56:19.753Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rbd无法map">
-<meta name="twitter:description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
-<meta name="twitter:image" content="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png">
+<meta name="twitter:title" content="k8s部署jenkins动态slave">
+<meta name="twitter:description" content="Kubernetes 环境下面使用 Jenkins 有什么好处我们知道持续构建与发布是我们日常工作中必不可少的一个步骤，目前大多公司都采用 Jenkins 集群来搭建符合需求的 CI/CD 流程，然而传统的 Jenkins Slave 一主多从方式会存在一些痛点，比如：  主 Master 发生单点故障时，整个流程都不可用了 每个 Slave 的配置环境不一样，来完成不同语言的编译打包等操作，但是">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/k8s_jenkins1.png">
 
 
 
@@ -123,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/dl9876la.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/dkkd644a.html">
 
 
 
 
 
-  <title>rbd无法map | 舒宇的博客</title>
+  <title>k8s部署jenkins动态slave | 舒宇的博客</title>
   
 
 
@@ -294,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dl9876la.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dkkd644a.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -311,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rbd无法map</h1>
+          <h1 class="post-title" itemprop="name headline">k8s部署jenkins动态slave</h1>
         
 
         <div class="post-meta">
@@ -323,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-19T17:10:01+08:00">
-                2019-07-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-29T15:10:01+08:00">
+                2019-07-29
               </time>
             
 
@@ -346,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/ceph/" itemprop="url" rel="index">
-                    <span itemprop="name">ceph</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -388,18 +391,42 @@
       
 
       
-        <h1 id="默认开启了rbd的一些属性"><a href="#默认开启了rbd的一些属性" class="headerlink" title="默认开启了rbd的一些属性"></a>默认开启了rbd的一些属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# ceph --show-config|grep rbd|grep features</span><br><span class="line">rbd_default_features = 61</span><br></pre></td></tr></table></figure>
-<p>RBD属性表： </p>
-<p><img src="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png" alt=""></p>
-<p>61的意思是上面图中的bit码相加得到的值<br>对rbd进行内核的map操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# rbd map mytest</span><br><span class="line">rbd: sysfs write failed</span><br><span class="line">RBD image feature set mismatch. You can disable features unsupported by the kernel with &quot;rbd feature disable&quot;.</span><br><span class="line">In some cases useful info is found in syslog - try &quot;dmesg | tail&quot; or so.</span><br><span class="line">rbd: map failed: (6) No such device or address</span><br></pre></td></tr></table></figure>
-<p>根据提示查询打印的信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# dmesg | tail</span><br><span class="line">[10440.462708] rbd: image mytest: image uses unsupported features: 0x3c</span><br></pre></td></tr></table></figure>
-<p>这个地方提示的很清楚了，不支持的属性0x3c，0x3c是16进制的数值，换算成10进制是3*16+12=60<br>60的意思是不支持：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">32+16+8+4 = exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line"></span><br><span class="line">也就是不支持这些属性，现在动态关闭这些属性</span><br></pre></td></tr></table></figure>
-<h1 id="关闭这些属性"><a href="#关闭这些属性" class="headerlink" title="关闭这些属性"></a>关闭这些属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd feature disable &#123;poolname&#125;/&#123;imagename&#125; &#123;feature&#125;</span><br></pre></td></tr></table></figure>
-<p>如果不想动态的关闭，那么在创建rbd之前，在配置文件中设置这个参数即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rbd_default_features = 3</span><br><span class="line"></span><br><span class="line">关于属性支持的，目前到内核4.6仍然只支持</span><br><span class="line"></span><br><span class="line">layering,striping = 1 + 2</span><br><span class="line"></span><br><span class="line">这两个属性</span><br></pre></td></tr></table></figure>
+        <h1 id="Kubernetes-环境下面使用-Jenkins-有什么好处"><a href="#Kubernetes-环境下面使用-Jenkins-有什么好处" class="headerlink" title="Kubernetes 环境下面使用 Jenkins 有什么好处"></a>Kubernetes 环境下面使用 Jenkins 有什么好处</h1><p>我们知道持续构建与发布是我们日常工作中必不可少的一个步骤，目前大多公司都采用 Jenkins 集群来搭建符合需求的 CI/CD 流程，然而传统的 Jenkins Slave 一主多从方式会存在一些痛点，比如：</p>
+<ul>
+<li>主 Master 发生单点故障时，整个流程都不可用了</li>
+<li>每个 Slave 的配置环境不一样，来完成不同语言的编译打包等操作，但是这些差异化的配置导致管理起来非常不方便，维护起来也是比较费劲</li>
+<li>资源分配不均衡，有的 Slave 要运行的 job 出现排队等待，而有的 Slave 处于空闲状态</li>
+<li>资源有浪费，每台 Slave 可能是物理机或者虚拟机，当 Slave 处于空闲状态时，也不会完全释放掉资源。</li>
+</ul>
+<p>正因为上面的这些种种痛点，我们渴望一种更高效更可靠的方式来完成这个 CI/CD 流程，而 Docker 虚拟化容器技术能很好的解决这个痛点，又特别是在 Kubernetes 集群环境下面能够更好来解决上面的问题。</p>
+<p>这种方式的工作流程大致为：当 Jenkins Master 接受到 Build 请求时，会根据配置的 Label 动态创建一个运行在 Pod 中的 Jenkins Slave 并注册到 Master 上，当运行完 Job 后，这个 Slave 会被注销并且这个 Pod 也会自动删除，恢复到最初状态。</p>
+<p>那么我们使用这种方式带来了哪些好处呢？</p>
+<ul>
+<li><strong>服务高可用</strong>，当 Jenkins Master 出现故障时，Kubernetes 会自动创建一个新的 Jenkins Master 容器，并且将 Volume 分配给新创建的容器，保证数据不丢失，从而达到集群服务高可用。</li>
+<li><strong>动态伸缩</strong>，合理使用资源，每次运行 Job 时，会自动创建一个 Jenkins Slave，Job 完成后，Slave 自动注销并删除容器，资源自动释放，而且 Kubernetes 会根据每个资源的使用情况，动态分配 Slave 到空闲的节点上创建，降低出现因某节点资源利用率高，还排队等待在该节点的情况。</li>
+<li><strong>扩展性好</strong>，当 Kubernetes 集群的资源严重不足而导致 Job 排队等待时，可以很容易的添加一个 Kubernetes Node 到集群中，从而实现扩展。</li>
+</ul>
+<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><h2 id="创建serviceAccount"><a href="#创建serviceAccount" class="headerlink" title="创建serviceAccount"></a>创建serviceAccount</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 jenkins]# cat rbac.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins2</span><br><span class="line">  namespace: default</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">kind: ClusterRole</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins2</span><br><span class="line">rules:</span><br><span class="line">  - apiGroups: [&quot;extensions&quot;, &quot;apps&quot;]</span><br><span class="line">    resources: [&quot;deployments&quot;]</span><br><span class="line">    verbs: [&quot;create&quot;, &quot;delete&quot;, &quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;patch&quot;, &quot;update&quot;]</span><br><span class="line">  - apiGroups: [&quot;&quot;]</span><br><span class="line">    resources: [&quot;services&quot;]</span><br><span class="line">    verbs: [&quot;create&quot;, &quot;delete&quot;, &quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;patch&quot;, &quot;update&quot;]</span><br><span class="line">  - apiGroups: [&quot;&quot;]</span><br><span class="line">    resources: [&quot;pods&quot;]</span><br><span class="line">    verbs: [&quot;create&quot;,&quot;delete&quot;,&quot;get&quot;,&quot;list&quot;,&quot;patch&quot;,&quot;update&quot;,&quot;watch&quot;]</span><br><span class="line">  - apiGroups: [&quot;&quot;]</span><br><span class="line">    resources: [&quot;pods/exec&quot;]</span><br><span class="line">    verbs: [&quot;create&quot;,&quot;delete&quot;,&quot;get&quot;,&quot;list&quot;,&quot;patch&quot;,&quot;update&quot;,&quot;watch&quot;]</span><br><span class="line">  - apiGroups: [&quot;&quot;]</span><br><span class="line">    resources: [&quot;pods/log&quot;]</span><br><span class="line">    verbs: [&quot;get&quot;,&quot;list&quot;,&quot;watch&quot;]</span><br><span class="line">  - apiGroups: [&quot;&quot;]</span><br><span class="line">    resources: [&quot;secrets&quot;]</span><br><span class="line">    verbs: [&quot;get&quot;]</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins2</span><br><span class="line">  namespace: default</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: jenkins2</span><br><span class="line">subjects:</span><br><span class="line">  - kind: ServiceAccount</span><br><span class="line">    name: jenkins2</span><br><span class="line">    namespace: default</span><br></pre></td></tr></table></figure>
+<h2 id="jenkins"><a href="#jenkins" class="headerlink" title="jenkins"></a>jenkins</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 jenkins]# cat jenkins.yaml </span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins2</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: jenkins2</span><br><span class="line">    spec:</span><br><span class="line">      terminationGracePeriodSeconds: 10</span><br><span class="line">      serviceAccount: jenkins2</span><br><span class="line">      containers:</span><br><span class="line">      - name: jenkins</span><br><span class="line">        image: jenkins/jenkins:lts</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 8080</span><br><span class="line">          name: web</span><br><span class="line">          protocol: TCP</span><br><span class="line">        - containerPort: 50000</span><br><span class="line">          name: agent</span><br><span class="line">          protocol: TCP</span><br><span class="line">        resources:</span><br><span class="line">          limits:</span><br><span class="line">            cpu: 1000m</span><br><span class="line">            memory: 1Gi</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 500m</span><br><span class="line">            memory: 512Mi</span><br><span class="line">        livenessProbe:</span><br><span class="line">          httpGet:</span><br><span class="line">            path: /login</span><br><span class="line">            port: 8080</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          timeoutSeconds: 5</span><br><span class="line">          failureThreshold: 12</span><br><span class="line">        readinessProbe:</span><br><span class="line">          httpGet:</span><br><span class="line">            path: /login</span><br><span class="line">            port: 8080</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          timeoutSeconds: 5</span><br><span class="line">          failureThreshold: 12</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - name: jenkinshome</span><br><span class="line">          subPath: jenkins2</span><br><span class="line">          mountPath: /var/jenkins_home</span><br><span class="line">        env:</span><br><span class="line">        - name: LIMITS_MEMORY</span><br><span class="line">          valueFrom:</span><br><span class="line">            resourceFieldRef:</span><br><span class="line">              resource: limits.memory</span><br><span class="line">              divisor: 1Mi</span><br><span class="line">        - name: JAVA_OPTS</span><br><span class="line">          value: -Xmx$(LIMITS_MEMORY)m -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Duser.timezone=Asia/Shanghai</span><br><span class="line">      securityContext:</span><br><span class="line">        fsGroup: 1000</span><br><span class="line">      volumes:</span><br><span class="line">      - name: jenkinshome</span><br><span class="line">        persistentVolumeClaim:</span><br><span class="line">          claimName: cephfs-pvc</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins2</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    app: jenkins2</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: jenkins2</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - name: web</span><br><span class="line">    port: 8080</span><br><span class="line">    targetPort: web</span><br><span class="line">    nodePort: 30002</span><br><span class="line">  - name: agent</span><br><span class="line">    port: 50000</span><br><span class="line">    targetPort: agent</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 jenkins]# kubectl apply -f rbac.yaml </span><br><span class="line">serviceaccount/jenkins2 created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/jenkins2 created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/jenkins2 created</span><br><span class="line">[root@node1 jenkins]# kubectl create -f jenkins.yaml </span><br><span class="line">deployment.extensions/jenkins2 created</span><br><span class="line">service/jenkins2 created</span><br><span class="line"></span><br><span class="line">[root@node1 jenkins]# kubectl get pods</span><br><span class="line">NAME                        READY   STATUS    RESTARTS   AGE</span><br><span class="line">busybox                     1/1     Running   291        12d</span><br><span class="line">jenkins2-5f76f7f8b5-cqwb4   1/1     Running   0          17m</span><br></pre></td></tr></table></figure>
+<p>访问：</p>
+<p><a href="http://192.168.6.102:30002" target="_blank" rel="noopener">http://192.168.6.102:30002</a></p>
+<p>初始化的密码我们可以在 jenkins 的容器的日志中进行查看，也可以直接在cephfs的共享数据目录中查看： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 secrets]# cat /mnt/cephfs/jenkins2/secrets/initialAdminPassword </span><br><span class="line">fc5cf245b9924616b4d430a50ad413dc</span><br></pre></td></tr></table></figure>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>第1步. 我们需要安装<strong>kubernetes plugin</strong>， 点击 Manage Jenkins -&gt; Manage Plugins -&gt; Available -&gt; Kubernetes勾选安装即可。 </p>
+<p>第2步. 安装完毕后，点击 Manage Jenkins —&gt; Configure System —&gt; (拖到最下方)Add a new cloud —&gt; 选择 Kubernetes，然后填写 Kubernetes 和 Jenkins 配置信息。  </p>
+<p><img src="https://shenshengkun.github.io/images/k8s_jenkins1.png" alt=""></p>
+<p>第3步. 配置 Pod Template，其实就是配置 Jenkins Slave 运行的 Pod 模板，命名空间我们同样是用 kube-ops，Labels 这里也非常重要，对于后面执行 Job 的时候需要用到该值 </p>
+<p><img src="https://shenshengkun.github.io/images/k8s_jenkins2.png" alt=""></p>
+<p>另外需要注意我们这里需要在下面挂载两个主机目录，一个是 /var/run/docker.sock，该文件是用于 Pod 中的容器能够共享宿主机的 Docker，这就是大家说的 docker in docker 的方式，Docker 二进制文件我们已经打包到上面的镜像中了，另外一个目录下 /root/.kube 目录，我们将这个目录挂载到容器的 /home/jenkins/.kube 目录下面这是为了让我们能够在 Pod 的容器中能够使用 kubectl 工具来访问我们的 Kubernetes 集群，方便我们后面在 Slave Pod 部署 Kubernetes 应用。  </p>
+<p>另外还有几个参数需要注意，如下图中的<strong>Time in minutes to retain slave when idle</strong>，这个参数表示的意思是当处于空闲状态的时候保留 Slave Pod 多长时间，这个参数最好我们保存默认就行了，如果你设置过大的话，Job 任务执行完成后，对应的 Slave Pod 就不会立即被销毁删除。  </p>
+<p>Jenkins Slave Pod 中没有配置权限，所以需要配置上 ServiceAccount，在 Slave Pod 配置的地方点击下面的高级，添加上对应的 ServiceAccount ，jenkins2</p>
+<p><img src="https://shenshengkun.github.io/images/k8s_jenkins3.png" alt=""></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>Kubernetes 插件的配置工作完成了，接下来我们就来添加一个 Job 任务，看是否能够在 Slave Pod 中执行，任务执行完成后看 Pod 是否会被销毁。</p>
+<p>在 Jenkins 首页点击<strong>create new jobs</strong>，创建一个测试的任务，输入任务名称，然后我们选择 Freestyle project 类型的任务： </p>
+<p><img src="https://shenshengkun.github.io/images/k8s_jenkins4.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;测试 Kubernetes 动态生成 jenkins slave&quot;</span><br><span class="line">echo &quot;==============docker in docker===========&quot;</span><br><span class="line">docker info</span><br><span class="line"></span><br><span class="line">echo &quot;=============kubectl=============&quot;</span><br><span class="line">kubectl get pods</span><br></pre></td></tr></table></figure>
+<p>我们直接在页面点击做成的 Build now 触发构建即可，然后观察 Kubernetes 集群中 Pod 的变化 </p>
 
       
     </div>
@@ -449,7 +476,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/dl9876la.html" title="rbd无法map">https://shenshengkun.github.io/posts/dl9876la.html</a>
+    <a href="https://shenshengkun.github.io/posts/dkkd644a.html" title="k8s部署jenkins动态slave">https://shenshengkun.github.io/posts/dkkd644a.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -471,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/0ijfj445.html" rel="next" title="k8s上用ceph-rbd存储">
-                <i class="fa fa-chevron-left"></i> k8s上用ceph-rbd存储
+              <a href="/posts/dlfl674a.html" rel="next" title="pxc集群部署">
+                <i class="fa fa-chevron-left"></i> pxc集群部署
               </a>
             
           </div>
@@ -480,10 +507,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/0rfhdj22.html" rel="prev" title="k8s上用cephfs存储">
-                k8s上用cephfs存储 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -644,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#默认开启了rbd的一些属性"><span class="nav-number">1.</span> <span class="nav-text">默认开启了rbd的一些属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭这些属性"><span class="nav-number">2.</span> <span class="nav-text">关闭这些属性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-环境下面使用-Jenkins-有什么好处"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes 环境下面使用 Jenkins 有什么好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建serviceAccount"><span class="nav-number">2.1.</span> <span class="nav-text">创建serviceAccount</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jenkins"><span class="nav-number">2.2.</span> <span class="nav-text">jenkins</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.1.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
             
 
           </div>
