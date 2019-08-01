@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shenshengkun.github.io/k8s/index.html</loc>
+    
+    <lastmod>2019-08-01T08:40:09.105Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://shenshengkun.github.io/posts/24jdja99.html</loc>
+    
+    <lastmod>2019-08-01T08:39:25.370Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://shenshengkun.github.io/posts/e2e612d1.html</loc>
     
     <lastmod>2019-08-01T06:40:22.647Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>https://shenshengkun.github.io/posts/dk8973fg.html</loc>
     
     <lastmod>2019-07-31T08:57:07.110Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://shenshengkun.github.io/k8s/index.html</loc>
-    
-    <lastmod>2019-07-31T08:56:57.593Z</lastmod>
     
   </url>
   
@@ -422,14 +429,14 @@
   </url>
   
   <url>
-    <loc>https://shenshengkun.github.io/posts/6924c90a.html</loc>
+    <loc>https://shenshengkun.github.io/posts/9afc5d97.html</loc>
     
     <lastmod>2019-05-30T02:29:19.215Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://shenshengkun.github.io/posts/9afc5d97.html</loc>
+    <loc>https://shenshengkun.github.io/posts/6924c90a.html</loc>
     
     <lastmod>2019-05-30T02:29:19.215Z</lastmod>
     
