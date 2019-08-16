@@ -81,19 +81,17 @@
 
 
 
-<meta name="description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
+<meta name="description" content="调度流程kube-scheduler 是 kubernetes 的调度器，它的主要作用就是根据特定的调度算法和调度策略将 Pod 调度到合适的 Node 节点上去，是一个独立的二进制程序，启动之后会一直监听 API Server，获取到 PodSpec.NodeName 为空的 Pod，对每个 Pod 都会创建一个 binding。  123456789调度器需要充分考虑诸多的因素：- 公平调度-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rbd无法map">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/dl9876la.html">
+<meta property="og:title" content="k8s-schedule工作流程">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/dk8k79hg.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
+<meta property="og:description" content="调度流程kube-scheduler 是 kubernetes 的调度器，它的主要作用就是根据特定的调度算法和调度策略将 Pod 调度到合适的 Node 节点上去，是一个独立的二进制程序，启动之后会一直监听 API Server，获取到 PodSpec.NodeName 为空的 Pod，对每个 Pod 都会创建一个 binding。  123456789调度器需要充分考虑诸多的因素：- 公平调度-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png">
-<meta property="og:updated_time" content="2019-07-22T08:32:24.811Z">
+<meta property="og:updated_time" content="2019-08-16T02:47:19.880Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rbd无法map">
-<meta name="twitter:description" content="默认开启了rbd的一些属性12[root@ceph1 ~]# ceph --show-config|grep rbd|grep featuresrbd_default_features = 61 RBD属性表：   61的意思是上面图中的bit码相加得到的值对rbd进行内核的map操作 12345[root@ceph1 ~]# rbd map mytestrbd: sysfs write fail">
-<meta name="twitter:image" content="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png">
+<meta name="twitter:title" content="k8s-schedule工作流程">
+<meta name="twitter:description" content="调度流程kube-scheduler 是 kubernetes 的调度器，它的主要作用就是根据特定的调度算法和调度策略将 Pod 调度到合适的 Node 节点上去，是一个独立的二进制程序，启动之后会一直监听 API Server，获取到 PodSpec.NodeName 为空的 Pod，对每个 Pod 都会创建一个 binding。  123456789调度器需要充分考虑诸多的因素：- 公平调度-">
 
 
 
@@ -123,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/dl9876la.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/dk8k79hg.html">
 
 
 
 
 
-  <title>rbd无法map | 舒宇的博客</title>
+  <title>k8s-schedule工作流程 | 舒宇的博客</title>
   
 
 
@@ -294,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dl9876la.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dk8k79hg.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -311,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rbd无法map</h1>
+          <h1 class="post-title" itemprop="name headline">k8s-schedule工作流程</h1>
         
 
         <div class="post-meta">
@@ -323,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-19T17:10:01+08:00">
-                2019-07-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-16T10:10:01+08:00">
+                2019-08-16
               </time>
             
 
@@ -346,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/ceph/" itemprop="url" rel="index">
-                    <span itemprop="name">ceph</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -388,19 +386,62 @@
       
 
       
-        <h1 id="默认开启了rbd的一些属性"><a href="#默认开启了rbd的一些属性" class="headerlink" title="默认开启了rbd的一些属性"></a>默认开启了rbd的一些属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# ceph --show-config|grep rbd|grep features</span><br><span class="line">rbd_default_features = 61</span><br></pre></td></tr></table></figure>
-<p>RBD属性表： </p>
-<p><img src="https://shenshengkun.github.io/images/ceph_rbd_shuxing.png" alt=""></p>
-<p>61的意思是上面图中的bit码相加得到的值<br>对rbd进行内核的map操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# rbd map mytest</span><br><span class="line">rbd: sysfs write failed</span><br><span class="line">RBD image feature set mismatch. You can disable features unsupported by the kernel with &quot;rbd feature disable&quot;.</span><br><span class="line">In some cases useful info is found in syslog - try &quot;dmesg | tail&quot; or so.</span><br><span class="line">rbd: map failed: (6) No such device or address</span><br></pre></td></tr></table></figure>
-<p>根据提示查询打印的信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph1 ~]# dmesg | tail</span><br><span class="line">[10440.462708] rbd: image mytest: image uses unsupported features: 0x3c</span><br></pre></td></tr></table></figure>
-<p>这个地方提示的很清楚了，不支持的属性0x3c，0x3c是16进制的数值，换算成10进制是3*16+12=60<br>60的意思是不支持：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">32+16+8+4 = exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line"></span><br><span class="line">也就是不支持这些属性，现在动态关闭这些属性</span><br></pre></td></tr></table></figure>
-<h1 id="关闭这些属性"><a href="#关闭这些属性" class="headerlink" title="关闭这些属性"></a>关闭这些属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd feature disable &#123;poolname&#125;/&#123;imagename&#125; &#123;feature&#125;</span><br></pre></td></tr></table></figure>
-<p>如果不想动态的关闭，那么在创建rbd之前，在配置文件中设置这个参数即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rbd_default_features = 3</span><br><span class="line"></span><br><span class="line">关于属性支持的，目前到内核4.6仍然只支持</span><br><span class="line"></span><br><span class="line">layering,striping = 1 + 2</span><br><span class="line"></span><br><span class="line">这两个属性</span><br></pre></td></tr></table></figure>
-
+        <h1 id="调度流程"><a href="#调度流程" class="headerlink" title="调度流程"></a>调度流程</h1><p><code>kube-scheduler</code> 是 kubernetes 的调度器，它的主要作用就是根据特定的调度算法和调度策略将 Pod 调度到合适的 Node 节点上去，是一个独立的二进制程序，启动之后会一直监听 API Server，获取到 PodSpec.NodeName 为空的 Pod，对每个 Pod 都会创建一个 binding。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">调度器需要充分考虑诸多的因素：</span><br><span class="line"></span><br><span class="line">- 公平调度</span><br><span class="line">- 资源高效利用</span><br><span class="line">- QoS</span><br><span class="line">- affinity 和 anti-affinity</span><br><span class="line">- 数据本地化（data locality）</span><br><span class="line">- 内部负载干扰（inter-workload interference）</span><br><span class="line">- deadlines</span><br></pre></td></tr></table></figure>
+<p>调度主要分为以下几个部分：</p>
+<ul>
+<li>首先是<strong>预选过程</strong>，过滤掉不满足条件的节点，这个过程称为<code>Predicates</code></li>
+<li>然后是<strong>优选过程</strong>，对通过的节点按照优先级排序，称之为<code>Priorities</code></li>
+<li>最后从中选择优先级最高的节点，如果中间任何一步骤有错误，就直接返回错误</li>
+</ul>
+<h2 id="Predicates"><a href="#Predicates" class="headerlink" title="Predicates"></a>Predicates</h2><p><code>Predicates</code>阶段首先遍历全部节点，过滤掉不满足条件的节点，属于强制性规则，这一阶段输出的所有满足要求的 Node 将被记录并作为第二阶段的输入，如果所有的节点都不满足条件，那么 Pod 将会一直处于 Pending 状态，直到有节点满足条件，在这期间调度器会不断的重试。 </p>
+<h2 id="Priorities"><a href="#Priorities" class="headerlink" title="Priorities"></a>Priorities</h2><p><code>Priorities</code>阶段即再次对节点进行筛选，如果有多个节点都满足条件的话，那么系统会按照节点的优先级(priorites)大小对节点进行排序，最后选择优先级最高的节点来部署 Pod 应用。 </p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、首先，客户端通过 API Server 的 REST API 或者 kubectl 工具创建 Pod 资源</span><br><span class="line">2、API Server 收到用户请求后，存储相关数据到 etcd 数据库中</span><br><span class="line">3、调度器监听 API Server 查看为调度(bind)的 Pod 列表，循环遍历地为每个 Pod 尝试分配节点，这个分配过程就是我们上面提到的两个阶段：</span><br><span class="line">    预选阶段(Predicates)，过滤节点，调度器用一组规则过滤掉不符合要求的 Node 节点，比如 Pod 设置了资源的 request，那么可用资源比 Pod 需要的资源少的主机显然就会被过滤掉</span><br><span class="line">    优选阶段(Priorities)，为节点的优先级打分，将上一阶段过滤出来的 Node 列表进行打分，调度器会考虑一些整体的优化策略，比如把 Deployment 控制的多个 Pod 副本分布到不同的主机上，使用最低负载的主机等等策略</span><br><span class="line">4、经过上面的阶段过滤后选择打分最高的 Node 节点和 Pod 进行 binding 操作，然后将结果存储到 etcd 中</span><br><span class="line">5、最后被选择出来的 Node 节点对应的 kubelet 去执行创建 Pod 的相关操作</span><br></pre></td></tr></table></figure>
+<p>其中<code>Predicates</code>过滤有一系列的算法可以使用：</p>
+<ul>
+<li>PodFitsResources：节点上剩余的资源是否大于 Pod 请求的资源</li>
+<li>PodFitsHost：如果 Pod 指定了 NodeName，检查节点名称是否和 NodeName 匹配</li>
+<li>PodFitsHostPorts：节点上已经使用的 port 是否和 Pod 申请的 port 冲突</li>
+<li>PodSelectorMatches：过滤掉和 Pod 指定的 label 不匹配的节点</li>
+<li>NoDiskConflict：已经 mount 的 volume 和 Pod 指定的 volume 不冲突，除非它们都是只读的</li>
+<li>CheckNodeDiskPressure：检查节点磁盘空间是否符合要求</li>
+<li>CheckNodeMemoryPressure：检查节点内存是否够用</li>
+</ul>
+<p><code>Priorities</code>优先级是由一系列键值对组成的，键是该优先级的名称，值是它的权重值：</p>
+<ul>
+<li>LeastRequestedPriority：通过计算 CPU 和内存的使用率来决定权重，使用率越低权重越高，当然正常肯定也是资源是使用率越低权重越高，能给别的 Pod 运行的可能性就越大</li>
+<li>SelectorSpreadPriority：为了更好的高可用，对同属于一个 Deployment 或者 RC 下面的多个 Pod 副本，尽量调度到多个不同的节点上，当一个 Pod 被调度的时候，会先去查找该 Pod 对应的 controller，然后查看该 controller 下面的已存在的 Pod，运行 Pod 越少的节点权重越高</li>
+<li>ImageLocalityPriority：就是如果在某个节点上已经有要使用的镜像节点了，镜像总大小值越大，权重就越高</li>
+<li>NodeAffinityPriority：这个就是根据节点的亲和性来计算一个权重值，后面我们会详细讲解亲和性的使用方法</li>
+</ul>
+<p>优先级源码函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">finalScoreNode = (weight1 * priorityFunc1) + (weight2 * priorityFunc2) + … + (weightn * priorityFuncn)</span><br></pre></td></tr></table></figure>
+<h1 id="自定义调度"><a href="#自定义调度" class="headerlink" title="自定义调度"></a>自定义调度</h1><h2 id="调度器扩展"><a href="#调度器扩展" class="headerlink" title="调度器扩展"></a>调度器扩展</h2><p><code>kube-scheduler</code>在启动的时候可以通过 <code>--policy-config-file</code>参数来指定调度策略文件，我们可以根据我们自己的需要来组装<code>Predicates</code>和<code>Priority</code>函数。选择不同的过滤函数和优先级函数、控制优先级函数的权重、调整过滤函数的顺序都会影响调度过程。 </p>
+<p>下面是官方的 Policy 文件示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;kind&quot; : &quot;Policy&quot;,</span><br><span class="line">    &quot;apiVersion&quot; : &quot;v1&quot;,</span><br><span class="line">    &quot;predicates&quot; : [</span><br><span class="line">        &#123;&quot;name&quot; : &quot;PodFitsHostPorts&quot;&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;PodFitsResources&quot;&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;NoDiskConflict&quot;&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;NoVolumeZoneConflict&quot;&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;MatchNodeSelector&quot;&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;HostName&quot;&#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;priorities&quot; : [</span><br><span class="line">        &#123;&quot;name&quot; : &quot;LeastRequestedPriority&quot;, &quot;weight&quot; : 1&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;BalancedResourceAllocation&quot;, &quot;weight&quot; : 1&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;ServiceSpreadingPriority&quot;, &quot;weight&quot; : 1&#125;,</span><br><span class="line">        &#123;&quot;name&quot; : &quot;EqualPriority&quot;, &quot;weight&quot; : 1&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义调度-1"><a href="#自定义调度-1" class="headerlink" title="自定义调度"></a>自定义调度</h2><p>自定义调度器主要的功能是查询未调度的 Pod，按照自定义的调度策略选择新的 Node，并将其更新到 Pod 的 Node Binding 上。</p>
+<p>比如，一个最简单的调度器可以用 shell 来编写（假设 Kubernetes 监听在 <code>localhost:8001</code>）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">SERVER=&apos;localhost:8001&apos;</span><br><span class="line">while true;</span><br><span class="line">do</span><br><span class="line">    for PODNAME in $(kubectl --server $SERVER get pods -o json | jq &apos;.items[] | select(.spec.schedulerName ==&quot;my-scheduler&quot;) | select(.spec.nodeName == null) | .metadata.name&apos; | tr -d &apos;&quot;&apos;)</span><br><span class="line">;</span><br><span class="line">    do</span><br><span class="line">        NODES=($(kubectl --server $SERVER get nodes -o json | jq &apos;.items[].metadata.name&apos; | tr -d &apos;&quot;&apos;))</span><br><span class="line">        NUMNODES=$&#123;#NODES[@]&#125;</span><br><span class="line">        CHOSEN=$&#123;NODES[$[ $RANDOM % $NUMNODES]]&#125;</span><br><span class="line">        curl --header &quot;Content-Type:application/json&quot; --request POST --data &apos;&#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;:&quot;Binding&quot;,&quot;metadata&quot;: &#123;&quot;name&quot;:&quot;&apos;$PODNAME&apos;&quot;&#125;,&quot;target&quot;: &#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;</span><br><span class="line">: &quot;Node&quot;, &quot;name&quot;: &quot;&apos;$CHOSEN&apos;&quot;&#125;&#125;&apos; http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/</span><br><span class="line">        echo &quot;Assigned $PODNAME to $CHOSEN&quot;</span><br><span class="line">    done</span><br><span class="line">    sleep 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h3 id="使用自定义调度器"><a href="#使用自定义调度器" class="headerlink" title="使用自定义调度器"></a>使用自定义调度器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx</span><br><span class="line">  labels:</span><br><span class="line">    app: nginx</span><br><span class="line">spec:</span><br><span class="line">  # 选择使用自定义调度器 my-scheduler</span><br><span class="line">  schedulerName: my-scheduler</span><br><span class="line">  containers:</span><br><span class="line">  - name: nginx</span><br><span class="line">    image: nginx:1.10</span><br></pre></td></tr></table></figure>
+<h2 id="优先级调度"><a href="#优先级调度" class="headerlink" title="优先级调度"></a>优先级调度</h2><p>Pod优先级、抢占功能，在kubernetes v1.8引入，在v1.11版本进入beta状态，并在v1.14版本进入GA阶段，已经是一个成熟的特性了。</p>
+<p>顾名思义，Pod优先级、抢占功能，通过将应用细分为不同的优先级，将资源优先提供给高优先级的应用，从而提高了资源可用率，同时保障了高优先级的服务质量。</p>
+<p>我们先来简单使用下Pod优先级、抢占功能。</p>
+<p>我的集群版本是 v1.14，因此feature <code>PodPriority</code> 默认是开启的。抢占模式的使用分为两步：</p>
+<ol>
+<li>定义PriorityClass，不同PriorityClass的value不同，value越大优先级越高。</li>
+<li>创建Pod，并设置Pod的priorityClassName字段为期待的PriorityClass。</li>
+</ol>
+<p>查看当前系统默认的优先级：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 scripts]# kubectl get priorityclasses.scheduling.k8s.io</span><br><span class="line">NAME                      VALUE        GLOBAL-DEFAULT   AGE</span><br><span class="line">system-cluster-critical   2000000000   false            7d</span><br><span class="line">system-node-critical      2000001000   false            7d</span><br></pre></td></tr></table></figure>
+<p>在指定 Pod 的优先级之前需要先定义一个 PriorityClass（非 namespace 资源），如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PriorityClass</span><br><span class="line">metadata:</span><br><span class="line">  name: high-priority</span><br><span class="line">value: 1000000</span><br><span class="line">globalDefault: false</span><br><span class="line">description: &quot;This priority class should be used for XYZ service pods only.&quot;</span><br></pre></td></tr></table></figure>
+<p>其中</p>
+<ul>
+<li><code>value</code> 为 32 位整数的优先级，该值越大，优先级越高</li>
+<li><code>globalDefault</code> 用于未配置 PriorityClassName 的 Pod，整个集群中应该只有一个 PriorityClass 将其设置为 true</li>
+</ul>
+<p>然后，在 PodSpec 中通过 PriorityClassName 设置 Pod 的优先级：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx</span><br><span class="line">  labels:</span><br><span class="line">    env: test</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: nginx</span><br><span class="line">    image: nginx</span><br><span class="line">    imagePullPolicy: IfNotPresent</span><br><span class="line">  priorityClassName: high-priority</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -449,7 +490,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/dl9876la.html" title="rbd无法map">https://shenshengkun.github.io/posts/dl9876la.html</a>
+    <a href="https://shenshengkun.github.io/posts/dk8k79hg.html" title="k8s-schedule工作流程">https://shenshengkun.github.io/posts/dk8k79hg.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -471,8 +512,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/dk8973fg.html" rel="next" title="prometheus监控ceph集群">
-                <i class="fa fa-chevron-left"></i> prometheus监控ceph集群
+              <a href="/posts/ldfl76la.html" rel="next" title="k8s做命名空间配额">
+                <i class="fa fa-chevron-left"></i> k8s做命名空间配额
               </a>
             
           </div>
@@ -480,10 +521,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/0rfhdj22.html" rel="prev" title="k8s上用cephfs存储">
-                k8s上用cephfs存储 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +685,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#默认开启了rbd的一些属性"><span class="nav-number">1.</span> <span class="nav-text">默认开启了rbd的一些属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭这些属性"><span class="nav-number">2.</span> <span class="nav-text">关闭这些属性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#调度流程"><span class="nav-number">1.</span> <span class="nav-text">调度流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Predicates"><span class="nav-number">1.1.</span> <span class="nav-text">Predicates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Priorities"><span class="nav-number">1.2.</span> <span class="nav-text">Priorities</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">1.3.</span> <span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义调度"><span class="nav-number">2.</span> <span class="nav-text">自定义调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调度器扩展"><span class="nav-number">2.1.</span> <span class="nav-text">调度器扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义调度-1"><span class="nav-number">2.2.</span> <span class="nav-text">自定义调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用自定义调度器"><span class="nav-number">2.2.1.</span> <span class="nav-text">使用自定义调度器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先级调度"><span class="nav-number">2.3.</span> <span class="nav-text">优先级调度</span></a></li></ol></li></ol></div>
             
 
           </div>
