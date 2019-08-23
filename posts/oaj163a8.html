@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  管道模板语言除了提供了丰富">
+<meta name="description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  title ：将字符串首字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s1.14-helm模板几个函数">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/oaj163a8.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  管道模板语言除了提供了丰富">
+<meta property="og:description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  title ：将字符串首字">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-23T02:05:21.227Z">
+<meta property="og:updated_time" content="2019-08-23T03:06:52.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14-helm模板几个函数">
-<meta name="twitter:description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  管道模板语言除了提供了丰富">
+<meta name="twitter:description" content="函数quote：是Sprig 模板库提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号&amp;quot;，则需要添加\来进行转义，而squote函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。  upper：是Sprig 模板库提供的，表示将字符串每一个字母都变成大写  default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。  title ：将字符串首字">
 
 
 
@@ -389,6 +389,7 @@
         <h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>quote：是<code>Sprig 模板库</code>提供的一种字符串函数，用途就是用双引号将字符串括起来，如果需要双引号<code>&quot;</code>，则需要添加<code>\</code>来进行转义，而<code>squote</code>函数的用途则是用双引号将字符串括起来，而不会对内容进行转义。 </p>
 <p>upper：是<a href="https://godoc.org/github.com/Masterminds/sprig" target="_blank" rel="noopener"><code>Sprig 模板库</code></a>提供的，表示将字符串每一个字母都变成大写 </p>
 <p>default：该函数允许我们在模板内部指定默认值，以防止该值被忽略掉了。 </p>
+<p>title ：将字符串首字母变成大写 </p>
 <h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>模板语言除了提供了丰富的内置函数之外，其另一个强大的功能就是<strong>管道</strong>的概念。和<code>UNIX</code>中一样，管道我们通常称为<code>Pipeline</code>，是一个链在一起的一系列模板命令的工具，以紧凑地表达一系列转换。简单来说，管道是可以按顺序完成一系列事情的一种方法 </p>
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# vim mychart/templates/configmap.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: &#123;&#123; .Release.Name &#125;&#125;-configmap</span><br><span class="line">data:</span><br><span class="line">  myvalue: &#123;&#123; .Values.hello | default  &quot;Hello World&quot; | quote &#125;&#125;</span><br><span class="line">  k8s: &#123;&#123; .Values.course.k8s | upper | quote &#125;&#125;</span><br><span class="line">  python: &#123;&#123; .Values.course.python | repeat 5 | quote &#125;&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# helm install --dry-run --debug mychart/</span><br><span class="line">[debug] Created tunnel using local port: &apos;42317&apos;</span><br><span class="line"></span><br><span class="line">[debug] SERVER: &quot;127.0.0.1:42317&quot;</span><br><span class="line"></span><br><span class="line">[debug] Original chart version: &quot;&quot;</span><br><span class="line">[debug] CHART PATH: /root/sy/mychart</span><br><span class="line"></span><br><span class="line">NAME:   crusty-hydra</span><br><span class="line">REVISION: 1</span><br><span class="line">RELEASED: Fri June 20 10:02:52 2019</span><br><span class="line">CHART: mychart-0.1.0</span><br><span class="line">USER-SUPPLIED VALUES:</span><br><span class="line">&#123;&#125;</span><br><span class="line"></span><br><span class="line">COMPUTED VALUES:</span><br><span class="line">course:</span><br><span class="line">  k8s: devops</span><br><span class="line">  python: django</span><br><span class="line"></span><br><span class="line">HOOKS:</span><br><span class="line">MANIFEST:</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"># Source: mychart/templates/configmap.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: crusty-hydra-configmap</span><br><span class="line">data:</span><br><span class="line">  myvalue: &quot;Hello World&quot;</span><br><span class="line">  k8s: &quot;DEVOPS&quot;</span><br><span class="line">  python: &quot;djangodjangodjangodjangodjango&quot;</span><br></pre></td></tr></table></figure>
@@ -474,8 +475,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/kfkd454f.html" rel="prev" title="tomcat8导致文件权限访问不到">
-                tomcat8导致文件权限访问不到 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/lad78haa.html" rel="prev" title="k8s1.14-helm模板控制流程">
+                k8s1.14-helm模板控制流程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -560,7 +561,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">95</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
