@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="舒宇的博客">
 <meta property="og:description" content="摘要Helm这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了kubernetes环境，但是每个微服务也得维护一套yaml文件，而且每个环境下的配置文件也不太">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-22T07:19:31.908Z">
+<meta property="og:updated_time" content="2019-08-23T01:41:04.364Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14-helm安装">
 <meta name="twitter:description" content="摘要Helm这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了kubernetes环境，但是每个微服务也得维护一套yaml文件，而且每个环境下的配置文件也不太">
@@ -419,6 +419,7 @@
 <li>通过与<code>Kubernetes</code>交互升级或卸载 chart</li>
 <li>简单的说，client 管理 charts，而 server 管理发布 release</li>
 </ul>
+<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Chart Install 过程：</span><br><span class="line"></span><br><span class="line">Helm从指定的目录或者tgz文件中解析出Chart结构信息</span><br><span class="line">Helm将指定的Chart结构和Values信息通过gRPC传递给Tiller</span><br><span class="line">Tiller根据Chart和Values生成一个Release</span><br><span class="line">Tiller将Release发送给Kubernetes运行。</span><br><span class="line"></span><br><span class="line">Chart Update过程：</span><br><span class="line"></span><br><span class="line">Helm从指定的目录或者tgz文件中解析出Chart结构信息</span><br><span class="line">Helm将要更新的Release的名称和Chart结构，Values信息传递给Tiller</span><br><span class="line">Tiller生成Release并更新指定名称的Release的History</span><br><span class="line">Tiller将Release发送给Kubernetes运行</span><br></pre></td></tr></table></figure>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>我们可以在<a href="https://github.com/kubernetes/helm/releases" target="_blank" rel="noopener">Helm Realese</a>页面下载二进制文件，这里下载的2.14.1版本，解压后将可执行文件<code>helm</code>拷贝到<code>/usr/local/bin</code>目录下即可，这样<code>Helm</code>客户端就在这台机器上安装完成了。 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.14.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts</span><br><span class="line"></span><br><span class="line">另外还需要在每个node节点安装yum install socat -y</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 helm]# helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:&quot;v2.14.1&quot;, GitCommit:&quot;5270352a09c7e8b6e8c9593002a73535276507c0&quot;, GitTreeState:&quot;clean&quot;&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:&quot;v2.14.1&quot;, GitCommit:&quot;5270352a09c7e8b6e8c9593002a73535276507c0&quot;, GitTreeState:&quot;clean&quot;&#125;</span><br></pre></td></tr></table></figure>
@@ -604,7 +605,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -685,7 +686,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用途"><span class="nav-number">2.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要概念"><span class="nav-number">3.</span> <span class="nav-text">重要概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Helm组件"><span class="nav-number">4.</span> <span class="nav-text">Helm组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">5.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">6.</span> <span class="nav-text">使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用途"><span class="nav-number">2.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要概念"><span class="nav-number">3.</span> <span class="nav-text">重要概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Helm组件"><span class="nav-number">4.</span> <span class="nav-text">Helm组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构"><span class="nav-number">5.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">6.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">7.</span> <span class="nav-text">使用</span></a></li></ol></div>
             
 
           </div>
