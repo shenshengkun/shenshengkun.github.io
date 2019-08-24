@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
+<meta name="description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s基本命令">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/5b3b5a45.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
+<meta property="og:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-24T06:13:43.753Z">
+<meta property="og:updated_time" content="2019-08-24T07:43:27.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s基本命令">
-<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
+<meta name="twitter:description" content="pods12345$ kubectl get pods -n pro$ kubectl get pods --all-namespaces -n pro$ kubectl get pod aa -o wide -n pro$ kubectl get pod aa -o yaml -n pro$ kubectl describe pod aa -n pro 不用grep列出node上的pod1kub">
 
 
 
@@ -386,46 +386,15 @@
       
 
       
-        <script src="/js/crypto-js.js"></script>
-<script>
-function doDecrypt (pwd, onError) {
-	console.log('in doDecrypt');
-	const txt = document.getElementById('enc_content').innerHTML;
-	let plantext;
-	try {
-		const bytes = CryptoJS.AES.decrypt(txt, pwd);
-		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-	} catch(err) {
-		if(onError) {
-			onError(err);
-		}
-		return;
-	}
-	document.getElementById('enc_content').innerHTML = plaintext;
-	document.getElementById('enc_content').style.display = 'block';
-	document.getElementById('enc_passwd').style.display = 'none';
-	if(typeof MathJax !== 'undefined') {
-		MathJax.Hub.Queue(
-			['resetEquationNumbers', MathJax.InputJax.TeX],
-			['PreProcess', MathJax.Hub],
-			['Reprocess', MathJax.Hub]
-		);
-	}
-}
-</script>
-<div id="enc_content" style="display:none">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</div>
-<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
-<script>
-var onError = function(error) {
-	document.getElementById("enc_error").innerHTML = "password error!"
-};
-function decrypt() {
-var passwd = document.getElementById("enc_pwd_input").value;
-console.log(passwd);
-doDecrypt(passwd, onError);
-}
-</script>
-</div>
+        <h1 id="pods"><a href="#pods" class="headerlink" title="pods"></a>pods</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get pods -n pro</span><br><span class="line">$ kubectl get pods --all-namespaces -n pro</span><br><span class="line">$ kubectl get pod aa -o wide -n pro</span><br><span class="line">$ kubectl get pod aa -o yaml -n pro</span><br><span class="line">$ kubectl describe pod aa -n pro</span><br></pre></td></tr></table></figure>
+<h2 id="不用grep列出node上的pod"><a href="#不用grep列出node上的pod" class="headerlink" title="不用grep列出node上的pod"></a>不用grep列出node上的pod</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods --field-selector spec.nodeName=node04 --all-namespaces</span><br></pre></td></tr></table></figure>
+<h2 id="POD升级和历史"><a href="#POD升级和历史" class="headerlink" title="POD升级和历史"></a>POD升级和历史</h2><p>列出部署历史记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout history deployment/DEPLOYMENT_NAME</span><br></pre></td></tr></table></figure></p>
+<p>跳转到特定修订版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/DEPLOYMENT_NAME --to-revision=N</span><br></pre></td></tr></table></figure></p>
+<h1 id="service"><a href="#service" class="headerlink" title="service"></a>service</h1><p>查看服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get services</span><br></pre></td></tr></table></figure></p>
+<p>将POD作为服务公开（创建端点）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl expose deployment/aa --port=2000 --type=NodePort</span><br></pre></td></tr></table></figure></p>
+<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -ti 1 bash -n product</span><br></pre></td></tr></table></figure>
+<h1 id="log"><a href="#log" class="headerlink" title="log"></a>log</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs -f 1 -n product</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -565,8 +534,17 @@ doDecrypt(passwd, onError);
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -654,6 +632,22 @@ doDecrypt(passwd, onError);
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pods"><span class="nav-number">1.</span> <span class="nav-text">pods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不用grep列出node上的pod"><span class="nav-number">1.1.</span> <span class="nav-text">不用grep列出node上的pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POD升级和历史"><span class="nav-number">1.2.</span> <span class="nav-text">POD升级和历史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#service"><span class="nav-number">2.</span> <span class="nav-text">service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#login"><span class="nav-number">3.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#log"><span class="nav-number">4.</span> <span class="nav-text">log</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
