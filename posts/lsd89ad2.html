@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="变量赋值变量 12345678910111213141516171819[root@master101 sy]# cat mychart/templates/configmap.yaml apiVersion: v1kind: ConfigMapmetadata:  name: &amp;#123;&amp;#123; .Release.Name &amp;#125;&amp;#125;-configmapdata:  &amp;#12">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s1.14-helm模板变量">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/lsd89ad2.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="变量赋值变量 12345678910111213141516171819[root@master101 sy]# cat mychart/templates/configmap.yaml apiVersion: v1kind: ConfigMapmetadata:  name: &amp;#123;&amp;#123; .Release.Name &amp;#125;&amp;#125;-configmapdata:  &amp;#12">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-23T06:09:13.086Z">
+<meta property="og:updated_time" content="2019-08-24T06:17:08.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14-helm模板变量">
-<meta name="twitter:description" content="变量赋值变量 12345678910111213141516171819[root@master101 sy]# cat mychart/templates/configmap.yaml apiVersion: v1kind: ConfigMapmetadata:  name: &amp;#123;&amp;#123; .Release.Name &amp;#125;&amp;#125;-configmapdata:  &amp;#12">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,12 +386,46 @@
       
 
       
-        <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><p>赋值变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# cat mychart/templates/configmap.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: &#123;&#123; .Release.Name &#125;&#125;-configmap</span><br><span class="line">data:</span><br><span class="line">  &#123;&#123;- $releaseName := .Release.Name -&#125;&#125;</span><br><span class="line">  &#123;&#123;- with .Values.course &#125;&#125;</span><br><span class="line">  release: &#123;&#123; $releaseName &#125;&#125;</span><br><span class="line">  k8s: &#123;&#123; .k8s | upper | quote &#125;&#125;</span><br><span class="line">  python: &#123;&#123; .python | repeat 5 | quote &#125;&#125;</span><br><span class="line">  &#123;&#123;- if eq .python &quot;django&quot; &#125;&#125;</span><br><span class="line">  web: true</span><br><span class="line">  &#123;&#123;- end &#125;&#125;</span><br><span class="line">  &#123;&#123;- end &#125;&#125;</span><br><span class="line">  courselist:</span><br><span class="line">  &#123;&#123;- range $index, $course := .Values.courselist &#125;&#125;</span><br><span class="line">  - &#123;&#123; $index &#125;&#125;: &#123;&#123; $course | title | quote &#125;&#125;</span><br><span class="line">  &#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with语句上面增加了一句&#123;&#123;- $releaseName := .Release.Name -&#125;&#125;，其中$releaseName就是后面的对象的一个引用变量，它的形式就是$name，赋值操作使用:=，这样with语句块内部的$releaseName变量仍然指向的是.Release.Name</span><br><span class="line"></span><br><span class="line">变量在range循环使用，我们可以在循环中用变量来同时捕获索引的值</span><br></pre></td></tr></table></figure>
-<p>结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# helm install --dry-run --debug mychart/</span><br><span class="line">[debug] Created tunnel using local port: &apos;42101&apos;</span><br><span class="line"></span><br><span class="line">[debug] SERVER: &quot;127.0.0.1:42101&quot;</span><br><span class="line"></span><br><span class="line">[debug] Original chart version: &quot;&quot;</span><br><span class="line">[debug] CHART PATH: /root/sy/mychart</span><br><span class="line"></span><br><span class="line">NAME:   needled-labradoodle</span><br><span class="line">REVISION: 1</span><br><span class="line">RELEASED: Fri Aug 23 14:08:08 2019</span><br><span class="line">CHART: mychart-0.1.0</span><br><span class="line">USER-SUPPLIED VALUES:</span><br><span class="line">&#123;&#125;</span><br><span class="line"></span><br><span class="line">COMPUTED VALUES:</span><br><span class="line">course:</span><br><span class="line">  k8s: devops</span><br><span class="line">  python: django</span><br><span class="line">courselist:</span><br><span class="line">- k8s</span><br><span class="line">- python</span><br><span class="line">- go</span><br><span class="line">- java</span><br><span class="line">- php</span><br><span class="line"></span><br><span class="line">HOOKS:</span><br><span class="line">MANIFEST:</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"># Source: mychart/templates/configmap.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: needled-labradoodle-configmap</span><br><span class="line">data:</span><br><span class="line">  release: needled-labradoodle</span><br><span class="line">  k8s: &quot;DEVOPS&quot;</span><br><span class="line">  python: &quot;djangodjangodjangodjangodjango&quot;</span><br><span class="line">  web: true</span><br><span class="line">  courselist:</span><br><span class="line">  - 0: &quot;K8s&quot;</span><br><span class="line">  - 1: &quot;Python&quot;</span><br><span class="line">  - 2: &quot;Go&quot;</span><br><span class="line">  - 3: &quot;Java&quot;</span><br><span class="line">  - 4: &quot;Php&quot;</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -531,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -629,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-number">1.</span> <span class="nav-text">变量</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

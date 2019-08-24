@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="前言在一个多用户、多团队的k8s集群上，通常会遇到一个问题，如何在不同团队之间取得资源的公平，即，不会因为某个流氓团队占据了所有资源，从而导致其他团队无法使用k8s。 k8s的解决方法是，通过RBAC将不同团队（or 项目）限制在不同的namespace下，通过resourceQuota来限制该namespace能够使用的资源。 配额资源分为以下三种。  计算资源配额：cpu，memory 存储资">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s做命名空间配额">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/ldfl76la.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="前言在一个多用户、多团队的k8s集群上，通常会遇到一个问题，如何在不同团队之间取得资源的公平，即，不会因为某个流氓团队占据了所有资源，从而导致其他团队无法使用k8s。 k8s的解决方法是，通过RBAC将不同团队（or 项目）限制在不同的namespace下，通过resourceQuota来限制该namespace能够使用的资源。 配额资源分为以下三种。  计算资源配额：cpu，memory 存储资">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-13T09:06:08.956Z">
+<meta property="og:updated_time" content="2019-08-24T06:18:15.817Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s做命名空间配额">
-<meta name="twitter:description" content="前言在一个多用户、多团队的k8s集群上，通常会遇到一个问题，如何在不同团队之间取得资源的公平，即，不会因为某个流氓团队占据了所有资源，从而导致其他团队无法使用k8s。 k8s的解决方法是，通过RBAC将不同团队（or 项目）限制在不同的namespace下，通过resourceQuota来限制该namespace能够使用的资源。 配额资源分为以下三种。  计算资源配额：cpu，memory 存储资">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,23 +386,46 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在一个多用户、多团队的k8s集群上，通常会遇到一个问题，如何在不同团队之间取得资源的公平，即，不会因为某个流氓团队占据了所有资源，从而导致其他团队无法使用k8s。</p>
-<p>k8s的解决方法是，通过RBAC将不同团队（or 项目）限制在不同的namespace下，通过resourceQuota来限制该namespace能够使用的资源。</p>
-<h1 id="配额"><a href="#配额" class="headerlink" title="配额"></a>配额</h1><p>资源分为以下三种。</p>
-<ul>
-<li>计算资源配额：cpu，memory</li>
-<li>存储资源配置：requests.storage（真～总量），pvc，某storage class下的限制（例如针对fast类型的sc的限制）</li>
-<li>对象数量配置：cm，service，pod的个数。</li>
-</ul>
-<h2 id="集群管理员需要为团队创建一个namespace"><a href="#集群管理员需要为团队创建一个namespace" class="headerlink" title="集群管理员需要为团队创建一个namespace"></a>集群管理员需要为团队创建一个namespace</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace sy</span><br></pre></td></tr></table></figure>
-<h2 id="创建quota"><a href="#创建quota" class="headerlink" title="创建quota"></a>创建quota</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# vim quota.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ResourceQuota</span><br><span class="line">metadata:</span><br><span class="line">  name: compute-resources</span><br><span class="line">  namespace: sy</span><br><span class="line">spec:</span><br><span class="line">  hard:</span><br><span class="line">    limits.cpu: &quot;2&quot;</span><br><span class="line">    limits.memory: 2Gi</span><br><span class="line">    persistentvolumeclaims: &quot;8&quot;</span><br><span class="line">    pods: &quot;2&quot;</span><br><span class="line">    requests.cpu: &quot;1&quot;</span><br><span class="line">    requests.memory: 1Gi</span><br><span class="line">    requests.storage: 30Gi</span><br></pre></td></tr></table></figure>
-<p>也可以设置namespace上下文，在这里执行，就不用指定namespace了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl config set-context $(kubectl config current-context) --namespace=zf</span><br></pre></td></tr></table></figure>
-<h2 id="测试pod"><a href="#测试pod" class="headerlink" title="测试pod"></a>测试pod</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# cat nginx.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: quota-mem-cpu-demo</span><br><span class="line">  namespace: sy</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: quota-mem-cpu-demo-ctr</span><br><span class="line">    image: nginx</span><br><span class="line">    resources:</span><br><span class="line">      limits:</span><br><span class="line">        memory: &quot;4Gi&quot;</span><br><span class="line">        cpu: &quot;800m&quot; </span><br><span class="line">      requests:</span><br><span class="line">        memory: &quot;3Gi&quot;</span><br><span class="line">        cpu: &quot;500m&quot;</span><br></pre></td></tr></table></figure>
-<p> 这时会报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master101 sy]# kubectl apply -f nginx.yaml </span><br><span class="line">Error from server (Forbidden): error when creating &quot;nginx.yaml&quot;: pods &quot;quota-mem-cpu-demo&quot; is forbidden: exceeded quota: compute-resources, requested: limits.memory=4Gi,requests.memory=3Gi, used: limits.memory=0,requests.memory=0, limited: limits.memory=2Gi,requests.memory=1Gi</span><br></pre></td></tr></table></figure>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当开启了resource quota时，用户创建pod，必须指定cpu、内存的 requests or limits ，否则创建失败。resourceQuota搭配 limitRanges口感更佳：limitRange可以配置创建Pod的默认limit/request。</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -542,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -640,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配额"><span class="nav-number">2.</span> <span class="nav-text">配额</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群管理员需要为团队创建一个namespace"><span class="nav-number">2.1.</span> <span class="nav-text">集群管理员需要为团队创建一个namespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建quota"><span class="nav-number">2.2.</span> <span class="nav-text">创建quota</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试pod"><span class="nav-number">2.3.</span> <span class="nav-text">测试pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">2.4.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="摘要当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 Down 掉以后，Pod 并不会立即触发重新调度，这实际上就是和 Kubelet 的状态更新机制密切相关的，Kubernetes 提供了一些参数配置来触发重新调度到嗯时间，下面我们来分析下 Kubelet 状态更新的基本流程。  kubelet 自身会定期">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubelet状态更新机制">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/dfkdaa65.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="摘要当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 Down 掉以后，Pod 并不会立即触发重新调度，这实际上就是和 Kubelet 的状态更新机制密切相关的，Kubernetes 提供了一些参数配置来触发重新调度到嗯时间，下面我们来分析下 Kubelet 状态更新的基本流程。  kubelet 自身会定期">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-20T06:18:22.061Z">
+<meta property="og:updated_time" content="2019-08-24T06:18:35.373Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubelet状态更新机制">
-<meta name="twitter:description" content="摘要当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 Down 掉以后，Pod 并不会立即触发重新调度，这实际上就是和 Kubelet 的状态更新机制密切相关的，Kubernetes 提供了一些参数配置来触发重新调度到嗯时间，下面我们来分析下 Kubelet 状态更新的基本流程。  kubelet 自身会定期">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,137 +386,46 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>当 Kubernetes 中 Node 节点出现状态异常的情况下，节点上的 Pod 会被重新调度到其他节点上去，但是有的时候我们会发现节点 Down 掉以后，Pod 并不会立即触发重新调度，这实际上就是和 Kubelet 的状态更新机制密切相关的，Kubernetes 提供了一些参数配置来触发重新调度到嗯时间，下面我们来分析下 Kubelet 状态更新的基本流程。</p>
-<ol>
-<li>kubelet 自身会定期更新状态到 apiserver，通过参数<code>--node-status-update-frequency</code>指定上报频率，默认是 10s 上报一次。</li>
-<li>kube-controller-manager 会每隔<code>--node-monitor-period</code>时间去检查 kubelet 的状态，默认是 5s。</li>
-<li>当 node 失联一段时间后，kubernetes 判定 node 为 <code>notready</code> 状态，这段时长通过<code>--node-monitor-grace-period</code>参数配置，默认 40s。</li>
-<li>当 node 失联一段时间后，kubernetes 判定 node 为 <code>unhealthy</code> 状态，这段时长通过<code>--node-startup-grace-period</code>参数配置，默认 1m0s。</li>
-<li>当 node 失联一段时间后，kubernetes 开始删除原 node 上的 pod，这段时长是通过<code>--pod-eviction-timeout</code>参数配置，默认 5m0s。</li>
-</ol>
-<blockquote>
-<p>kube-controller-manager 和 kubelet 是异步工作的，这意味着延迟可能包括任何的网络延迟、apiserver 的延迟、etcd 延迟，一个节点上的负载引起的延迟等等。因此，如果<code>--node-status-update-frequency</code>设置为5s，那么实际上 etcd 中的数据变化会需要 6-7s，甚至更长时间。</p>
-</blockquote>
-<p>Kubelet在更新状态失败时，会进行<code>nodeStatusUpdateRetry</code>次重试，默认为 5 次。</p>
-<p>Kubelet 会在函数<code>tryUpdateNodeStatus</code>中尝试进行状态更新。Kubelet 使用了 Golang 中的<code>http.Client()</code>方法，但是没有指定超时时间，因此，如果 API Server 过载时，当建立 TCP 连接时可能会出现一些故障。</p>
-<p>因此，在<code>nodeStatusUpdateRetry</code> * <code>--node-status-update-frequency</code>时间后才会更新一次节点状态。</p>
-<p>同时，Kubernetes 的 controller manager 将尝试每<code>--node-monitor-period</code>时间周期内检查<code>nodeStatusUpdateRetry</code>次。在<code>--node-monitor-grace-period</code>之后，会认为节点 unhealthy，然后会在<code>--pod-eviction-timeout</code>后删除 Pod。</p>
-<p>kube proxy 有一个 watcher API，一旦 Pod 被驱逐了，kube proxy 将会通知更新节点的 iptables 规则，将 Pod 从 Service 的 Endpoints 中移除，这样就不会访问到来自故障节点的 Pod 了。</p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>对于这些参数的配置，需要根据不通的集群规模场景来进行配置。</p>
-<h3 id="社区默认的配置"><a href="#社区默认的配置" class="headerlink" title="社区默认的配置"></a>社区默认的配置</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>–node-status-update-frequency</td>
-<td>10s</td>
-</tr>
-<tr>
-<td>–node-monitor-period</td>
-<td>5s</td>
-</tr>
-<tr>
-<td>–node-monitor-grace-period</td>
-<td>40s</td>
-</tr>
-<tr>
-<td>–pod-eviction-timeout</td>
-<td>5m</td>
-</tr>
-</tbody>
-</table>
-<h3 id="快速更新和快速响应"><a href="#快速更新和快速响应" class="headerlink" title="快速更新和快速响应"></a>快速更新和快速响应</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>–node-status-update-frequency</td>
-<td>4s</td>
-</tr>
-<tr>
-<td>–node-monitor-period</td>
-<td>2s</td>
-</tr>
-<tr>
-<td>–node-monitor-grace-period</td>
-<td>20s</td>
-</tr>
-<tr>
-<td>–pod-eviction-timeout</td>
-<td>30s</td>
-</tr>
-</tbody>
-</table>
-<p>在这种情况下，Pod 将在 50s 被驱逐，因为该节点在 20s 后被视为Down掉了，<code>--pod-eviction-timeout</code>在 30s 之后发生，但是，这种情况会给 etcd 产生很大的开销，因为每个节点都会尝试每 2s 更新一次状态。</p>
-<p>如果环境有1000个节点，那么每分钟将有15000次节点更新操作，这可能需要大型 etcd 容器甚至是 etcd 的专用节点。</p>
-<blockquote>
-<p>如果我们计算尝试次数，则除法将给出5，但实际上每次尝试的 nodeStatusUpdateRetry 尝试将从3到5。 由于所有组件的延迟，尝试总次数将在15到25之间变化。</p>
-</blockquote>
-<h3 id="中等更新和平均响应"><a href="#中等更新和平均响应" class="headerlink" title="中等更新和平均响应"></a>中等更新和平均响应</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>–node-status-update-frequency</td>
-<td>20s</td>
-</tr>
-<tr>
-<td>–node-monitor-period</td>
-<td>5s</td>
-</tr>
-<tr>
-<td>–node-monitor-grace-period</td>
-<td>2m</td>
-</tr>
-<tr>
-<td>–pod-eviction-timeout</td>
-<td>1m</td>
-</tr>
-</tbody>
-</table>
-<p>这种场景下会 20s 更新一次 node 状态，controller manager 认为 node 状态不正常之前，会有 2m<em>60⁄20</em>5=30 次的 node 状态更新，Node 状态为 down 之后 1m，就会触发驱逐操作。</p>
-<p>如果有 1000 个节点，1分钟之内就会有 60s/20s*1000=3000 次的节点状态更新操作。</p>
-<h3 id="低更新和慢响应"><a href="#低更新和慢响应" class="headerlink" title="低更新和慢响应"></a>低更新和慢响应</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>–node-status-update-frequency</td>
-<td>1m</td>
-</tr>
-<tr>
-<td>–node-monitor-period</td>
-<td>5s</td>
-</tr>
-<tr>
-<td>–node-monitor-grace-period</td>
-<td>5m</td>
-</tr>
-<tr>
-<td>–pod-eviction-timeout</td>
-<td>1m</td>
-</tr>
-</tbody>
-</table>
-<p>Kubelet 将会 1m 更新一次节点的状态，在认为不健康之后会有 5m/1m*5=25 次重试更新的机会。Node为不健康的时候，1m 之后 pod开始被驱逐。</p>
-<p>可以有不同的组合，例如快速更新和慢反应以满足特定情况。</p>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -656,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -754,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">1.1.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#社区默认的配置"><span class="nav-number">1.1.1.</span> <span class="nav-text">社区默认的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速更新和快速响应"><span class="nav-number">1.1.2.</span> <span class="nav-text">快速更新和快速响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中等更新和平均响应"><span class="nav-number">1.1.3.</span> <span class="nav-text">中等更新和平均响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#低更新和慢响应"><span class="nav-number">1.1.4.</span> <span class="nav-text">低更新和慢响应</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

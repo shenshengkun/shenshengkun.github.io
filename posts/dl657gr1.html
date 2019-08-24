@@ -81,19 +81,17 @@
 
 
 
-<meta name="description" content="Controller Manager简介Controller Manager在Pod工作流中起着管理和控制整个集群的作用，主要对资源对象进行管理，当Node节点中运行的Pod对象或是Node自身发生意外或故障时，Controller Manager会及时发现并处理，以确保整个集群处于理想工作状态。   Replication ControllerReplication Controller称为副本">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s-ControllerManager工作流程">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/dl657gr1.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="Controller Manager简介Controller Manager在Pod工作流中起着管理和控制整个集群的作用，主要对资源对象进行管理，当Node节点中运行的Pod对象或是Node自身发生意外或故障时，Controller Manager会及时发现并处理，以确保整个集群处于理想工作状态。   Replication ControllerReplication Controller称为副本">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://shenshengkun.github.io/images/kube_control1.png">
-<meta property="og:updated_time" content="2019-08-22T03:28:01.308Z">
+<meta property="og:updated_time" content="2019-08-24T06:16:48.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s-ControllerManager工作流程">
-<meta name="twitter:description" content="Controller Manager简介Controller Manager在Pod工作流中起着管理和控制整个集群的作用，主要对资源对象进行管理，当Node节点中运行的Pod对象或是Node自身发生意外或故障时，Controller Manager会及时发现并处理，以确保整个集群处于理想工作状态。   Replication ControllerReplication Controller称为副本">
-<meta name="twitter:image" content="https://shenshengkun.github.io/images/kube_control1.png">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -388,12 +386,46 @@
       
 
       
-        <h1 id="Controller-Manager简介"><a href="#Controller-Manager简介" class="headerlink" title="Controller Manager简介"></a>Controller Manager简介</h1><p>Controller Manager在Pod工作流中起着管理和控制整个集群的作用，主要对资源对象进行管理，当Node节点中运行的Pod对象或是Node自身发生意外或故障时，Controller Manager会及时发现并处理，以确保整个集群处于理想工作状态。 </p>
-<p><img src="https://shenshengkun.github.io/images/kube_control1.png" alt=""></p>
-<h2 id="Replication-Controller"><a href="#Replication-Controller" class="headerlink" title="Replication Controller"></a>Replication Controller</h2><p>Replication Controller称为副本控制器，在Pod工作流中主要用于保证集群中Replication Controller所关联的Pod副本数始终保持在预期值，比如若发生节点故障的情况导致Pod被意外杀死，Replication Controller会重新调度保证集群仍然运行指定副本数，另外还可通过调整Replication Controller中spec.replicas属性值来实现扩容或缩容。</p>
-<h2 id="Endpoint-Controller"><a href="#Endpoint-Controller" class="headerlink" title="Endpoint Controller"></a>Endpoint Controller</h2><p>Endpoint用来表示kubernetes集群中Service对应的后端Pod副本的访问地址，Endpoint Controller则是用来生成和维护Endpoints对象的控制器，其主要负责监听Service和对应Pod副本变化。如果监测到Service被删除，则删除和该Service同名的Endpoints对象；如果监测到新的Service被创建或是被修改，则根据该Service信息获得相关的Pod列表，然后创建或更新对应的Endpoints对象；如果监测到Pod的事件，则更新它对应的Service的Endpoints对象。</p>
-<h2 id="Node-Controller"><a href="#Node-Controller" class="headerlink" title="Node Controller"></a>Node Controller</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">controller manager 判断是否有 --cluster-cidr 参数, 如果有在每个节点设置spec.PodCIDR 并保障cidr 不冲突</span><br><span class="line">逐个读取Node 信息, 多次尝试修改nodeStatusMap中的节点状态信息, 将该节点信息和 Node Controller 的 nodeStatusMap 中保存的信息作比较.</span><br><span class="line"></span><br><span class="line">如果判断出没有收到 kubelet 发送的信息, 第一次收到 kubelet 发送的的节点信息, 或在该处理过程中节点状态编程非&quot;健康&quot;, 则在 nodeStatusMap 中保存该节点状态信息, 并用 Node Controller 所在节点的系统时间,作为探测时间和节点状态变化时间.</span><br><span class="line">如果判断出在指定时间内受到的新的节点信息, 且节点状态发生变化, 则在 nodeStatusMap  中保存该界节点的状态信息. 并用 Node Controller 所在节点的系统时间,作为探测时间和节点状态变化时间.</span><br><span class="line">如果判断出在指定时间内收到新的节点信息, 但状态没有变化则在 nodeStatusMap  中保存该节点的状态信息. 并用 Node Controller 所在节点的系统时间作为探测时间, 将上次节点信息中的节点状态变化时间作为该节点的状态变化时间. 如果判断出某段时间(gracePeriod) 内没有收到节点状态信息, 则设置节点状态为&quot;位置&quot;, 并通过api server 保存节点状态.</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -533,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -631,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller-Manager简介"><span class="nav-number">1.</span> <span class="nav-text">Controller Manager简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication-Controller"><span class="nav-number">1.1.</span> <span class="nav-text">Replication Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Endpoint-Controller"><span class="nav-number">1.2.</span> <span class="nav-text">Endpoint Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-Controller"><span class="nav-number">1.3.</span> <span class="nav-text">Node Controller</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="问题发现在node节点断电 重启后，发现有的pod节点状态不正常，之前的回收策略也都做了，就调研下是什么原因导致的 pod一直处于Terminated: ExitCode 状态 解决直接删除，无法飘移123kubectl delete pod &amp;lt;podname&amp;gt; --namespace=&amp;lt;namspacer&amp;gt; --grace-period=0 --force发现pod无法漂">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes Pod无法删除">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/dk7569vg.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="问题发现在node节点断电 重启后，发现有的pod节点状态不正常，之前的回收策略也都做了，就调研下是什么原因导致的 pod一直处于Terminated: ExitCode 状态 解决直接删除，无法飘移123kubectl delete pod &amp;lt;podname&amp;gt; --namespace=&amp;lt;namspacer&amp;gt; --grace-period=0 --force发现pod无法漂">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-05T06:59:46.817Z">
+<meta property="og:updated_time" content="2019-08-24T06:18:41.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubernetes Pod无法删除">
-<meta name="twitter:description" content="问题发现在node节点断电 重启后，发现有的pod节点状态不正常，之前的回收策略也都做了，就调研下是什么原因导致的 pod一直处于Terminated: ExitCode 状态 解决直接删除，无法飘移123kubectl delete pod &amp;lt;podname&amp;gt; --namespace=&amp;lt;namspacer&amp;gt; --grace-period=0 --force发现pod无法漂">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,13 +386,46 @@
       
 
       
-        <h1 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h1><p>在node节点断电 重启后，发现有的pod节点状态不正常，之前的回收策略也都做了，就调研下是什么原因导致的</p>
-<p>pod一直处于Terminated: ExitCode 状态</p>
-<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><h2 id="直接删除，无法飘移"><a href="#直接删除，无法飘移" class="headerlink" title="直接删除，无法飘移"></a>直接删除，无法飘移</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete pod &lt;podname&gt; --namespace=&lt;namspacer&gt; --grace-period=0 --force</span><br><span class="line">发现pod无法漂移</span><br><span class="line">docker ps -a查看对应docker容器的状态，发现这两个Pod的docker容器处于Dead状态。使用docker rm &lt;container id&gt;，提示Device is Busy，无法删除。</span><br></pre></td></tr></table></figure>
-<h2 id="现象是由于systemd服务PrivateTmp-true引起"><a href="#现象是由于systemd服务PrivateTmp-true引起" class="headerlink" title="现象是由于systemd服务PrivateTmp=true引起"></a>现象是由于systemd服务<code>PrivateTmp=true</code>引起</h2><p>最根本的方法是，当机器加入时，在 <code>docker.service</code> 中加上：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">MountFlags=slave</span><br></pre></td></tr></table></figure>
-<h1 id="关于Systemd的MountFlags"><a href="#关于Systemd的MountFlags" class="headerlink" title="关于Systemd的MountFlags"></a>关于Systemd的MountFlags</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MountFlags: 配置Systemd服务的Mount Namespace配置。会影响服务进程上下文中挂载点的信息，即服务是否会继承主机上已有的挂载点，以及如果服务运行时执行了挂载或卸载设备的操作，是否会真实地在主机上产生效果。可选值为shared、slave和private</span><br><span class="line"></span><br><span class="line">shared：服务与主机共用一个Mount Namespace，会继承主机挂载点，服务挂载或卸载设备时会真实地反映到主机上</span><br><span class="line"></span><br><span class="line">slave：服务使用独立的Mount Namespace，会继承主机挂载点，但服务对挂载点的操作只在自己的Namespace内生效，不会反映到主机上</span><br><span class="line"></span><br><span class="line">private: 服务使用独立的Mount Namespace，在启动时没有任何挂载点，服务对挂载点的操作也不会反映到主机上</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -532,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -630,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题发现"><span class="nav-number">1.</span> <span class="nav-text">问题发现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决"><span class="nav-number">2.</span> <span class="nav-text">解决</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#直接删除，无法飘移"><span class="nav-number">2.1.</span> <span class="nav-text">直接删除，无法飘移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#现象是由于systemd服务PrivateTmp-true引起"><span class="nav-number">2.2.</span> <span class="nav-text">现象是由于systemd服务PrivateTmp=true引起</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于Systemd的MountFlags"><span class="nav-number">3.</span> <span class="nav-text">关于Systemd的MountFlags</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s1.14集群部署-metrics-server">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/d3554aa2.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-10T03:22:59.745Z">
+<meta property="og:updated_time" content="2019-08-24T06:16:24.329Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-metrics-server">
-<meta name="twitter:description" content="介绍metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。 从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,27 +386,46 @@
       
 
       
-        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>metrics-server 通过 kube-apiserver 发现所有节点，然后调用 kubelet APIs（通过 https 接口）获得各节点（Node）和 Pod 的 CPU、Memory 等资源使用情况。</p>
-<p>从 Kubernetes 1.12 开始，kubernetes 的安装脚本移除了 Heapster，从 1.13 开始完全移除了对 Heapster 的支持，Heapster 不再被维护。</p>
-<p>替代方案如下：</p>
-<ol>
-<li>用于支持自动扩缩容的 CPU/memory HPA metrics：metrics-server；</li>
-<li>通用的监控方案：使用第三方可以获取 Prometheus 格式监控指标的监控系统，如 Prometheus Operator；</li>
-<li>事件传输：使用第三方工具来传输、归档 kubernetes events；</li>
-</ol>
-<p>Kubernetes Dashboard 还不支持 metrics-server（PR：<a href="https://github.com/kubernetes/dashboard/pull/3504" target="_blank" rel="noopener">#3504</a>），如果使用 metrics-server 替代 Heapster，将无法在 dashboard 中以图形展示 Pod 的内存和 CPU 情况，需要通过 Prometheus、Grafana 等监控方案来弥补。</p>
-<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work/</span><br><span class="line">git clone https://github.com/kubernetes-incubator/metrics-server.git</span><br><span class="line">cd metrics-server/deploy/1.8+/</span><br><span class="line">ls</span><br><span class="line">aggregated-metrics-reader.yaml  auth-delegator.yaml  auth-reader.yaml  metrics-apiservice.yaml  metrics-server-deployment.yaml  metrics-server-service.yaml  resource-reader.yaml</span><br></pre></td></tr></table></figure>
-<h2 id="修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数："><a href="#修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数：" class="headerlink" title="修改 metrics-server-deployment.yaml 文件，为 metrics-server 添加三个命令行参数："></a>修改 <code>metrics-server-deployment.yaml</code> 文件，为 metrics-server 添加三个命令行参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: metrics-server</span><br><span class="line">  namespace: kube-system</span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: metrics-server</span><br><span class="line">  namespace: kube-system</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: metrics-server</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      k8s-app: metrics-server</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      name: metrics-server</span><br><span class="line">      labels:</span><br><span class="line">        k8s-app: metrics-server</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: metrics-server</span><br><span class="line">      volumes:</span><br><span class="line">      # mount in tmp so we can safely use from-scratch images and/or read-only containers</span><br><span class="line">      - name: tmp-dir</span><br><span class="line">        emptyDir: &#123;&#125;</span><br><span class="line">      containers:</span><br><span class="line">      - name: metrics-server</span><br><span class="line">        image: mirrorgooglecontainers/metrics-server-amd64:v0.3.3</span><br><span class="line">        command:</span><br><span class="line">        - /metrics-server</span><br><span class="line">        - --metric-resolution=30s</span><br><span class="line">        - --requestheader-allowed-names=aggregator</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - name: tmp-dir</span><br><span class="line">          mountPath: /tmp</span><br></pre></td></tr></table></figure>
-<ul>
-<li>–metric-resolution=30s：从 kubelet 采集数据的周期；</li>
-<li>–requestheader-allowed-names=aggregator：允许请求 metrics-server API 的用户名，该名称与 kube-apiserver 的 <code>--proxy-client-cert-file</code> 指定的证书 CN 一致；</li>
-<li>–kubelet-preferred-address-types：优先使用 InternalIP 来访问 kubelet，这样可以避免节点名称<strong>没有 DNS 解析</strong>记录时，通过节点名称调用节点 kubelet API 失败的情况（未配置时默认的情况）；</li>
-</ul>
-<h2 id="修改apiserver参数："><a href="#修改apiserver参数：" class="headerlink" title="修改apiserver参数："></a>修改apiserver参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/systemd/system</span><br><span class="line"></span><br><span class="line">vim kube-apiserver.service</span><br><span class="line"></span><br><span class="line">--requestheader-allowed-names=&quot;aggregator&quot;</span><br></pre></td></tr></table></figure>
-<p>重启apiserver</p>
-<h2 id="部署-metrics-server："><a href="#部署-metrics-server：" class="headerlink" title="部署 metrics-server："></a>部署 metrics-server：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work/metrics-server/deploy/1.8+/</span><br><span class="line">kubectl create -f .</span><br></pre></td></tr></table></figure>
-<h2 id="使用-kubectl-top-命令查看集群节点资源使用情况"><a href="#使用-kubectl-top-命令查看集群节点资源使用情况" class="headerlink" title="使用 kubectl top 命令查看集群节点资源使用情况"></a>使用 kubectl top 命令查看集群节点资源使用情况</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 1.8+]# kubectl top node</span><br><span class="line">NAME    CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   </span><br><span class="line">node1   117m         5%     2217Mi          57%       </span><br><span class="line">node2   147m         7%     2680Mi          69%</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -546,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -644,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改-metrics-server-deployment-yaml-文件，为-metrics-server-添加三个命令行参数："><span class="nav-number">2.1.</span> <span class="nav-text">修改 metrics-server-deployment.yaml 文件，为 metrics-server 添加三个命令行参数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改apiserver参数："><span class="nav-number">2.2.</span> <span class="nav-text">修改apiserver参数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署-metrics-server："><span class="nav-number">2.3.</span> <span class="nav-text">部署 metrics-server：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-kubectl-top-命令查看集群节点资源使用情况"><span class="nav-number">2.4.</span> <span class="nav-text">使用 kubectl top 命令查看集群节点资源使用情况</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

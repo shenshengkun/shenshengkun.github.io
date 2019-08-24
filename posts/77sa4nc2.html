@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="介绍1.11后CoreDNS 已取代 Kube DNS 作为集群服务发现元件,由于 Kubernetes 需要让 Pod 与 Pod 之间能夠互相通信,然而要能够通信需要知道彼此的 IP 才行,而这种做法通常是通过 Kubernetes API 来获取,但是 Pod IP 会因为生命周期变化而改变,因此这种做法无法弹性使用,且还会增加 API Server 负担,基于此问题 Kubernetes">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s1.14集群部署-coredns">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/77sa4nc2.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="介绍1.11后CoreDNS 已取代 Kube DNS 作为集群服务发现元件,由于 Kubernetes 需要让 Pod 与 Pod 之间能夠互相通信,然而要能够通信需要知道彼此的 IP 才行,而这种做法通常是通过 Kubernetes API 来获取,但是 Pod IP 会因为生命周期变化而改变,因此这种做法无法弹性使用,且还会增加 API Server 负担,基于此问题 Kubernetes">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-21T12:01:56.403Z">
+<meta property="og:updated_time" content="2019-08-24T06:16:17.251Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-coredns">
-<meta name="twitter:description" content="介绍1.11后CoreDNS 已取代 Kube DNS 作为集群服务发现元件,由于 Kubernetes 需要让 Pod 与 Pod 之间能夠互相通信,然而要能够通信需要知道彼此的 IP 才行,而这种做法通常是通过 Kubernetes API 来获取,但是 Pod IP 会因为生命周期变化而改变,因此这种做法无法弹性使用,且还会增加 API Server 负担,基于此问题 Kubernetes">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,14 +386,46 @@
       
 
       
-        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>1.11后CoreDNS 已取代 Kube DNS 作为集群服务发现元件,由于 Kubernetes 需要让 Pod 与 Pod 之间能夠互相通信,然而要能够通信需要知道彼此的 IP 才行,而这种做法通常是通过 Kubernetes API 来获取,但是 Pod IP 会因为生命周期变化而改变,因此这种做法无法弹性使用,且还会增加 API Server 负担,基于此问题 Kubernetes 提供了 DNS 服务来作为查询,让 Pod 能夠以 Service 名称作为域名来查询 IP 位址,因此使用者就再不需要关心实际 Pod IP,而 DNS 也会根据 Pod 变化更新资源记录(Record resources)</p>
-<p>CoreDNS 是由 CNCF 维护的开源 DNS 方案,该方案前身是 SkyDNS,其采用了 Caddy 的一部分来开发伺服器框架,使其能够建立一套快速灵活的 DNS,而 CoreDNS 每个功能都可以被当作成一個插件的中介软体,如 Log、Cache、Kubernetes 等功能,甚至能够将源记录存储在 Redis、Etcd 中</p>
-<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><p>coredns 目录是 <code>cluster/addons/dns</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work/kubernetes/cluster/addons/dns/coredns</span><br><span class="line">cp coredns.yaml.base coredns.yaml</span><br><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">sed -i -e &quot;s/__PILLAR__DNS__DOMAIN__/$&#123;CLUSTER_DNS_DOMAIN&#125;/&quot; -e &quot;s/__PILLAR__DNS__SERVER__/$&#123;CLUSTER_DNS_SVC_IP&#125;/&quot; coredns.yaml</span><br><span class="line"></span><br><span class="line">还需要将镜像修改下，coredns/coredns:1.3.1</span><br></pre></td></tr></table></figure>
-<h2 id="创建-coredns"><a href="#创建-coredns" class="headerlink" title="创建 coredns"></a>创建 coredns</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f coredns.yaml</span><br></pre></td></tr></table></figure>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cat&lt;&lt;EOF | kubectl apply -f -</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: busybox</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: busybox</span><br><span class="line">    image: busybox:1.28.3</span><br><span class="line">    command:</span><br><span class="line">      - sleep</span><br><span class="line">      - &quot;3600&quot;</span><br><span class="line">    imagePullPolicy: IfNotPresent</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>创建成功后，我们进行检查</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod</span><br><span class="line">NAME      READY   STATUS    RESTARTS   AGE</span><br><span class="line">busybox   1/1     Running   0          4s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@node1 coredns]# kubectl exec -ti busybox -- nslookup kubernetes</span><br><span class="line">Server:    10.254.0.2</span><br><span class="line">Address 1: 10.254.0.2 kube-dns.kube-system.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Name:      kubernetes</span><br><span class="line">Address 1: 10.254.0.1 kubernetes.default.svc.cluster.local</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@node1 ~]# kubectl exec -ti busybox ping kubernetes.default.svc.cluster.local</span><br><span class="line">PING kubernetes.default.svc.cluster.local (10.254.0.1): 56 data bytes</span><br><span class="line">64 bytes from 10.254.0.1: seq=0 ttl=64 time=0.099 ms</span><br><span class="line">^C</span><br><span class="line">--- kubernetes.default.svc.cluster.local ping statistics ---</span><br><span class="line">1 packets transmitted, 1 packets received, 0% packet loss</span><br><span class="line">round-trip min/avg/max = 0.099/0.099/0.099 ms</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注意：用my-svc.my-namespace.svc.cluster.local的方式可以访问服务</span><br></pre></td></tr></table></figure>
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">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</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -533,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -631,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署"><span class="nav-number">2.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-coredns"><span class="nav-number">2.2.</span> <span class="nav-text">创建 coredns</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">2.3.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

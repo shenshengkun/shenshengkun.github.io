@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="k8s证书的三种方式 cfssl easyrsa openssl  本文使用cfssl签发证书 安装 cfssl 工具集123456789101112mkdir -p /opt/k8s/cert &amp;amp;&amp;amp; cd /opt/k8swget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64mv cfssl_linux-amd64 /opt/k8s/b">
+<meta name="description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s1.14集群部署-cfssl证书">
 <meta property="og:url" content="https://shenshengkun.github.io/posts/8d664qf5.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="k8s证书的三种方式 cfssl easyrsa openssl  本文使用cfssl签发证书 安装 cfssl 工具集123456789101112mkdir -p /opt/k8s/cert &amp;amp;&amp;amp; cd /opt/k8swget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64mv cfssl_linux-amd64 /opt/k8s/b">
+<meta property="og:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T08:51:30.034Z">
+<meta property="og:updated_time" content="2019-08-24T06:15:25.676Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k8s1.14集群部署-cfssl证书">
-<meta name="twitter:description" content="k8s证书的三种方式 cfssl easyrsa openssl  本文使用cfssl签发证书 安装 cfssl 工具集123456789101112mkdir -p /opt/k8s/cert &amp;amp;&amp;amp; cd /opt/k8swget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64mv cfssl_linux-amd64 /opt/k8s/b">
+<meta name="twitter:description" content="function doDecrypt (pwd, onError) { 	console.log(&apos;in doDecrypt&apos;); 	const txt = document.getElementById(&apos;enc_content&apos;).innerHTML; 	let plantext; 	try { 		const bytes = CryptoJS.AES.decrypt(txt, pwd);">
 
 
 
@@ -386,26 +386,46 @@
       
 
       
-        <h1 id="k8s证书的三种方式"><a href="#k8s证书的三种方式" class="headerlink" title="k8s证书的三种方式"></a>k8s证书的三种方式</h1><ul>
-<li>cfssl</li>
-<li>easyrsa</li>
-<li>openssl</li>
-</ul>
-<p>本文使用cfssl签发证书</p>
-<h1 id="安装-cfssl-工具集"><a href="#安装-cfssl-工具集" class="headerlink" title="安装 cfssl 工具集"></a>安装 cfssl 工具集</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/k8s/cert &amp;&amp; cd /opt/k8s</span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64</span><br><span class="line">mv cfssl_linux-amd64 /opt/k8s/bin/cfssl</span><br><span class="line"></span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64</span><br><span class="line">mv cfssljson_linux-amd64 /opt/k8s/bin/cfssljson</span><br><span class="line"></span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64</span><br><span class="line">mv cfssl-certinfo_linux-amd64 /opt/k8s/bin/cfssl-certinfo</span><br><span class="line"></span><br><span class="line">chmod +x /opt/k8s/bin/*</span><br><span class="line">export PATH=/opt/k8s/bin:$PATH</span><br></pre></td></tr></table></figure>
-<h1 id="创建根证书-CA"><a href="#创建根证书-CA" class="headerlink" title="创建根证书 (CA)"></a>创建根证书 (CA)</h1><p>CA 证书是集群所有节点共享的，<strong>只需要创建一个 CA 证书</strong>，后续创建的所有证书都由它签名。 </p>
-<h2 id="创建配置文件"><a href="#创建配置文件" class="headerlink" title="创建配置文件"></a>创建配置文件</h2><p>CA 配置文件用于配置根证书的使用场景 (profile) 和具体参数 (usage，过期时间、服务端认证、客户端认证、加密等)，后续在签名其它证书时需要指定特定场景。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">cat &gt; ca-config.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  &quot;signing&quot;: &#123;</span><br><span class="line">    &quot;default&quot;: &#123;</span><br><span class="line">      &quot;expiry&quot;: &quot;87600h&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;profiles&quot;: &#123;</span><br><span class="line">      &quot;kubernetes&quot;: &#123;</span><br><span class="line">        &quot;usages&quot;: [</span><br><span class="line">            &quot;signing&quot;,</span><br><span class="line">            &quot;key encipherment&quot;,</span><br><span class="line">            &quot;server auth&quot;,</span><br><span class="line">            &quot;client auth&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;expiry&quot;: &quot;87600h&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>signing</code>：表示该证书可用于签名其它证书，生成的 <code>ca.pem</code> 证书中 <code>CA=TRUE</code>；</li>
-<li><code>server auth</code>：表示 client 可以用该该证书对 server 提供的证书进行验证；</li>
-<li><code>client auth</code>：表示 server 可以用该该证书对 client 提供的证书进行验证；</li>
-</ul>
-<h2 id="创建证书签名请求文件"><a href="#创建证书签名请求文件" class="headerlink" title="创建证书签名请求文件"></a>创建证书签名请求文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">cat &gt; ca-csr.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  &quot;CN&quot;: &quot;kubernetes&quot;,</span><br><span class="line">  &quot;key&quot;: &#123;</span><br><span class="line">    &quot;algo&quot;: &quot;rsa&quot;,</span><br><span class="line">    &quot;size&quot;: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;names&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;C&quot;: &quot;CN&quot;,</span><br><span class="line">      &quot;ST&quot;: &quot;BeiJing&quot;,</span><br><span class="line">      &quot;L&quot;: &quot;BeiJing&quot;,</span><br><span class="line">      &quot;O&quot;: &quot;k8s&quot;,</span><br><span class="line">      &quot;OU&quot;: &quot;4Paradigm&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<h2 id="生成-CA-证书和私钥"><a href="#生成-CA-证书和私钥" class="headerlink" title="生成 CA 证书和私钥"></a>生成 CA 证书和私钥</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">cfssl gencert -initca ca-csr.json | cfssljson -bare ca</span><br></pre></td></tr></table></figure>
-<h1 id="分发证书文件"><a href="#分发证书文件" class="headerlink" title="分发证书文件"></a>分发证书文件</h1><p>将生成的 CA 证书、秘钥文件、配置文件拷贝到<strong>所有节点</strong>的 <code>/etc/kubernetes/cert</code> 目录下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/k8s/work</span><br><span class="line">source /opt/k8s/bin/environment.sh</span><br><span class="line">for node_ip in $&#123;NODE_IPS[@]&#125;</span><br><span class="line">  do</span><br><span class="line">    echo &quot;&gt;&gt;&gt; $&#123;node_ip&#125;&quot;</span><br><span class="line">    ssh root@$&#123;node_ip&#125; &quot;mkdir -p /etc/kubernetes/cert&quot;</span><br><span class="line">    scp ca*.pem ca-config.json root@$&#123;node_ip&#125;:/etc/kubernetes/cert</span><br><span class="line">  done</span><br></pre></td></tr></table></figure>
-
+        <script src="/js/crypto-js.js"></script>
+<script>
+function doDecrypt (pwd, onError) {
+	console.log('in doDecrypt');
+	const txt = document.getElementById('enc_content').innerHTML;
+	let plantext;
+	try {
+		const bytes = CryptoJS.AES.decrypt(txt, pwd);
+		var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+	} catch(err) {
+		if(onError) {
+			onError(err);
+		}
+		return;
+	}
+	document.getElementById('enc_content').innerHTML = plaintext;
+	document.getElementById('enc_content').style.display = 'block';
+	document.getElementById('enc_passwd').style.display = 'none';
+	if(typeof MathJax !== 'undefined') {
+		MathJax.Hub.Queue(
+			['resetEquationNumbers', MathJax.InputJax.TeX],
+			['PreProcess', MathJax.Hub],
+			['Reprocess', MathJax.Hub]
+		);
+	}
+}
+</script>
+<div id="enc_content" style="display:none">U2FsdGVkX1+q6MsWqLvncO4FfcxB4Sdm63KELGH8rAPexRytA0aNEX+KfDqR/LA7LzXbEzJX/zgChOSMuquaO8ZFDqPtZE5alxCPf15yFy/o5wqE78dyiisYfB64PkGK5/GHCoGxnqez54qJiejmSjyhgIHa9cCRta7rFrmNb0qty2244D3K4stadQu/7gPGki0mN0+WhbobCq2G0DY/MmxX3oVnQnFI/T+mmjhZlogN20e6WG/OW4WdKpK4VLG7d1i3ZfRN9ewaCZ8ed1wb32inkpqq85iS07TCnDvZxO0FkHBBY8hyeDEiiwXozyTP//JAw52XcjXk98XxnD2XAw/U1zlHBIhk9tvvFKgPRz4WtrOD8Q9m8eTU97dantqvCW+FI9re+U5GdOfMi+RpJps1uSfDA5WjfsufQHDC/OvEFvw2bAkIEKP3TPVGd0+MjT97xT/IYVYR+gzN2k+Bo+2ivOJ70zY1rYq6oThZCqXYSQTDB3uXS+71gSVr/dNdoy99WoVVPCAt6Sgyje/AfHqP0ZqbvwX7kviHWx2yEkV8HCHg2I6aeKgxRzXfjF11y/59zvTZwJcwjiPbf6MH9XS0CLzqzFzDw9zOmMefBx5KYSSd1m391E8SxBz2G5TOoYWMkGwnJyysHqE8iIcBz7Wn46M+nbnjpFPEyXqXUO0RV6uszN2DAVtNnZLRuWVxG/xaCO7bgyqxs4M+s7Cb74oXb1n1mE5OkWcd+00fHw8BAQl5KFG4yXdC2L4S+UbLJg6K9C1MKCE2PJqBnvfKnd15pz2E/pze/jJEkoTsAc2S1ozccZdBUdPIwItkzNM3lAl+ZHFOELVzi5t1SYIPj4XKdvyUEbtrPnB+ifukoYJXLHKVe+FMGxIDvzLlNo/UHOERO+ZdKkNQnkwh9TUlPh24x2iYm66twxUw4thl2LSLf7sXZYVzPlNjLuBfws4FzIgdR1JrJkS2EjJwNkUkfcVl3POKQT52KYI7gtj9xZZF1oZtd5/GGpt/6Lstl03NXj8cJMLL4jKMuFPsDKRFLJvI1QyVdlSuNzZ3rzVTumvGYci8FN0OyhD1SV2zN3qCwb9/tTgLIHWeV4QDFbRYJE2/zi2zt1KbEM7saJYOLZ/Up2TS72YC86ydpgLqkqIVNfQ2lgWpLwEYL34+qIlKtDKZWkg3+W76u8AnzlepsA2HnLo8xydUa8mnK/H0WnQfgcFdPW+TqiAxaZya5lJQYZV3OdlxjFjVTsjsuQYx9rPTbwTgKndd6SakYmhZYrd5aWCyqAA7pGSpu5JBjI807qncfTGjUjnhe/YY6b0foqbs/PPjW7XyCknZJIjS/TkdgodXuvpXvRXmkQ/CvRfFgMTqNO0i1n9GvPIm3UfG56EWphsMv//aWViWclRwR34yOqBJVBcGveXOpiQZ0mSKTVnlmIdMZZbgbnH18I+9Gnj+oy9PSsXpDc/4zaF81CRWFU3M1zTEYZkwJirIZ9oV47jQOZDNa8A7Djn+WNhu2OP5UwouhKGs3+mHSw5YeIhonGEm/DIiVnPM+q71zUxoy/uGDYn2X9aJq6mjY7WD/6FlnRoXH3brJwT/UmnN7fbrfL6OiXdsh8lG+KsH3oMQaXZrlJlO1QeneEZr+BpXoitOzT8Ri6cpXDo++4Si3d/tZJezzxStytDZJqvwU5mMSNNbwQN+As1CKNrXub55PyZLU00XLDod69bhcE7RBx1Jv+0SxLpJWu9CTyb9AjTR/uTRLYkde88UkcmziQqbYQ3q8amwxIGoHIW0r/kilVqQMNQfPlvXPdcs3nwuiRoK97py4fFKAPSJLt8EHGKteSoBtVbsI9R8wDJoKJ28nokaSxmzjiv1k2WcbQqyQaQLjrfShjELiAG5fZm1PZodmjfLYsrUAhEmJWqH472vLyku0DiGEzKma4TAAkNiQ+4ofhwKHUZnSnRJ4nVFhdECsdscaYJ2yS44PXyruQ4SK8Ce6zuMTHuIE/5NvtBHRO3pw56GT7fzmvXMwqU/Sz/qtY1+QDw3UaAp6YAZHNWrAvY4lYKZudQBl7lmFcXPX2+8Jt92YkvfEy66lM8/60201RnCKkMkyAxlf8BSQyykcyLrd0uRzNb6kMsBkYTjgg0Zg/VXQ0UxA8bFx4aA/Hzq4oiKm+vwdeanZtenb21chiz/KY+CvAFVdn4g4A5bV5g0WZ5WkDxlYfDip15QjCAbi/7/FxRiyNZ8UcuZkz6n0D12LAfAFT4WHcG0/1txD2V+S3pyQ0Y025oUQaLamAIYci6eXfZF2poGiZbh3Ei7aeK0JgiPXQnjVJqYY/K3bVA3J8OX6AM6i2a/cdGDfDeK8kArbS/99PDy1zPh5h6wEVgyMbuPdI1n5MSwVBG13Gf3uMa2Vrz6iluG+MkKeEREv34EWQirwQ1+hKP1W3hZsRnYI7hi6lwvl83hbcwRWoI8zwc26N5HlTEULSzF5+JE4arCeHdYUGgQ/9Va8Ur0c5U5eD2Lny9aj9msQ5JAer8bl1Gutu6fyzmiQnuKCj7ZjNJS27q/S3UPJnvxZd1vdDWVA2xThYX2zIqDu/vt4SNtbLBDz5thAq6zYZ17gwL9TXzo80Csfap1DyfmT6QoOb0h1b4HXAN2h0kr+FGyrbO/10m9DOAkcYhlRKAy2u60VCVNw76jo6rISxOTSW80sEEShFYqQfTloDZOFVkdm1IcEikP7yix39NN38E4TjspCMPeJ96OsmnI0+uWOX9bv0zVXKYdcQ9kIG1DZFpuNXlD0pj13Ps7wqnAVHt3HegD+yh3zSgx7a5UEACWgPg3w1vJhbrTjXCB7qwRm8oV44Ny5Xk37S6gchlBToune401BaEK1L7TFccVdRiUw0HnEf7q22zV7PObZhJr3zV10Mo2r+na0hMYrQ1TUtsA2N+JmWmO9s5QjS79l3OVCX1TxzUEZKjPsVHfJ10qJUZcn8+ulWgd269P2iScXGs9qCR/fB38RKOk1kT4LO+cHgnUIoP8kwO/hHMqhKtujrJf8/RPMtrTae135Ws4cpN16DAhxI8ZIE4C7KX0vG7rbnJ4jHYcFeO8Dt82qjTFtXv7a06JWjTIrt4pWeFkbPu2IU+nJHwzJMGk2Mj8hR4dMMkjOC361KYppjNixqPYpWOVGqAs6XjIJGyOsYRVZhkpwZ2O8kSIx2trVsW3TNySkVVei3hkRqMSXGOGVxhGYTwq1bHFqc2fX3hJCUFopTuMfeP/YJwJyzMSgOCG0+STSlp8qmROPMD7Dsh6L02nrwklOmCt+zvKt6ksMw2CRwKlCTlElvooCw1QWGVlQc/JO2a6XDpx3PF13MbodfyTPIMpj1sl/hu9KuzqdmWtZ9qvCKQIJLpXW2QqMipKETjlzq8PvzBjNBOKKn6WDsRNKsSQ9CbEOnvBrwf+9Ze5gX8bSMq/Zc1X4hA5MjA9GQWJU2+D4cDZEhOWbwvRsl4ACxqaVkdA+xZOOwLJm1KncM40z5ihzxL4X2czu2qa3yNyj5XH+MvAxPgY6q/NafU5eNtFhuAVd3bCTdKY2cjM6QktDTOhop+Y5T87965jLWZcR0SVNnVj2+3UHx6swtr2vum5RRCwcvjNzTwMG2a36laaCqarcbbR6QEysMnPb3TgSFUKSqP6YuRIltGkuadOR2yyxax5iz7uQrM0CMthG4bHx03/puKNSliIrpfcNB2ENqoiendNwA9CjFtwgc30sVCQ3dUkabcvU/p/0TphDTK/wYrL0y0Boh3nj9lh4d5mEYL7yC9qYVM36UJOaM10TDi5vvRTjp8DLT6w2meEESEqRFDCwPLY1GPx6eiwDRKK2NBmrARG46ksZXq5bF8oit7bbp10P5HC7X1URE9ITDpzDrpQbMrrktFxMp3vj+XkL1LQLAMVV4a2ZB1M7ZHrURiGGMPmDYPBtVoTc4fkGSZxAiEnW2ODjPLZQcyUp3II2L3Qvvn7/4fyXG/Y5zZNlcluc+AzsvvrkX3H0CPPAmOJNagDq6zXehFuQvlV6f3YZFRhXeedZQuhLB8ftYTzgwz5jnJb4UaiI3vaCa9pC8kXSUJhUOjCg/3bwgi5OXPMAj3w+tZnOd+oSCGmMw7AuZw4IFjQB9+a1dHqgn7BRekdyeP5nFf4l/U0V8doUPu7JCXRj9XM7TvZI2imo5cb11uy0U4SbXR4oVT4pNDDLoWrRCGbTlinmiA5SdLEwX1B7Ad7rZtGKuADbx9w/PjaQ6FaFeToR0ttblLVq28emwunvNzdT0EETvQ9Zg4FtkW0G0FsweY4KHPmA481DHJxefpkCE5HF50qwGoPTBJwspuewDn/lOPeZ98tcXlbnlkyJKITiBwkhV7etcEiRw3+nnXQMpOtTyGXpK8RR3UNnwrds7OGW0EW0I5QAfLMh0/W3E2dxeDC1VVYYk037dN98xWKSGupURH/u18WW8ZetoRR+OtmkIfcREI0LU/FWdBfwlxeX88yTvOWd0M+GU6mSuyweJwQK9cHigqlm+1fV1ahNDpZWZ1gQ8JJLoxHJ6ALCsasKU7/yF3Lbfcmz5wPsTCMsyCqc2BNq9msZUcD+8EuHPdpnsji3P8ICZCjrm8fM3nSiuMB5imPsccwwxWd9hjYl47q9zAaI6JEPmaciLUou163fXEa06cYb4iDD1KP5GvnitFfs28MidNP7BehNeJKiaIKko/JaivhcAx9aReK0noGeN8oFAQ0VuzvMG/q102uHyDlTh/Ao/Wub0QzhHZEB40y0ZDthMUp/lyzBiHw4DhBjs2k0LI4g9cV9uztWMpd9lIlceNQnhErWb2UqkZ72K3kYxcNmw+jBHTmMwWSx7woht1Ak57nKjSv2RnAg2VblUifhmuVFmYneL3jy4CPp02x9LjkuTzQpxmbe7NHpfP4t7+T5pmaXUTaclfCekM/PQIwgsESa6IO3hmIeH/QMOSHMiyqGAOkdgdWhxbYbnhgWqPnMclGRuM/WHIMaLbBMjN2trUCZmtCRP5c3O1IbErzMnmtw1HXricsK6cajA88+0wg6EYU3toq+TGoGEL66vI3A6ZnJq8/09xcDLAhTq9M4KGG+k9C7Tqgf6HIwlnx+KBEMpqppeTSyVu8UzImvx2ARjV4OQqFwRRUQsZodtLPQjVEHTTzH6nbZjw+jkI/jjAhDoIs/8ks7y09ukF+Q3BBJj09FrUurS1dKgVihK1aAbu5jsVZgEi2D4LMt2CdbbOsp8wG8U1sD+HxArCDcrQZkCw7PUcpU34Rt1ttQpb58Deo9rpix8ZFw2uRZ939gK4FNMdt2ZO5gNytXUBY8Zog083S4oqKdyzXzJr0EATDc5G3pqXfyHVrvyA9Dl+eVsTvlWexcocvxFxa2z53lq1GgmR7LJP9gvOHI9Y6X2cMf8Z8K+XDBKEjXv7ozPi8pvSZik1jZoEbRA8iHMplGh6muCFNJbd1ekDgX9gBheOD9RujRSyrrf9kEiFwCasL+p/Fj8roZq5XiEzWJoWjP/hojYbCPT2LJ8KV3EAfux7oj9Z6dEvleoVPI83PhJ6JBnW494c9EgIlYy0orPv1XM27gzmVRpDsyRO5pDgRCStaulj4D4qttlQbfXq5r3nL2wjYvn67GHqdgwxdvOGj15tff/YBW/XZL7gI1/9izUGphFdBoGmVO7RfPqzlG5hVWVJD98VTkT8xzY6K+3fhOl+TOXaQUW08o+myyAsZXjrghmaY+kFxwgflpgU2mgKGKK7smNlw442ze6oQvBrpLStnF3a796wu2GY5ceFfFHhQmytPF7rN0aw3vrN5EQIo79gZTrU1kL+1xSN4G7kXoKP1xVEY8qssbtGS/WLprZ5QZuvZjZ0rh+LXd2tAn1NuRSSQdA8DfLt2X+TB7Hg5iusb/mTjKCm0q65PlLIsiC7zmZlSMZH/75dZmYQNfrERvjK4aCqYfz7POmXj6TyzQxHRHJEO4CWLwPWa3ZZzsNrhZNEI+TnX2kJGCF8I4crUpCrjquMQC7bkiz8l/JbqBqcrIyybf/iFpTjxs2lEaSwfOT6oTuCMquAWT7oF9NprqYxCutal52Q5Yz5Zw/oFBqjTyC5L49G8akqZlgvIPJniwcfX9laVf9b74If4+KUQ6C/lK7RXhFQ58oj2feY4Sw5pd5zoqA5MC+xkGBHLlUR039NtP7zESTB2vowrIk/0Bz+NeupZ5FNEbFR3Cblof+sM9vbjOiisx17kfUss1akaYtYF43ADpPjYvMZAoc+zyL4dQPrL5olrwUEPd8Y9UNtfpNDo/jb8Z84Q34XvrJW54Rz97qmBljCVoaoQZSskexqQqtK0jngXp8swEL9ppsgbL4DFXDtLcpTeN1CH2agLqYZWlVmFB4F0SAcdZ/MkaPNtkR098O/MU6Sr0zWaOtjiPttrrxrb3Qwq2i3H+EnOB/xrakMjQYEcMUOheQC7SW86FhElzZDaYpzXScOxIPe428mzJZhHnLiuGrD3Q7GG2t1mE7HhiTK1qKCyoV9OdS1r++YKqz8H8vPsiCCoXpUcrtFsCMXYzUM6xTYpeag8uhTubIjVQjKP1epT9OcLDVnFYVhRLIkr75rEXJOJ9fa/qrXiHToh+XRz3bCftZOYX9xabeNm/BrDg6YZEjNY6OgMTCAZ5rD5gIbuw/YUSnz85c89E5uRhq31NRdpE9BLfcFn4udN8FChxXV8zx7utBOOW8CaHXVcNDU4uywUJA9pXK87VTviWPofolO6BEY30jq0MbgpkCfxpqRi6RIuntE9dJAxP3t1zDeGfhdmhKdbeqLQ286pT0fsXmVAWo9Dvc6oImHOsJG9oxBGcosX6OdYv+koAD5h6KFNHPUARdER6iRRwEdD7f2iHAv0WKhdg7ygj16GvkLCEJsHeCQt8vGYRpGXfXY5vyCMszZSsD4M21ZiE5atJMd1+kvKSwZtpJcixIYKrRk1W9HAIuMWBduwM2ATf6I8YVZzvPsnU3+qRc1ffrSFEVQgbJk0zHgnJHOOhrWVMcOHc7UlwPfH2S1eAmwRDFeO3DtIvxXdQ3ZDA19I0K0o5yxMFLRkMCR7P6TzxJauLNmCF8kOHGPmBDFejk3B7ZFdBWO9BkpFepVc3KvXiYRRQYlUGn+THEylxWsg8d4GOmV/pwmxRv2cq1KExEbCEVK8IJUL2SG1MTYHqAWX6Mp6JhXffE/Z0e6xcGVNF2byCe3R9ydw3lvttj0lcXiPahemXE8ML72cYEJnuM/wMEafodaJSQXvfbfB7d+vwlvvc4qaL+80R87M3c+FffDMthM/h34XYLPpwYoQpXZqyB9OlJUVHwD5MiRMeo5V3siq7NYdj9NhzFoF9WV9Hkkes0eOQ+6ZJH9I8Ivds3F/GKX2vXXE23kNM1IXsQImKfWsNZzaJmtLI6r1yznWFmDQO1VJpoEB8SkeRsgaQ2ZB7uAO9f3ORSijE6arPNHlcil/pVWcxONlXY3RaFoDjcX0GKP9iMeU5+n8xPeHD1JLYVspr9F9CGToqRG/alcyKEsBLlu8cnXwiR7/FZvhZofOm0kcMI8fFGlRvyMZSs4Xscj8JIMVPJJa+O+3H0/pDBUsb85SSnMDx6Y5DZzhEXoHFKYTgL+32X6nH/BmbAWPG2LmWyKghm+hI9O0F4EVGFpnA5Y4qnT4TeyPL37pGWpkqX8cvw5Gtzz8bkBu0ee8aKjZYPSkVyWwJmrMgIWk7fP8dpYfjRsL0RkvRItMqrmDEVBATcao7wJV1dAG4XM3JgeAJaI3YkNFwbV9h7G/mshAuWDtNHi7w5AfpWlFlHuEhYl08ds7ow/gxr5Ac4fMT5i+PYDgJT1p98vGHu5GBq9oKntMnu89HYIjut2UJtpHjhwrevfTzn/yzeU4IylRz4F09Jyy5QQ3FemJkui6VuoleybarDsMRZ9cZnLfCI1PKumqyOGtyS0r0fPmnDASGF4txbS6cpnJYffRvDM+c4Es2K//AhdpfKilKIGUehAPjMbUj9m2vhF4QcfAck7Ws+sXgZ139UB6hAAkMg0MxP3QUVXHG7B5vFHX/LG+b8ziix06bHowUYMjFH+t3KaYyB+lVJUOjoJZ6GiZH+ke7SFJk2GdP/MTOGjS1X5DKGKuSLQQ6zHqaB/rOpde8z1pahry3kUReycm0prN3oHRigfdXJoxYw8uKGAc96beYxeTwVaG6760z86M+WLs/um/7TvHpjxFpqMNlQC/D35k+ql1OuXQQ/HTVaAlQiw03kAziqvdKlYXvYWnE3vo5UDI6cM3rGz+L+e1h8XWMI7vovjw8QEE6biMRECb06J6wbIABp1Qo+fb1yOL4FHmb157LPwgFxdyISN73+mVDVWkk84YidXh8TtG3sqm6H4PYCTfO4DG/Xxy41usVMFYDFbN5aEyMNez+8F46Qy5d2ez1iARRDD125SlIlnMNt/Vb01d+tk1mVjTyM+Le2jQBrj1b5YTmirTJXSNCDsaXCnZQ/YJoElXYT+huw7FaBJf+/AeCdc41WbcipRG8RRQeaVVCrNqd9EciRCGRmOoMDku8tglAvPAYEYwOFlej5iJdh4BDmL74DjyZ/4QOquUH5brTryTqBLnzOLQMSDS/+CxQnW1Yli4hLx3Y3wnw61nKFpgMSrPRpDs/xJDpkENAyVJQ08dZ0vcA+ZnfD+ARJwP1R0aGqVTzHTxvguwJyAIIb9zfUNGDKG/dSeE/FCc9g26q84LPn6+tfZuLabD6j+gsVvcO7LsiGG0xhjm7aZtZZBlKnboXBC6nZDD+FuATXFUJ+JR6UIv3vGcaTEJH3bIbqBYPYQR7TDOajYcWy4xfWy0Xhgsjp9d/RWKWPhmqvtQPGXZxs9eDJOl/U98hqiIFCSwVhmZw4wHTXuCazwEXi1sidrNGg0g1n7/bkA6ZLfI8pwl9kuCe/zfgDegrgIeGctMlQcaPwZHIS8Sl9+/1QKTJDJWUfdfeKQzcyNgI6EV/Uc+9oc2itwGUpjjwF+I4hPY8jXTevuC0iQlQWD2oDwPyg2O3fDhTfFMq0n+0cAVgFOHLYeVxLR1GgdUxuAhrdDgP6bKvvGRvH7eVEn/EX7SI2Le26wt0qF3lQYyGUotMhHXLTgVzFucX/6urnCXaY58lh3JLCPsA8msGMjkGs01u3n3YsBgsC8RWixBPfpuvHiplXNdrfLzN/vImY5xGk1wzWdELwN369nSR/D163a88aPmk5IvtWRKoWOng/LsA+nc/JKc0gNLCuYwkIG/l8WlAcWIRyM3S9EPgCY5F7Gry2Si76xqMweFUAGucl64hTykSpYUQyaqChalXJzhWOW+PMJr2sbAz5f7YP7f6DRfcOm7b6cj+T8LSNVsUArWBfnasXZaRqUWk9340LQQ3izBvoZw1OOyjQVJXFpj4bAYzjvWS600v+N+F9fEqISkx8nEW+u0WnojZeSNjKoPUEEEZio4D1arXRNEzq+vXMWeytrgOn2ACo5zXAx+Id01jzwTSlx1m3E21iM63N0596GtXEd48zzeP8+EdK4386jTQWYsNffU62QS51/b8zh9x0Afpw1Bb6d93pWnpKAWbc3ArvCBVwYRwpROFF84xeUVc9pJDsIjnhZbucFijb6y78yZObCVuiaGKf5rsj+Hhhfe3k/k/WtVa3XkSpQW+/pkBew801ccQBfl0RHnzx64DTkcwquky0y8urW3TJ9n6/oqZzujMUydVPc9+iwI09y9dPe1SXLSS8j79ur4PoRPsvP/0xMJxH6SihGnRgCVp/vXqraxazrNSJG+u1Y3hO5fl/B2vbzHVgSv9KleCSIx3b6UxByu7BDlACj5Ybum5dtqKX6JqFPujv7zd7DczPrZfrepSg4O4lhgcEQsanIbIFA1LieD95c/DSSHQHThlI+vkYHma41lnHGN1nHbD2Y8U2dv9hkz7R7Fdv/cYQZy5L2CIJzn18XfWryMdW0PGE3Iu2eKHRTA9uYPYmM8nQVtxqKtO3YbUPqSXeU5qIPG3nhwnR7KIxtu2Wb7+FujJiuKFEcBP6gx/S48kUMBZjToy6o6ZS6cutHACYFq64PcjFtEo/+t2JXhrgSQ05hHhZuSoGVfXQzQBY/KYmcKC+1spzLw0D/4elrY0wtLVo4rng7saH8o869D4ahCQyAxkKbqrKzb+k1kMRBpJzW34QXI+8eMtHTjf21uc3VdUa+ZtZP/TSgAtvRAhch1VpJ2b3wVyEd8pAZNoHDiFPSmnWCV0bxpL/CiZYAdsRpboJn9g8GUqhktKlEWSA13tOgW3mKKPJcP/LLQqXCHxx4qA39jYj8T9CRmOeSH7PCfDjo3TlGO9boPNYoqOEuTAmfGldpVMZZcIAsmYMspgRjW7jUEN+xlST/qmAKiJERbwU1f6foN0LLHuTgEexmHd5KgTqZPLCIXWuddFJNL1vlIw/e13y9nXs7pcZ/zc54A5punmmMQuIBbHtuGbYKZy4tC/N5rJWD+XEWyhu7gtdBz7jO49l+NtpW8/PyYKLcczktrjpl/cB5r5cUfNSOUKHasGgmm9RGrb4VA+6jcdPIz9grs300xRruroJox44R+wrkJq9ChnGG0GkMENRlYbedhXBv3G4mgXGcRG5VnK9IHztBfDJRpTH2PZ7j8mbzlLVVbJrp9XS/Cwt5uCqaaZhg8EogtFIXVIylVduYoLaDzbEXretd9ur6oK5KAT7kuQD84tYZwGdKBGSvmkPa9hzhBlhzSBdFYsFj5T6Zt2apZvkV1yioMgxNwg6wxfs2VZHEsug8Fx7QrQZ5Ft/+1UDFE4MG//N/tT24HuD9W+Sm64SAg9YqHUWUC7g1rWu3dGN2Rc0bTeamyYLnVwajeKXoJT1RxxZwvitt+PLpqx+08pt4Oz026k8G91e3nrTLwJaBvdZd7FwcX+53BIIZTkkm5C5Zdd15ZZB9J13jlE3KHC8ivy2JpXn9RzMzHKq3EVkae3qb9ojhHqFvxQYKplseBlGgJ9ZAOg++/RhlsvL24okubdR2KCe9ws4DTYYQS</div>
+<div id="enc_passwd"> <input id="enc_pwd_input" type="password" style="border-radius: 5px;border-style: groove;height: 30px;width: 50%;cursor: auto;font-size: 102%;color: currentColor;outline: none;text-overflow: initial;padding-left: 5px;" onkeydown="if (event.keyCode == 13) { decrypt(); return false;}"> <input type="submit" value="解&nbsp;密" onclick="decrypt()" style="width: 58px;height: 34px;border-radius: 5px;background-color: white;border-style: solid;color: currentColor;"><div id="enc_error" style="display: inline-block;color: #d84527;margin-left: 10px"></div>
+<script>
+var onError = function(error) {
+	document.getElementById("enc_error").innerHTML = "password error!"
+};
+function decrypt() {
+var passwd = document.getElementById("enc_pwd_input").value;
+console.log(passwd);
+doDecrypt(passwd, onError);
+}
+</script>
+</div>
       
     </div>
     
@@ -545,17 +565,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -643,22 +654,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k8s证书的三种方式"><span class="nav-number">1.</span> <span class="nav-text">k8s证书的三种方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装-cfssl-工具集"><span class="nav-number">2.</span> <span class="nav-text">安装 cfssl 工具集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建根证书-CA"><span class="nav-number">3.</span> <span class="nav-text">创建根证书 (CA)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">创建配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建证书签名请求文件"><span class="nav-number">3.2.</span> <span class="nav-text">创建证书签名请求文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成-CA-证书和私钥"><span class="nav-number">3.3.</span> <span class="nav-text">生成 CA 证书和私钥</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分发证书文件"><span class="nav-number">4.</span> <span class="nav-text">分发证书文件</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
