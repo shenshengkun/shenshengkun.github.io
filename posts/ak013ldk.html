@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="摘要Helm这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了kubernetes环境，但是每个微服务也得维护一套yaml文件，而且每个环境下的配置文件也不太">
+<meta name="description" content="Something was encrypted, please enter password to read.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s1.14-helm安装">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/dkgg3h4f.html">
+<meta property="og:title" content="Kubelet资源预留">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/ak013ldk.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="摘要Helm这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了kubernetes环境，但是每个微服务也得维护一套yaml文件，而且每个环境下的配置文件也不太">
+<meta property="og:description" content="Something was encrypted, please enter password to read.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-23T01:41:04.364Z">
+<meta property="og:updated_time" content="2019-09-09T06:16:02.443Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k8s1.14-helm安装">
-<meta name="twitter:description" content="摘要Helm这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了kubernetes环境，但是每个微服务也得维护一套yaml文件，而且每个环境下的配置文件也不太">
+<meta name="twitter:title" content="Kubelet资源预留">
+<meta name="twitter:description" content="Something was encrypted, please enter password to read.">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/dkgg3h4f.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/ak013ldk.html">
 
 
 
 
 
-  <title>k8s1.14-helm安装 | 舒宇的博客</title>
+  <title>Kubelet资源预留 | 舒宇的博客</title>
   
 
 
@@ -292,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dkgg3h4f.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/ak013ldk.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">k8s1.14-helm安装</h1>
+          <h1 class="post-title" itemprop="name headline">Kubelet资源预留</h1>
         
 
         <div class="post-meta">
@@ -321,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-17T18:20:01+08:00">
-                2019-06-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-06T13:53:01+08:00">
+                2019-08-06
               </time>
             
 
@@ -386,59 +386,19 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p><code>Helm</code>这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了<code>kubernetes</code>环境，但是每个微服务也得维护一套<code>yaml</code>文件，而且每个环境下的配置文件也不太一样，部署一套新的环境成本是真的很高。如果我们能使用类似于<code>yum</code>的工具来安装我们的应用的话是不是就很爽歪歪了啊？<code>Helm</code>就相当于<code>kubernetes</code>环境下的<code>yum</code>包管理工具。 </p>
-<h1 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h1><p>做为 Kubernetes 的一个包管理工具，<code>Helm</code>具有如下功能：</p>
-<ul>
-<li>创建新的 chart</li>
-<li>chart 打包成 tgz 格式</li>
-<li>上传 chart 到 chart 仓库或从仓库中下载 chart</li>
-<li>在<code>Kubernetes</code>集群中安装或卸载 chart</li>
-<li>管理用<code>Helm</code>安装的 chart 的发布周期</li>
-</ul>
-<h1 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h1><p>Helm 有三个重要概念：</p>
-<ul>
-<li>chart：包含了创建<code>Kubernetes</code>的一个应用实例的必要信息</li>
-<li>config：包含了应用发布配置信息</li>
-<li>release：是一个 chart 及其配置的一个运行实例</li>
-</ul>
-<h1 id="Helm组件"><a href="#Helm组件" class="headerlink" title="Helm组件"></a>Helm组件</h1><p>Helm 有以下两个组成部分：</p>
-<p><code>Helm Client</code> 是用户命令行工具，其主要负责如下：</p>
-<ul>
-<li>本地 chart 开发</li>
-<li>仓库管理</li>
-<li>与 Tiller sever 交互</li>
-<li>发送预安装的 chart</li>
-<li>查询 release 信息</li>
-<li>要求升级或卸载已存在的 release</li>
-</ul>
-<p><code>Tiller Server</code>是一个部署在<code>Kubernetes</code>集群内部的 server，其与 Helm client、Kubernetes API server 进行交互。Tiller server 主要负责如下：</p>
-<ul>
-<li>监听来自 Helm client 的请求</li>
-<li>通过 chart 及其配置构建一次发布</li>
-<li>安装 chart 到<code>Kubernetes</code>集群，并跟踪随后的发布</li>
-<li>通过与<code>Kubernetes</code>交互升级或卸载 chart</li>
-<li>简单的说，client 管理 charts，而 server 管理发布 release</li>
-</ul>
-<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Chart Install 过程：</span><br><span class="line"></span><br><span class="line">Helm从指定的目录或者tgz文件中解析出Chart结构信息</span><br><span class="line">Helm将指定的Chart结构和Values信息通过gRPC传递给Tiller</span><br><span class="line">Tiller根据Chart和Values生成一个Release</span><br><span class="line">Tiller将Release发送给Kubernetes运行。</span><br><span class="line"></span><br><span class="line">Chart Update过程：</span><br><span class="line"></span><br><span class="line">Helm从指定的目录或者tgz文件中解析出Chart结构信息</span><br><span class="line">Helm将要更新的Release的名称和Chart结构，Values信息传递给Tiller</span><br><span class="line">Tiller生成Release并更新指定名称的Release的History</span><br><span class="line">Tiller将Release发送给Kubernetes运行</span><br></pre></td></tr></table></figure>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>我们可以在<a href="https://github.com/kubernetes/helm/releases" target="_blank" rel="noopener">Helm Realese</a>页面下载二进制文件，这里下载的2.14.1版本，解压后将可执行文件<code>helm</code>拷贝到<code>/usr/local/bin</code>目录下即可，这样<code>Helm</code>客户端就在这台机器上安装完成了。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.14.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts</span><br><span class="line"></span><br><span class="line">另外还需要在每个node节点安装yum install socat -y</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 helm]# helm version</span><br><span class="line">Client: &amp;version.Version&#123;SemVer:&quot;v2.14.1&quot;, GitCommit:&quot;5270352a09c7e8b6e8c9593002a73535276507c0&quot;, GitTreeState:&quot;clean&quot;&#125;</span><br><span class="line">Server: &amp;version.Version&#123;SemVer:&quot;v2.14.1&quot;, GitCommit:&quot;5270352a09c7e8b6e8c9593002a73535276507c0&quot;, GitTreeState:&quot;clean&quot;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">自Kubernetes 1.6版本开始，API Server启用了RBAC授权。而目前的Tiller部署没有定义授权的ServiceAccount，这会导致访问API Server时被拒绝。我们可以采用如下方法，明确为Tiller部署添加授权。</span><br><span class="line"></span><br><span class="line">kubectl create serviceaccount --namespace kube-system tiller</span><br><span class="line">kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller</span><br><span class="line">kubectl patch deploy --namespace kube-system tiller-deploy -p &apos;&#123;&quot;spec&quot;:&#123;&quot;template&quot;:&#123;&quot;spec&quot;:&#123;&quot;serviceAccount&quot;:&quot;tiller&quot;&#125;&#125;&#125;&#125;&apos;</span><br><span class="line">kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default</span><br></pre></td></tr></table></figure>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>我们现在了尝试创建一个 Chart： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 helm]# helm create hello-helm</span><br><span class="line">Creating hello-helm</span><br><span class="line">[root@node1 helm]# ls</span><br><span class="line">hello-helm  helm-v2.14.1-linux-amd64.tar.gz  linux-amd64</span><br><span class="line">[root@node1 helm]# helm install ./hello-helm</span><br><span class="line">NAME:   virulent-wolverine</span><br><span class="line">LAST DEPLOYED: Mon Jun 17 10:56:39 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/Deployment</span><br><span class="line">NAME                           READY  UP-TO-DATE  AVAILABLE  AGE</span><br><span class="line">virulent-wolverine-hello-helm  0/1    0           0          1s</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                                            READY  STATUS             RESTARTS  AGE</span><br><span class="line">virulent-wolverine-hello-helm-6f54d6f866-d5t7v  0/1    ContainerCreating  0         1s</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                           TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)  AGE</span><br><span class="line">virulent-wolverine-hello-helm  ClusterIP  10.254.123.130  &lt;none&gt;       80/TCP   1s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">1. Get the application URL by running these commands:</span><br><span class="line">  export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=hello-helm,app.kubernetes.io/instance=virulent-wolverine&quot; -o jsonpath=&quot;&#123;.items[0].metadata.name&#125;&quot;)</span><br><span class="line">  echo &quot;Visit http://127.0.0.1:8080 to use your application&quot;</span><br><span class="line">  kubectl port-forward $POD_NAME 8080:80</span><br></pre></td></tr></table></figure>
-<p>然后我们根据提示执行下面的命令： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export POD_NAME=$(kubectl get pods --namespace default -l &quot;app.kubernetes.io/name=hello-helm,app.kubernetes.io/instance=virulent-wolverine&quot; -o jsonpath=&quot;&#123;.items[0].metadata.name&#125;&quot;)</span><br><span class="line">kubectl port-forward $POD_NAME 8080:80</span><br></pre></td></tr></table></figure>
-<p>访问：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# curl 127.0.0.1:8080</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    body &#123;</span><br><span class="line">        width: 35em;</span><br><span class="line">        margin: 0 auto;</span><br><span class="line">        font-family: Tahoma, Verdana, Arial, sans-serif;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;If you see this page, the nginx web server is successfully installed and</span><br><span class="line">working. Further configuration is required.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;For online documentation and support please refer to</span><br><span class="line">&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;</span><br><span class="line">Commercial support is available at</span><br><span class="line">&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>查看<code>release</code>： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# helm list</span><br><span class="line">NAME                    REVISION        UPDATED                         STATUS          CHART                   APP VERSION     NAMESPACE</span><br><span class="line">virulent-wolverine      1               Mon Jun 17 10:56:39 2019        DEPLOYED        hello-helm-0.1.0        1.0             default</span><br></pre></td></tr></table></figure>
-<p>打包<code>chart</code>： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm package hello-helm</span><br></pre></td></tr></table></figure>
-<p>删除：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# helm delete virulent-wolverine</span><br><span class="line">release &quot;virulent-wolverine&quot; deleted</span><br><span class="line">[root@node1 ~]# helm list</span><br><span class="line">[root@node1 ~]# helm list --all</span><br><span class="line">NAME                    REVISION        UPDATED                         STATUS  CHART                   APP VERSION     NAMESPACE</span><br><span class="line">virulent-wolverine      1               Mon Jun 17 10:56:39 2019        DELETED hello-helm-0.1.0        1.0             default</span><br></pre></td></tr></table></figure>
-<p>彻底删除：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# helm delete virulent-wolverine --purge</span><br><span class="line">release &quot;virulent-wolverine&quot; deleted</span><br><span class="line">[root@node1 ~]# helm list --all</span><br><span class="line">[root@node1 ~]#</span><br></pre></td></tr></table></figure>
-
+        <div id="hbe-security">
+  <div class="hbe-input-container">
+  <input type="password" class="hbe-form-control" id="pass" placeholder="Welcome to my blog, please enter password to read.">
+    <label for="pass">Welcome to my blog, please enter password to read.</label>
+    <div class="bottom-line"></div>
+  </div>
+</div>
+<div id="decryptionError" style="display: none;">Incorrect Password!</div>
+<div id="noContentError" style="display: none;">No content to display!</div>
+<div id="encrypt-blog" style="display:none">
+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
+</div>
+<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
       
     </div>
     
@@ -487,7 +447,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/dkgg3h4f.html" title="k8s1.14-helm安装">https://shenshengkun.github.io/posts/dkgg3h4f.html</a>
+    <a href="https://shenshengkun.github.io/posts/ak013ldk.html" title="Kubelet资源预留">https://shenshengkun.github.io/posts/ak013ldk.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -509,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/dl74fla1.html" rel="next" title="k8s-apiserver工作原理">
-                <i class="fa fa-chevron-left"></i> k8s-apiserver工作原理
+              <a href="/posts/ladj543a8.html" rel="next" title="Kubernetes垃圾回收机制">
+                <i class="fa fa-chevron-left"></i> Kubernetes垃圾回收机制
               </a>
             
           </div>
@@ -519,8 +479,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/5a4fga4h.html" rel="prev" title="istio架构与技术">
-                istio架构与技术 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/dd6348aa.html" rel="prev" title="k8s设置LXCFS">
+                k8s设置LXCFS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -578,17 +538,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -676,22 +627,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用途"><span class="nav-number">2.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要概念"><span class="nav-number">3.</span> <span class="nav-text">重要概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Helm组件"><span class="nav-number">4.</span> <span class="nav-text">Helm组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构"><span class="nav-number">5.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">6.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">7.</span> <span class="nav-text">使用</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
