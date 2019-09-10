@@ -81,17 +81,21 @@
 
 
 
-<meta name="description" content="摘要本文记录一些python中os和sys模块的常用方法 os1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889">
+<meta name="description" content="介绍一个很有意思的小工具叫 kubeman，野心倒是不小，励志成为 kubectl 的替代品，用于实时监控和管理 kubernetes 集群，还可以调试与 Istio 相关的问题。 如果只使用 kubectl，当网格中的服务出现问题时，可能需要运行很多命令，而且要交叉引用来自多个命令的输出信息，这就会导致问题分析的过程很复杂。kubeman 将这些交叉引用和相关信息分析的复杂逻辑隐藏起来，只暴露一">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python模块-os、sys">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/5d02f982.html">
+<meta property="og:title" content="kubectl的替代工具kubeman">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/al019dlf.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="摘要本文记录一些python中os和sys模块的常用方法 os1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889">
+<meta property="og:description" content="介绍一个很有意思的小工具叫 kubeman，野心倒是不小，励志成为 kubectl 的替代品，用于实时监控和管理 kubernetes 集群，还可以调试与 Istio 相关的问题。 如果只使用 kubectl，当网格中的服务出现问题时，可能需要运行很多命令，而且要交叉引用来自多个命令的输出信息，这就会导致问题分析的过程很复杂。kubeman 将这些交叉引用和相关信息分析的复杂逻辑隐藏起来，只暴露一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-30T02:29:19.190Z">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_kubeman1.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_kubeman2.png">
+<meta property="og:image" content="https://shenshengkun.github.io/images/k8s_kubeman3.png">
+<meta property="og:updated_time" content="2019-09-10T02:01:46.079Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python模块-os、sys">
-<meta name="twitter:description" content="摘要本文记录一些python中os和sys模块的常用方法 os1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889">
+<meta name="twitter:title" content="kubectl的替代工具kubeman">
+<meta name="twitter:description" content="介绍一个很有意思的小工具叫 kubeman，野心倒是不小，励志成为 kubectl 的替代品，用于实时监控和管理 kubernetes 集群，还可以调试与 Istio 相关的问题。 如果只使用 kubectl，当网格中的服务出现问题时，可能需要运行很多命令，而且要交叉引用来自多个命令的输出信息，这就会导致问题分析的过程很复杂。kubeman 将这些交叉引用和相关信息分析的复杂逻辑隐藏起来，只暴露一">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/k8s_kubeman1.png">
 
 
 
@@ -121,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/5d02f982.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/al019dlf.html">
 
 
 
 
 
-  <title>python模块-os、sys | 舒宇的博客</title>
+  <title>kubectl的替代工具kubeman | 舒宇的博客</title>
   
 
 
@@ -292,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/5d02f982.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/al019dlf.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -309,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python模块-os、sys</h1>
+          <h1 class="post-title" itemprop="name headline">kubectl的替代工具kubeman</h1>
         
 
         <div class="post-meta">
@@ -321,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-15T07:24:01+08:00">
-                2018-02-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-10T10:10:01+08:00">
+                2019-09-10
               </time>
             
 
@@ -344,8 +348,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
                   </a>
                 </span>
 
@@ -386,14 +390,15 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文记录一些python中os和sys模块的常用方法</p>
-<h1 id="os"><a href="#os" class="headerlink" title="os"></a>os</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">## dir</span><br><span class="line">os.getcwd()</span><br><span class="line">#获取当前工作目录，即当前python脚本工作的目录路径</span><br><span class="line">os.chdir(&quot;dirname&quot;)</span><br><span class="line">#改变当前脚本工作目录；相当于shell下cd</span><br><span class="line">os.curdir</span><br><span class="line">#返回当前目录: (&apos;.&apos;)</span><br><span class="line">os.pardir</span><br><span class="line">#获取当前目录的父目录字符串名：(&apos;..&apos;)</span><br><span class="line">os.makedirs(&apos;dirname1/dirname2&apos;)</span><br><span class="line">#可生成多层递归目录</span><br><span class="line">os.removedirs(&apos;dirname1&apos;)</span><br><span class="line">#若目录为空，则删除，并递归到上一级目录，如若也为空，则删除，依此类推</span><br><span class="line">os.mkdir(&apos;dirname&apos;)</span><br><span class="line">#生成单级目录；相当于shell中mkdir dirname</span><br><span class="line">os.rmdir(&apos;dirname&apos;)</span><br><span class="line">#删除单级空目录，若目录不为空则无法删除，报错；相当于shell中rmdir dirname</span><br><span class="line">os.listdir(&apos;dirname&apos;)</span><br><span class="line">#列出指定目录下的所有文件和子目录，包括隐藏文件，并以列表方式打印</span><br><span class="line"></span><br><span class="line">## file</span><br><span class="line">os.remove()</span><br><span class="line">#删除一个文件</span><br><span class="line">os.rename(&quot;oldname&quot;,&quot;newname&quot;)</span><br><span class="line">#重命名文件/目录</span><br><span class="line">os.stat(&apos;path/filename&apos;)</span><br><span class="line">#获取文件/目录信息</span><br><span class="line"></span><br><span class="line">## other</span><br><span class="line">os.sep</span><br><span class="line">#输出操作系统特定的路径分隔符，win下为&quot;\\&quot;,Linux下为&quot;/&quot;</span><br><span class="line">os.linesep</span><br><span class="line">#输出当前平台使用的行终止符，win下为&quot;\t\n&quot;,Linux下为&quot;\n&quot;</span><br><span class="line">os.pathsep</span><br><span class="line">#输出用于分割文件路径的字符串</span><br><span class="line">os.name</span><br><span class="line">#输出字符串指示当前使用平台。win-&gt;&apos;nt&apos;; Linux-&gt;&apos;posix&apos;</span><br><span class="line">os.system(&quot;bash command&quot;)</span><br><span class="line">#运行shell命令，直接显示</span><br><span class="line">os.environ</span><br><span class="line">#获取系统环境变量</span><br><span class="line"></span><br><span class="line">## os.path</span><br><span class="line">os.path.isfile(path)</span><br><span class="line">#如果path是一个存在的文件，返回True。否则返回False</span><br><span class="line">os.path.isdir(path)</span><br><span class="line">#如果path是一个存在的目录，则返回True。否则返回False</span><br><span class="line">os.path.abspath(path)</span><br><span class="line">#返回绝对路径</span><br><span class="line">os.path.basename(path)</span><br><span class="line"># 返回path最后的文件名。如何path以／或\结尾，那么就会返回空值。即os.path.split(path)的第二个元素</span><br><span class="line">os.path.commonprefix(list)</span><br><span class="line">#返回list(多个路径)中，所有path共有的最长的路径。</span><br><span class="line">os.path.dirname(path)</span><br><span class="line">#返回path的目录。其实就是os.path.split(path)的第一个元素</span><br><span class="line">os.path.exists(path)</span><br><span class="line">#如果path存在，返回True；如果path不存在，返回False</span><br><span class="line">os.path.lexists</span><br><span class="line">#路径存在则返回True,路径损坏也返回True</span><br><span class="line">os.path.expanduser(path)</span><br><span class="line">#把path中包含的&quot;~&quot;和&quot;~user&quot;转换成用户目录</span><br><span class="line">os.path.expandvars(path)</span><br><span class="line">#根据环境变量的值替换path中包含的”$name”和”$&#123;name&#125;”</span><br><span class="line">os.path.getatime(path)</span><br><span class="line">#返回path所指向的文件或者目录的最后存取时间</span><br><span class="line">os.path.getmtime(path)</span><br><span class="line">#返回path所指向的文件或者目录的最后修改时间</span><br><span class="line">os.path.getctime(path)</span><br><span class="line">#返回path的大小</span><br><span class="line">os.path.getsize(path)</span><br><span class="line">#返回文件大小，如果文件不存在就返回错误</span><br><span class="line">os.path.isabs(path)</span><br><span class="line">#判断是否为绝对路径</span><br><span class="line">os.path.islink(path)</span><br><span class="line">#判断路径是否为链接</span><br><span class="line">os.path.ismount(path)</span><br><span class="line">#判断路径是否为挂载点（）</span><br><span class="line">os.path.join(path1[, path2[, ...]])</span><br><span class="line">#把目录和文件名合成一个路径</span><br><span class="line">os.path.normcase(path)</span><br><span class="line">#转换path的大小写和斜杠</span><br><span class="line">os.path.normpath(path)</span><br><span class="line">#规范path字符串形式</span><br><span class="line">os.path.realpath(path)</span><br><span class="line">#返回path的真实路径</span><br><span class="line">os.path.relpath(path[, start])</span><br><span class="line">#从start开始计算相对路径</span><br><span class="line">os.path.samefile(path1, path2)</span><br><span class="line">#判断目录或文件是否相同</span><br><span class="line">os.path.sameopenfile(fp1, fp2)</span><br><span class="line">#判断fp1和fp2是否指向同一文件</span><br><span class="line">os.path.samestat(stat1, stat2)</span><br><span class="line">#判断stat tuple stat1和stat2是否指向同一个文件</span><br><span class="line">os.path.split(path)</span><br><span class="line">#把路径分割成dirname和basename，返回一个元组</span><br><span class="line">os.path.splitdrive(path)</span><br><span class="line">#一般用在windows下，返回驱动器名和路径组成的元组</span><br><span class="line">os.path.splitext(path)</span><br><span class="line">#分割路径，返回路径名和文件扩展名的元组</span><br><span class="line">os.path.splitunc(path)</span><br><span class="line">#把路径分割为加载点与文件</span><br><span class="line">os.path.walk(path, visit, arg)</span><br><span class="line">#遍历path，进入每个目录都调用visit函数，visit函数必须有</span><br><span class="line">3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有</span><br><span class="line">文件名，args则为walk的第三个参数</span><br><span class="line">os.path.supports_unicode_filenames</span><br><span class="line">#设置是否支持unicode路径名</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">在Linux和Mac平台上，该函数会原样返回path，在windows平台上会将路径中所有字符转换为小写，并将所有斜杠转换为饭斜杠。</span><br><span class="line">&gt;&gt;&gt; os.path.normcase(&apos;c:/windows\\system32\\&apos;)   </span><br><span class="line">&apos;c:\\windows\\system32\\&apos;   </span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">规范化路径，如..和/</span><br><span class="line">&gt;&gt;&gt; os.path.normpath(&apos;c://windows\\System32\\../Temp/&apos;)   </span><br><span class="line">&apos;c:\\windows\\Temp&apos;   </span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; a=&apos;/Users/jieli/test1/\\\a1/\\\\aa.py/../..&apos;</span><br><span class="line">&gt;&gt;&gt; print(os.path.normpath(a))</span><br><span class="line">/Users/jieli/test1</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">简单使用</span><br><span class="line">import os</span><br><span class="line">cur_path = os.path.dirname(os.path.realpath(__file__)) #当前路径</span><br><span class="line">print(cur_path)</span><br><span class="line">filename = cur_path + &quot;/scripts.log&quot;  #带上文件路径</span><br><span class="line">print(filename)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">os路径处理</span><br><span class="line">#方式一：推荐使用</span><br><span class="line">import os</span><br><span class="line">#具体应用</span><br><span class="line">import os,sys</span><br><span class="line">possible_topdir = os.path.normpath(os.path.join(</span><br><span class="line">    os.path.abspath(__file__),</span><br><span class="line">    os.pardir, #上一级</span><br><span class="line">    os.pardir,</span><br><span class="line">    os.pardir</span><br><span class="line">))</span><br><span class="line">sys.path.insert(0,possible_topdir)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#方式二：不推荐使用</span><br><span class="line">os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))</span><br></pre></td></tr></table></figure>
-<h1 id="sys"><a href="#sys" class="headerlink" title="sys"></a>sys</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys.argv           命令行参数List，第一个元素是程序本身路径</span><br><span class="line">sys.exit(n)        退出程序，正常退出时exit(0)</span><br><span class="line">sys.version        获取Python解释程序的版本信息</span><br><span class="line">sys.maxint         最大的Int值</span><br><span class="line">sys.path           返回模块的搜索路径，初始化时使用PYTHONPATH环境变量的值</span><br><span class="line">sys.platform       返回操作系统平台名称</span><br><span class="line">sys.stdout.write(&apos;please:&apos;)</span><br><span class="line">val = sys.stdin.readline()[:-1]</span><br></pre></td></tr></table></figure>
-<p>模拟打印进度条</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">#=========知识储备==========</span><br><span class="line">#进度条的效果</span><br><span class="line">[#             ]</span><br><span class="line">[##            ]</span><br><span class="line">[###           ]</span><br><span class="line">[####          ]</span><br><span class="line"></span><br><span class="line">#指定宽度</span><br><span class="line">print(&apos;[%-15s]&apos; %&apos;#&apos;)</span><br><span class="line">print(&apos;[%-15s]&apos; %&apos;##&apos;)</span><br><span class="line">print(&apos;[%-15s]&apos; %&apos;###&apos;)</span><br><span class="line">print(&apos;[%-15s]&apos; %&apos;####&apos;)</span><br><span class="line"></span><br><span class="line">#打印%</span><br><span class="line">print(&apos;%s%%&apos; %(100)) #第二个%号代表取消第一个%的特殊意义</span><br><span class="line"></span><br><span class="line">#可传参来控制宽度</span><br><span class="line">print(&apos;[%%-%ds]&apos; %50) #[%-50s]</span><br><span class="line">print((&apos;[%%-%ds]&apos; %50) %&apos;#&apos;)</span><br><span class="line">print((&apos;[%%-%ds]&apos; %50) %&apos;##&apos;)</span><br><span class="line">print((&apos;[%%-%ds]&apos; %50) %&apos;###&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#=========实现打印进度条函数==========</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def progress(percent,width=50):</span><br><span class="line">    if percent &gt;= 1:</span><br><span class="line">        percent=1</span><br><span class="line">    show_str=(&apos;[%%-%ds]&apos; %width) %(int(width*percent)*&apos;#&apos;)</span><br><span class="line">    print(&apos;\r%s %d%%&apos; %(show_str,int(100*percent)),file=sys.stdout,flush=True,end=&apos;&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#=========应用==========</span><br><span class="line">data_size=1025</span><br><span class="line">recv_size=0</span><br><span class="line">while recv_size &lt; data_size:</span><br><span class="line">    time.sleep(0.1) #模拟数据的传输延迟</span><br><span class="line">    recv_size+=1024 #每次收1024</span><br><span class="line"></span><br><span class="line">    percent=recv_size/data_size #接收的比例</span><br><span class="line">    progress(percent,width=70) #进度条的宽度70</span><br></pre></td></tr></table></figure>
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>一个很有意思的小工具叫 <code>kubeman</code>，野心倒是不小，励志成为 <code>kubectl</code> 的替代品，用于实时监控和管理 kubernetes 集群，还可以调试与 Istio 相关的问题。</p>
+<p>如果只使用 kubectl，当网格中的服务出现问题时，可能需要运行很多命令，而且要交叉引用来自多个命令的输出信息，这就会导致问题分析的过程很复杂。kubeman 将这些交叉引用和相关信息分析的复杂逻辑隐藏起来，只暴露一个 UI 界面，针对每一种资源对象封装了一些常用的操作项，这样可以简化很多操作流程。</p>
+<h1 id="windows和mac安装"><a href="#windows和mac安装" class="headerlink" title="windows和mac安装"></a>windows和mac安装</h1><p>windows和mac安装很简单，到 <a href="https://mp.weixin.qq.com/s/-oVcpj2WvLFWhVTC394now" target="_blank" rel="noopener">release</a> 页面下载相应的二进制，然后直接运行就好了 。</p>
+<p>要是windows想执行linux的k8s集群，把.kube目录拷贝到/user/administrator下面就可以</p>
+<h1 id="linux安装"><a href="#linux安装" class="headerlink" title="linux安装"></a>linux安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">下载kubeman.0.5.0.appimage</span><br><span class="line">chmod a+x *.appimage</span><br><span class="line">wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br><span class="line">rpm -ivh epel-release-latest-7.noarch.rpm</span><br><span class="line">yum --enablerepo=epel -y install fuse-sshfs</span><br><span class="line">user=&quot;$(whoami)&quot;</span><br><span class="line">usermod -a -G fuse &quot;$user&quot;</span><br><span class="line">yum provides */libgtk-3.so.0</span><br><span class="line">yum -y install /usr/lib64/libgtk-3.so.0 /usr/lib/libgtk-3.so.0</span><br><span class="line">./kubeman.0.5.0.appimage  --appimage-extract</span><br><span class="line"></span><br><span class="line">启动的话，如果linux没开display，就需要用xmanager执行就可以</span><br><span class="line">命令是：</span><br><span class="line">./kubeman.0.5.0.appimage</span><br></pre></td></tr></table></figure>
+<h1 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h1><h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><p><img src="https://shenshengkun.github.io/images/k8s_kubeman1.png" alt=""></p>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p><img src="https://shenshengkun.github.io/images/k8s_kubeman2.png" alt=""></p>
+<h2 id="测服务可达"><a href="#测服务可达" class="headerlink" title="测服务可达"></a>测服务可达</h2><p><img src="https://shenshengkun.github.io/images/k8s_kubeman3.png" alt=""></p>
+
       
     </div>
     
@@ -442,7 +447,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/5d02f982.html" title="python模块-os、sys">https://shenshengkun.github.io/posts/5d02f982.html</a>
+    <a href="https://shenshengkun.github.io/posts/al019dlf.html" title="kubectl的替代工具kubeman">https://shenshengkun.github.io/posts/al019dlf.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -464,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/8d289766.html" rel="next" title="python模块-logging">
-                <i class="fa fa-chevron-left"></i> python模块-logging
+              <a href="/posts/df013ja9.html" rel="next" title="harbor修改了docker默认网卡失效原因">
+                <i class="fa fa-chevron-left"></i> harbor修改了docker默认网卡失效原因
               </a>
             
           </div>
@@ -473,10 +478,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/1901393b.html" rel="prev" title="python模块-random">
-                python模块-random <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -641,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#os"><span class="nav-number">2.</span> <span class="nav-text">os</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sys"><span class="nav-number">3.</span> <span class="nav-text">sys</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#windows和mac安装"><span class="nav-number">2.</span> <span class="nav-text">windows和mac安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#linux安装"><span class="nav-number">3.</span> <span class="nav-text">linux安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#效果"><span class="nav-number">4.</span> <span class="nav-text">效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令"><span class="nav-number">4.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志"><span class="nav-number">4.2.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测服务可达"><span class="nav-number">4.3.</span> <span class="nav-text">测服务可达</span></a></li></ol></li></ol></div>
             
 
           </div>
