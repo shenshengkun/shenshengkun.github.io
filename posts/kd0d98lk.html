@@ -81,19 +81,17 @@
 
 
 
-<meta name="description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
+<meta name="description" content="在使用docker容器的时候，应该了解“PID1僵尸进程reap”问题。如果使用的时候不加注意，可能会导致出现一些意想不到的问题。  问题僵尸进程僵尸进程是指完成执行（通过exit系统调用，或运行时发生致命错误或收到终止信号所致），但在操作系统进程表中仍然有一个表项，处于“终止状态”的进程。这发生于子进程需要保留表项以允许其父进程读取子进程的exit status：一旦退出态通过wait系统调用读">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ceph的pg算法">
-<meta property="og:url" content="https://shenshengkun.github.io/posts/fd22jkk6.html">
+<meta property="og:title" content="docker打基础镜像处理僵尸进程">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/kd0d98lk.html">
 <meta property="og:site_name" content="舒宇的博客">
-<meta property="og:description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
+<meta property="og:description" content="在使用docker容器的时候，应该了解“PID1僵尸进程reap”问题。如果使用的时候不加注意，可能会导致出现一些意想不到的问题。  问题僵尸进程僵尸进程是指完成执行（通过exit系统调用，或运行时发生致命错误或收到终止信号所致），但在操作系统进程表中仍然有一个表项，处于“终止状态”的进程。这发生于子进程需要保留表项以允许其父进程读取子进程的exit status：一旦退出态通过wait系统调用读">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://shenshengkun.github.io/images/pg1.png">
-<meta property="og:updated_time" content="2019-07-12T09:49:15.127Z">
+<meta property="og:updated_time" content="2019-09-11T07:07:21.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ceph的pg算法">
-<meta name="twitter:description" content="PG介绍PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的">
-<meta name="twitter:image" content="https://shenshengkun.github.io/images/pg1.png">
+<meta name="twitter:title" content="docker打基础镜像处理僵尸进程">
+<meta name="twitter:description" content="在使用docker容器的时候，应该了解“PID1僵尸进程reap”问题。如果使用的时候不加注意，可能会导致出现一些意想不到的问题。  问题僵尸进程僵尸进程是指完成执行（通过exit系统调用，或运行时发生致命错误或收到终止信号所致），但在操作系统进程表中仍然有一个表项，处于“终止状态”的进程。这发生于子进程需要保留表项以允许其父进程读取子进程的exit status：一旦退出态通过wait系统调用读">
 
 
 
@@ -123,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://shenshengkun.github.io/posts/fd22jkk6.html">
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/kd0d98lk.html">
 
 
 
 
 
-  <title>ceph的pg算法 | 舒宇的博客</title>
+  <title>docker打基础镜像处理僵尸进程 | 舒宇的博客</title>
   
 
 
@@ -294,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/fd22jkk6.html">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/kd0d98lk.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shu Yu">
@@ -311,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ceph的pg算法</h1>
+          <h1 class="post-title" itemprop="name headline">docker打基础镜像处理僵尸进程</h1>
         
 
         <div class="post-meta">
@@ -323,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-11T17:10:01+08:00">
-                2019-07-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-11T14:56:50+08:00">
+                2019-09-11
               </time>
             
 
@@ -346,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/ceph/" itemprop="url" rel="index">
-                    <span itemprop="name">ceph</span>
+                  <a href="/categories/虚拟化/" itemprop="url" rel="index">
+                    <span itemprop="name">虚拟化</span>
                   </a>
                 </span>
 
@@ -388,26 +386,34 @@
       
 
       
-        <h1 id="PG介绍"><a href="#PG介绍" class="headerlink" title="PG介绍"></a>PG介绍</h1><p>PG, Placement Groups。CRUSH先将数据分解成一组对象，然后根据对象名称、复制级别和系统中的PG数等信息执行散列操作，再将结果生成PG ID。可以将PG看做一个逻辑容器，这个容器包含多个对象，同时这个逻辑对象映射之多个OSD上。<br>如果没有PG，在成千上万个OSD上管理和跟踪数百万计的对象的复制和传播是相当困难的。没有PG这一层，管理海量的对象所消耗的计算资源也是不可想象的。建议每个OSD上配置50~100个PG。</p>
-<h1 id="计算PG数"><a href="#计算PG数" class="headerlink" title="计算PG数"></a>计算PG数</h1><p>官方推荐如下：</p>
-<p><img src="https://shenshengkun.github.io/images/pg1.png" alt=""></p>
-<p>Ceph集群中的PG总数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PG总数 = (OSD总数 * 100) / 最大副本数</span><br></pre></td></tr></table></figure>
-<p>结果必须舍入到最接近的2的N次方幂的值。</p>
-<p>Ceph集群中每个pool中的PG总数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">存储池PG总数 = (OSD总数 * 100 / 最大副本数) / 池数</span><br></pre></td></tr></table></figure>
-<p>平衡每个存储池中的PG数和每个OSD中的PG数对于降低OSD的方差、避免速度缓慢的恢复再平衡进程是相当重要的。</p>
-<h1 id="修改PG和PGP"><a href="#修改PG和PGP" class="headerlink" title="修改PG和PGP"></a>修改PG和PGP</h1><p>PGP是为了实现定位而设置的PG，它的值应该和PG的总数(即pg_num)保持一致。对于Ceph的一个pool而言，如果增加pg_num，还应该调整pgp_num为同样的值，这样集群才可以开始再平衡。<br>参数pg_num定义了PG的数量，PG映射至OSD。当任意pool的PG数增加时，PG依然保持和源OSD的映射。直至目前，Ceph还未开始再平衡。此时，增加pgp_num的值，PG才开始从源OSD迁移至其他的OSD，正式开始再平衡。PGP，Placement Groups of Placement。</p>
-<p>获取现有的PG数和PGP数值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool get data pg_num</span><br><span class="line"></span><br><span class="line">ceph osd pool get data pgp_num</span><br></pre></td></tr></table></figure>
-<p>检查存储池的副本数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd dump|grep -i size</span><br></pre></td></tr></table></figure>
-<p>计算pg_num和pgp_num</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># pg_num calculation</span><br><span class="line">pg_num = (num_osds * 100) / num_copies</span><br><span class="line">num_up = pow(2, int(log(pg_num,2) + 0.5))</span><br><span class="line">num_down = pow(2, int(log(pg_num,2)))</span><br><span class="line">if abs(pg_num - num_up) &lt;= abs(pg_num - num_down):</span><br><span class="line">    pg_num = num_up</span><br><span class="line">else:</span><br><span class="line">    pg_num = num_down</span><br><span class="line">pgp_num = pg_num</span><br></pre></td></tr></table></figure>
-<p>修改存储池的PG和PGP</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool set data pg_num </span><br><span class="line"></span><br><span class="line">ceph osd pool set data pgp_num</span><br></pre></td></tr></table></figure>
-<p>例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool ls</span><br><span class="line">ceph osd pool set .rgw.root pg_num 16</span><br><span class="line">ceph osd pool set .rgw.root pgp_num 16</span><br></pre></td></tr></table></figure>
+        <p>在使用docker容器的时候，应该了解“PID1僵尸进程reap”问题。如果使用的时候不加注意，可能会导致出现一些意想不到的问题。 </p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><h2 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h2><p>僵尸进程是指完成执行（通过<code>exit</code>系统调用，或运行时发生致命错误或收到终止信号所致），但在操作系统进程表中仍然有一个表项，处于“终止状态”的进程。这发生于子进程需要保留表项以允许其父进程读取子进程的exit status：一旦退出态通过<code>wait</code>系统调用读取，僵尸进程条目就从进程表中删除，这个过程被称为reap。正常情况下，进程直接被其父进程<code>wait</code>并由系统回收，进程长时间保持僵尸状态一般是错误的并导致资源泄漏。</p>
+<p>英语中的<em>zombie process</em>源自丧尸–不死之人，隐喻进程已死大但没有被reap。与正常进程不同，<code>kill</code>命令对僵尸进程无效。孤儿进程不同于僵尸进程，其父进程已经死掉，但孤儿进程仍能正常执行，并不会变为僵尸进程，因为<code>init</code>进程会收养并<code>wait</code>其退出。</p>
+<p>子进程死后，系统会发送SIGCHLD信号给父进程，父进程对其默认处理是忽略。如果想响应这个消息，父进程通常在SIGCHLD信号处理程序中，使用<code>wait</code>系统调用来响应子进程的终止。</p>
+<p>僵尸进程被reap后，其进程号与在进程表中的表项都可以被系统重用。但如果父进程没有调用<code>wait</code>，僵尸进程将保留进程表中的表项，导致资源泄漏。</p>
+<p>reap僵尸进程的方式是通过<code>kill</code>命令手工向其父进程发送SIGCHLD信号，如果其父进程仍然拒绝reap僵尸进程，则终止父进程，使得<code>init</code>进程收养僵尸进程。<code>init</code>进程周期执行<code>wait</code>系统调用reap其所收养的所有僵尸进程。</p>
+<p>为避免产生僵尸进程，实际应用中一般采取的方式是：</p>
+<ol>
+<li>将父进程中对SIGCHLD信号的处理函数设置SIG_IGN</li>
+<li>fork两次并杀死一级自进程，令二级子进程成为孤儿进程而被<code>init</code>所“收养”、清理</li>
+</ol>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>Tini是能想到的最简单的<code>init</code>。</p>
+<p>Tini一般在容器中运行，用于生成子进程，等待它推出，reap僵尸进程，并执行信号转发。</p>
+<p>在github上是这么介绍的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Why Tini?</span><br><span class="line">Using Tini has several benefits:</span><br><span class="line"></span><br><span class="line">It protects you from software that accidentally creates zombie processes, which can (over time!) starve your entire system for PIDs (and make it unusable).</span><br><span class="line">It ensures that the default signal handlers work for the software you run in your Docker image. For example, with Tini, SIGTERM properly terminates your process even if you didn&apos;t explicitly install a signal handler for it.</span><br><span class="line">It does so completely transparently! Docker images that work without Tini will work with Tini without any changes.</span><br></pre></td></tr></table></figure>
+<h1 id="docker打一个tomcat镜像"><a href="#docker打一个tomcat镜像" class="headerlink" title="docker打一个tomcat镜像"></a>docker打一个tomcat镜像</h1><h2 id="措施"><a href="#措施" class="headerlink" title="措施"></a>措施</h2><ul>
+<li>基于以上要求我们构建出一下镜像</li>
+<li>首先使用apline作为基础镜像足够小只有5M</li>
+<li>由于alpine自带支持中文的字符集，这里我们只需要将LANG设置为C.UTF-8即可完美的支持中文。</li>
+<li>国内软件源首选阿里云啦，顺道配置一下阿里云的镜像源，加速我们的镜像构建速度。</li>
+<li>配置UTC+8时区需要安装tzdata，安装完成之后配置一下即可。</li>
+<li>使用<a href="https://github.com/krallin/tini" target="_blank" rel="noopener">tini</a> 包装java进程。 </li>
+</ul>
+<h2 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h2><h3 id="tini的dockerfile"><a href="#tini的dockerfile" class="headerlink" title="tini的dockerfile"></a>tini的dockerfile</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine:3.8</span><br><span class="line">ENV LANG=C.UTF-8 \</span><br><span class="line">    JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk/jre \</span><br><span class="line">    PATH=$PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin \</span><br><span class="line">    TZ=Asia/Shanghai</span><br><span class="line">RUN echo &quot;&quot; &gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; echo &quot;https://mirrors.aliyun.com/alpine/v3.8/main/&quot; &gt;&gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; echo &quot;https://mirrors.aliyun.com/alpine/v3.8/community/&quot; &gt;&gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; apk update &amp;&amp; apk add --no-cache openjdk8-jre openjdk8 ca-certificates tzdata tini \</span><br><span class="line">&amp;&amp; apk add --update procps \</span><br><span class="line">&amp;&amp; rm -rf /var/cache/apk/* \</span><br><span class="line">&amp;&amp; ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &amp;&amp; echo $TZ &gt; /etc/timezone</span><br><span class="line">ENTRYPOINT [&quot;tini&quot;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="tomcat的dockerfile"><a href="#tomcat的dockerfile" class="headerlink" title="tomcat的dockerfile"></a>tomcat的dockerfile</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FROM sy:tini</span><br><span class="line"></span><br><span class="line">ADD apache-tomcat-8.5.43.tar.gz /opt/</span><br><span class="line"></span><br><span class="line">CMD [&quot;/sbin/tini&quot;, &quot;--&quot;,&quot;/opt/apache-tomcat-8.5.43/bin/catalina.sh&quot;,&quot;run&quot;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t sy-tomcat:tini -f Dockerfile .</span><br></pre></td></tr></table></figure>
+<p>这样打完的镜像不仅小，也解决了僵尸进程，包括jmap等命令用不了的问题</p>
 
       
     </div>
@@ -457,7 +463,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://shenshengkun.github.io/posts/fd22jkk6.html" title="ceph的pg算法">https://shenshengkun.github.io/posts/fd22jkk6.html</a>
+    <a href="https://shenshengkun.github.io/posts/kd0d98lk.html" title="docker打基础镜像处理僵尸进程">https://shenshengkun.github.io/posts/kd0d98lk.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -479,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/dsl5646k.html" rel="next" title="ceph组件的状态">
-                <i class="fa fa-chevron-left"></i> ceph组件的状态
+              <a href="/posts/al019dlf.html" rel="next" title="kubectl的替代工具kubeman">
+                <i class="fa fa-chevron-left"></i> kubectl的替代工具kubeman
               </a>
             
           </div>
@@ -488,10 +494,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/78fhjj54.html" rel="prev" title="ceph-luminous-bluestore">
-                ceph-luminous-bluestore <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -656,7 +658,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PG介绍"><span class="nav-number">1.</span> <span class="nav-text">PG介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算PG数"><span class="nav-number">2.</span> <span class="nav-text">计算PG数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改PG和PGP"><span class="nav-number">3.</span> <span class="nav-text">修改PG和PGP</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#僵尸进程"><span class="nav-number">1.1.</span> <span class="nav-text">僵尸进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决办法"><span class="nav-number">1.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#docker打一个tomcat镜像"><span class="nav-number">2.</span> <span class="nav-text">docker打一个tomcat镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#措施"><span class="nav-number">2.1.</span> <span class="nav-text">措施</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dockerfile"><span class="nav-number">2.2.</span> <span class="nav-text">dockerfile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tini的dockerfile"><span class="nav-number">2.2.1.</span> <span class="nav-text">tini的dockerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat的dockerfile"><span class="nav-number">2.2.2.</span> <span class="nav-text">tomcat的dockerfile</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
