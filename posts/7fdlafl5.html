@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="简述最近在给k8s的一些java应用，包括lua项目，做火焰图的安装，后经仔细研究发现，火焰图安装需要打开docker的安全限制，由于我的环境基本都是在k8s中不熟的，所以找了一些文档，总结了下pod的安全策略。 PSPPod Security Policy, 是用于检查 Pod 安全的对象。他可以限制 Pod 是否可以使用特权模式，挂载主机目录等等。 限制范围          是否特权模式 R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pod的安全策略">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/7fdlafl5.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="简述最近在给k8s的一些java应用，包括lua项目，做火焰图的安装，后经仔细研究发现，火焰图安装需要打开docker的安全限制，由于我的环境基本都是在k8s中不熟的，所以找了一些文档，总结了下pod的安全策略。 PSPPod Security Policy, 是用于检查 Pod 安全的对象。他可以限制 Pod 是否可以使用特权模式，挂载主机目录等等。 限制范围          是否特权模式 R">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-04T06:32:06.935Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pod的安全策略">
+<meta name="twitter:description" content="简述最近在给k8s的一些java应用，包括lua项目，做火焰图的安装，后经仔细研究发现，火焰图安装需要打开docker的安全限制，由于我的环境基本都是在k8s中不熟的，所以找了一些文档，总结了下pod的安全策略。 PSPPod Security Policy, 是用于检查 Pod 安全的对象。他可以限制 Pod 是否可以使用特权模式，挂载主机目录等等。 限制范围          是否特权模式 R">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/7fdlafl5.html">
+
+
+
+
+
+  <title>pod的安全策略 | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-envoy">
+          <a href="/envoy" rel="section">
+            
+            envoy
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-istio">
+          <a href="/istio" rel="section">
+            
+            istio
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-openstack">
+          <a href="/openstack" rel="section">
+            
+            openstack
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/7fdlafl5.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">pod的安全策略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-29T10:10:01+08:00">
+                2019-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>最近在给k8s的一些java应用，包括lua项目，做火焰图的安装，后经仔细研究发现，火焰图安装需要打开docker的安全限制，由于我的环境基本都是在k8s中不熟的，所以找了一些文档，总结了下pod的安全策略。</p>
+<h1 id="PSP"><a href="#PSP" class="headerlink" title="PSP"></a>PSP</h1><p>Pod Security Policy, 是用于检查 Pod 安全的对象。他可以限制 Pod 是否可以使用特权模式，挂载主机目录等等。</p>
+<h2 id="限制范围"><a href="#限制范围" class="headerlink" title="限制范围"></a>限制范围</h2><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否特权模式</td>
+<td>Running of privileged containers</td>
+<td>privileged</td>
+</tr>
+<tr>
+<td>是否root namespace</td>
+<td>Usage of the root namespaces</td>
+<td>hostPID, hostIPC</td>
+</tr>
+<tr>
+<td>是否主机网络模式</td>
+<td>Usage of host networking and ports</td>
+<td>hostNetwork, hostPorts</td>
+</tr>
+<tr>
+<td>可以选择存储类型</td>
+<td>Usage of volume types</td>
+<td>volumes</td>
+</tr>
+<tr>
+<td>可以挂载主机哪些目录</td>
+<td>Usage of the host filesystem</td>
+<td>allowedHostPaths</td>
+</tr>
+<tr>
+<td>lvm?</td>
+<td>White list of FlexVolume drivers</td>
+<td>allowedFlexVolumes</td>
+</tr>
+<tr>
+<td></td>
+<td>Allocating an FSGroup that owns the pod’s volumes</td>
+<td>fsGroup</td>
+</tr>
+<tr>
+<td>read only root file</td>
+<td>Requiring the use of a read only root file system</td>
+<td>readOnlyRootFilesystem</td>
+</tr>
+<tr>
+<td>user in ctr</td>
+<td>The user and group IDs of the container</td>
+<td>runAsUser, supplementalGroups</td>
+</tr>
+<tr>
+<td></td>
+<td>Restricting escalation to root privileges</td>
+<td>allowPrivilegeEscalation, defaultAllowPrivilegeEscalation</td>
+</tr>
+<tr>
+<td></td>
+<td>Linux capabilities</td>
+<td>defaultAddCapabilities, requiredDropCapabilities, allowedCapabilities</td>
+</tr>
+<tr>
+<td>SELinux</td>
+<td>The SELinux context of the container</td>
+<td>seLinux</td>
+</tr>
+<tr>
+<td></td>
+<td>The AppArmor profile used by containers</td>
+<td>annotations</td>
+</tr>
+<tr>
+<td></td>
+<td>The seccomp profile used by containers</td>
+<td>annotations</td>
+</tr>
+<tr>
+<td></td>
+<td>The sysctl profile used by containers</td>
+<td>annotations</td>
+</tr>
+</tbody>
+</table>
+<h2 id="策略实例"><a href="#策略实例" class="headerlink" title="策略实例"></a>策略实例</h2><p>最宽松策略</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: policy/v1beta1</span><br><span class="line">kind: PodSecurityPolicy</span><br><span class="line">metadata:</span><br><span class="line">  name: privileged</span><br><span class="line">  annotations:</span><br><span class="line">    seccomp.security.alpha.kubernetes.io/allowedProfileNames: &apos;*&apos;</span><br><span class="line">spec:</span><br><span class="line">  privileged: true</span><br><span class="line">  allowPrivilegeEscalation: true</span><br><span class="line">  allowedCapabilities:</span><br><span class="line">  - &apos;*&apos;</span><br><span class="line">  volumes:</span><br><span class="line">  - &apos;*&apos;</span><br><span class="line">  hostNetwork: true</span><br><span class="line">  hostPorts:</span><br><span class="line">  - min: 0</span><br><span class="line">    max: 65535</span><br><span class="line">  hostIPC: true</span><br><span class="line">  hostPID: true</span><br><span class="line">  runAsUser:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  seLinux:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  supplementalGroups:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  fsGroup:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br></pre></td></tr></table></figure>
+<p>最严格的限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: policy/v1beta1</span><br><span class="line">kind: PodSecurityPolicy</span><br><span class="line">metadata:</span><br><span class="line">  name: restricted</span><br><span class="line">  annotations:</span><br><span class="line">    seccomp.security.alpha.kubernetes.io/allowedProfileNames: &apos;docker/default&apos;</span><br><span class="line">    apparmor.security.beta.kubernetes.io/allowedProfileNames: &apos;runtime/default&apos;</span><br><span class="line">    seccomp.security.alpha.kubernetes.io/defaultProfileName:  &apos;docker/default&apos;</span><br><span class="line">    apparmor.security.beta.kubernetes.io/defaultProfileName:  &apos;runtime/default&apos;</span><br><span class="line">spec:</span><br><span class="line">  privileged: false</span><br><span class="line">  # Required to prevent escalations to root.</span><br><span class="line">  allowPrivilegeEscalation: false</span><br><span class="line">  # This is redundant with non-root + disallow privilege escalation,</span><br><span class="line">  # but we can provide it for defense in depth.</span><br><span class="line">  requiredDropCapabilities:</span><br><span class="line">    - ALL</span><br><span class="line">  # Allow core volume types.</span><br><span class="line">  volumes:</span><br><span class="line">    - &apos;configMap&apos;</span><br><span class="line">    - &apos;emptyDir&apos;</span><br><span class="line">    - &apos;projected&apos;</span><br><span class="line">    - &apos;secret&apos;</span><br><span class="line">    - &apos;downwardAPI&apos;</span><br><span class="line">    # Assume that persistentVolumes set up by the cluster admin are safe to use.</span><br><span class="line">    - &apos;persistentVolumeClaim&apos;</span><br><span class="line">  hostNetwork: false</span><br><span class="line">  hostIPC: false</span><br><span class="line">  hostPID: false</span><br><span class="line">  runAsUser:</span><br><span class="line">    # Require the container to run without root privileges.</span><br><span class="line">    rule: &apos;MustRunAsNonRoot&apos;</span><br><span class="line">  seLinux:</span><br><span class="line">    # This policy assumes the nodes are using AppArmor rather than SELinux.</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  supplementalGroups:</span><br><span class="line">    rule: &apos;MustRunAs&apos;</span><br><span class="line">    ranges:</span><br><span class="line">      # Forbid adding the root group.</span><br><span class="line">      - min: 1</span><br><span class="line">        max: 65535</span><br><span class="line">  fsGroup:</span><br><span class="line">    rule: &apos;MustRunAs&apos;</span><br><span class="line">    ranges:</span><br><span class="line">      # Forbid adding the root group.</span><br><span class="line">      - min: 1</span><br><span class="line">        max: 65535</span><br><span class="line">  readOnlyRootFilesystem: false</span><br></pre></td></tr></table></figure>
+<h2 id="开启-PSP-功能"><a href="#开启-PSP-功能" class="headerlink" title="开启 PSP 功能"></a>开启 PSP 功能</h2><p>管理员需要关心这一章节。普通用户可以跳过。</p>
+<p>Pod 安全检查的功能已经编译在 <code>kube-apiserver</code> 中。当 api server 接收到创建 Pod 的请求，他会检查 Pod 的各个参数，匹配创建者所能使用的策略。如果没有策略可以匹配，则 Pod 不会被创建。 只需要在 <code>kube-apiserver</code> 启动参数 <code>--admission-control=</code> 的值列表中加入 <code>PodSecurityPolicy</code> 就会开启检查。</p>
+<p>从 1.10 开始，当 <code>kube-apiserver</code> 使用 Static Pod 的方式启动时会有一些问题。<code>kube-apiserver</code> 启动参数加入 <code>PodSecurityPolicy</code> 之后，他本身的 Pod 会因为没有匹配的策略而无法启动。 启动 <code>kube-apiserver</code> 的创建者是 <code>group</code> <code>system:node</code>。所以需要提前给他绑定绑定一个拥有 PSP 策略的角色。</p>
+<ol>
+<li><p>创建规则</p>
+<p>创建上一章节中的 <a href="https://github.com/fanux/fist/blob/master/namespace/psp.md#privileged" target="_blank" rel="noopener"><code>最宽松策略</code></a>。或者其他你觉得合适的规则。</p>
+</li>
+</ol>
+<ol>
+<li>创建角色。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: ClusterRole</span><br><span class="line">metadata:</span><br><span class="line">  name: privileged-user</span><br><span class="line">rules:</span><br><span class="line">- apiGroups: [&quot;extensions&quot;]</span><br><span class="line">  resourceNames:</span><br><span class="line">  - privileged # &lt;-- 上文中 `最宽松策略`</span><br><span class="line">  resources: [&quot;podsecuritypolicies&quot;]</span><br><span class="line">  verbs:</span><br><span class="line">  - use</span><br></pre></td></tr></table></figure>
+<ol>
+<li>绑定账户和角色</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: RoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: privileged-users</span><br><span class="line">  namespace: kube-system</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: privileged-user # &lt;-- 上一步中创建的角色</span><br><span class="line">subjects:</span><br><span class="line">- kind: Group</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  name: system:nodes # &lt;-- 创建 kube-apiserver 的账户</span><br></pre></td></tr></table></figure>
+<ol>
+<li>修改 <code>kube-apiserver</code> 参数</li>
+</ol>
+<ul>
+<li><code>cp /etc/kubernetes/manifests/kube-apiserver.yaml ./</code></li>
+<li><code>vim kube-apiserver.yaml</code></li>
+<li>在 <code>--admission-control=</code> 末尾加 <code>,PodSecurityPolicy</code></li>
+<li><code>cp kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml</code></li>
+</ul>
+<ol>
+<li>确保 <code>kube-apiserver</code> 启动</li>
+</ol>
+<ul>
+<li><code>kubectl -n kube-system get pods | grep api</code> 能看到 pod 。</li>
+<li>如果看不到，请从头看一遍文章。</li>
+<li>如果还不行请参考 k8s 最新文档。</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
+<li>用户创建 Pod</li>
+<li>Service Account 创建 Pod</li>
+</ul>
+<h3 id="用户创建-Pod"><a href="#用户创建-Pod" class="headerlink" title="用户创建 Pod"></a>用户创建 Pod</h3><p>通常我们并不直接创建 Pod。这里只是为了理解各对象之间的关系。 可以快速浏览至下一小节[Service Account 创建 Pod]</p>
+<p>确定使用哪个用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl config view</span><br></pre></td></tr></table></figure>
+<p>可以看到当前命令行的配置。参考 <code>current-context</code>, <code>context</code> 可以知道默认用的那个用户。 这里如下用户作为例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">clusters:</span><br><span class="line">- cluster:</span><br><span class="line">    certificate-authority-data: REDACTED</span><br><span class="line">    server: https://*.*.*.*:*</span><br><span class="line">  name: kubernetes</span><br><span class="line">contexts:</span><br><span class="line">- context: </span><br><span class="line">    cluster: kubernetes</span><br><span class="line">    user: kubernetes-admin # &lt;--- 3. 具体使用的用户</span><br><span class="line">  name: kubernetes-admin@kubernetes # &lt;--- 2. </span><br><span class="line">current-context: kubernetes-admin@kubernetes # &lt;--- 1. current-context</span><br><span class="line">kind: Config</span><br><span class="line">preferences: &#123;&#125;</span><br><span class="line">users:</span><br><span class="line">- name: kubernetes-admin</span><br><span class="line">  user:</span><br><span class="line">    client-certificate-data: REDACTED</span><br><span class="line">    client-key-data: REDACTED</span><br></pre></td></tr></table></figure>
+<p>这里看到 kubectl 使用的就是 user kubernetes-admin@kubernetes。我们假设 <code>kubernetes-admin@kubernetes</code> 是个普通用户，目前不能创建 Pod 。</p>
+<ol>
+<li>创建规则</li>
+</ol>
+<p>这里说的规则就是 <code>PodSecutityPolicy</code> 对象本身，也可以说是 psp 资源。psp 资源是 cluster scoped，不分 namespace。</p>
+<p>这里使用前文中的 <a href="https://github.com/fanux/fist/blob/master/namespace/psp.md#privileged" target="_blank" rel="noopener"><code>最宽松策略</code></a>。也可以使用其他你觉得合适的规则。如果已经创建，则不需要重复创建。</p>
+<p><code>kubectl get psp</code> 查看已有 psp 资源。</p>
+<p>最宽松策略</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: policy/v1beta1</span><br><span class="line">kind: PodSecurityPolicy</span><br><span class="line">metadata:</span><br><span class="line">  name: privileged</span><br><span class="line">  annotations:</span><br><span class="line">    seccomp.security.alpha.kubernetes.io/allowedProfileNames: &apos;*&apos;</span><br><span class="line">spec:</span><br><span class="line">  privileged: true</span><br><span class="line">  allowPrivilegeEscalation: true</span><br><span class="line">  allowedCapabilities:</span><br><span class="line">  - &apos;*&apos;</span><br><span class="line">  volumes:</span><br><span class="line">  - &apos;*&apos;</span><br><span class="line">  hostNetwork: true</span><br><span class="line">  hostPorts:</span><br><span class="line">  - min: 0</span><br><span class="line">    max: 65535</span><br><span class="line">  hostIPC: true</span><br><span class="line">  hostPID: true</span><br><span class="line">  runAsUser:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  seLinux:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  supplementalGroups:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br><span class="line">  fsGroup:</span><br><span class="line">    rule: &apos;RunAsAny&apos;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>创建角色</li>
+</ol>
+<p>在 default namespace 下创建一个角色。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kind: Role</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">metadata:</span><br><span class="line">  namespace: default</span><br><span class="line">  name: privileged-user</span><br><span class="line">rules:</span><br><span class="line">- apiGroups: [&quot;extensions&quot;]</span><br><span class="line">  resourceNames:</span><br><span class="line">  - privileged # &lt;--- psp 资源</span><br><span class="line">  resources: [&quot;podsecuritypolicies&quot;]</span><br><span class="line">  verbs:</span><br><span class="line">  - use</span><br></pre></td></tr></table></figure>
+<ol>
+<li>绑定角色和用户</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">kind: RoleBinding</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">metadata:</span><br><span class="line">  name: a-privileged-user</span><br><span class="line">  namespace: default</span><br><span class="line">subjects:</span><br><span class="line">- kind: User</span><br><span class="line">  name: kubernetes-admin@kubernetes # &lt;--- 我们假设的用户</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">roleRef:</span><br><span class="line">  kind: Role</span><br><span class="line">  name: privileged-user # &lt;--- 要绑的角色</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br></pre></td></tr></table></figure>
+<ol>
+<li>创建 Pod</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: my-pod</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: nginx</span><br><span class="line">    image: hub.xfyun.cn/devops/alpine-curl:3.6</span><br><span class="line">    command: [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;sleep 1000000&quot;]</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 80</span><br></pre></td></tr></table></figure>
+<h3 id="Service-Account-创建-Pod"><a href="#Service-Account-创建-Pod" class="headerlink" title="Service Account 创建 Pod"></a>Service Account 创建 Pod</h3><p>当用命令行直接创建 Pod 时(<code>kubectl apply -f pod.yaml</code>)。通常都是用某个 <code>User</code> 作为创建者。 当通过 Deployment，StatefulSet 这类对象创建 Pod 时。Pod 的创建者是 Service Account 类型的。 当没有明确指定 Service Account 时，将会使用所在 namespace 下名为 default 的 Service Account。所以只要给 default Service Account 绑定 privileged-user 就可以了。 当在 Pod 的 spec 中明确定义了所使用的 <code>serviceAccountName</code> ，那么将会使用指定的。 所以只要给对应的 Service Account 绑定 privileged-user 就可以了。可以参考如下绑定。</p>
+<p>绑定 default Service Account</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: RoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: default</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: Role</span><br><span class="line">  name: privileged-user</span><br><span class="line">subjects:</span><br><span class="line">- kind: ServiceAccount</span><br><span class="line">  name: default # &lt;--- 或者其他 sa</span><br><span class="line">  namespace: default</span><br></pre></td></tr></table></figure>
+<p>以上是 psp 的基本使用。下边是扩展技巧。</p>
+<h3 id="绑定角色使用-ClusterRole"><a href="#绑定角色使用-ClusterRole" class="headerlink" title="绑定角色使用 ClusterRole"></a>绑定角色使用 <code>ClusterRole</code></h3><p><code>Role</code> 资源是 namespace scoped。仅限所在的 namespace 使用。当在不同 namespace 中使用同一个 psp 策略时，需要创建不同的 <code>Role</code>。这个时候可以使用 <code>ClusterRole</code>。</p>
+<p><code>ClusterRole</code> 是 cluster scoped 资源。当用 <code>ClusterRoleBinding</code> 绑定 <code>ClusterRole</code> 和账户时。此账户就在集群范围内拥有了 <code>ClusterRole</code> 定义的权限。</p>
+<p>当在 <code>RoleBinding</code> 中绑定 <code>ClusterRole</code> 和账户时。此账户就只在 <code>RoleBinding</code> 所在 namespace 中拥有 <code>ClusterRole</code> 定义的权限。 这样就可以给不同账户绑定同一个角色。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: RoleBinding # &lt;--- RoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: default</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole # &lt;--- ClusterRole</span><br><span class="line">  name: privileged-user</span><br><span class="line">subjects:</span><br><span class="line">- kind: ServiceAccount</span><br><span class="line">  name: default</span><br><span class="line">  namespace: default</span><br></pre></td></tr></table></figure>
+<h3 id="绑定账户使用-Group"><a href="#绑定账户使用-Group" class="headerlink" title="绑定账户使用 Group"></a>绑定账户使用 <code>Group</code></h3><p>当使用 <code>RoleBinding</code> 时可以在 namespace 范围内给所有 Service Account 或者所有认证用户绑定角色。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: RoleBinding # &lt;--- RoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: default</span><br><span class="line">  namespace: default</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole </span><br><span class="line">  name: privileged-user</span><br><span class="line">subjects:</span><br><span class="line"># Authorize all service accounts in a namespace:</span><br><span class="line">- kind: Group</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  name: system:serviceaccounts</span><br><span class="line"># Or equivalently, all authenticated users in a namespace:</span><br><span class="line">- kind: Group</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  name: system:authenticated</span><br></pre></td></tr></table></figure>
+<p>对于 kube-system ns 和集群管理方的 ns 可以直接授权所有 service account 高权限角色。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: RoleBinding # &lt;--- RoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: default</span><br><span class="line">  namespace: kube-system</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole </span><br><span class="line">  name: privileged-user</span><br><span class="line">subjects:</span><br><span class="line"># Authorize all service accounts in a namespace:</span><br><span class="line">- kind: Group</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  name: system:serviceaccounts</span><br></pre></td></tr></table></figure>
+<h1 id="火焰图"><a href="#火焰图" class="headerlink" title="火焰图"></a>火焰图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">一个简单的基于cpu的火焰图</span><br><span class="line">https://github.com/jvm-profiling-tools/async-profiler</span><br><span class="line">虚拟机使用:</span><br><span class="line">./profiler.sh -d 30 -f /tmp/flamegraph.svg 8983</span><br><span class="line">docker使用:</span><br><span class="line">--security-opt=seccomp:unconfined</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">psp出自：</span><br><span class="line">https://github.com/fanux/fist/blob/master/namespace/psp.md</span><br><span class="line">https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/7fdlafl5.html" title="pod的安全策略">https://shenshengkun.github.io/posts/7fdlafl5.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/aov65voo.html" rel="next" title="k8s的event信息存在es">
+                <i class="fa fa-chevron-left"></i> k8s的event信息存在es
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/9dfl28ic.html" rel="prev" title="nginx日志计算带宽">
+                nginx日志计算带宽 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://i4t.com/" title="Abcdocker" target="_blank">Abcdocker</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.dgstack.cn/" title="Dgstack" target="_blank">Dgstack</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.anonym0x1.com/" title="Anony" target="_blank">Anony</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=314773&auto=1&height=66"></iframe>
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简述"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PSP"><span class="nav-number">2.</span> <span class="nav-text">PSP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#限制范围"><span class="nav-number">2.1.</span> <span class="nav-text">限制范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略实例"><span class="nav-number">2.2.</span> <span class="nav-text">策略实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开启-PSP-功能"><span class="nav-number">2.3.</span> <span class="nav-text">开启 PSP 功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.4.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户创建-Pod"><span class="nav-number">2.4.1.</span> <span class="nav-text">用户创建 Pod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-Account-创建-Pod"><span class="nav-number">2.4.2.</span> <span class="nav-text">Service Account 创建 Pod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定角色使用-ClusterRole"><span class="nav-number">2.4.3.</span> <span class="nav-text">绑定角色使用 ClusterRole</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定账户使用-Group"><span class="nav-number">2.4.4.</span> <span class="nav-text">绑定账户使用 Group</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#火焰图"><span class="nav-number">3.</span> <span class="nav-text">火焰图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

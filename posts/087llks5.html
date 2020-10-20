@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="mariadb集群部署mariadb服务注意: 以下步骤在二台服务器都要进行 12345678910[root@controller01 ~]# yum install libaio galera rsync lsof -y[root@controller01 ~]# useradd  mysql -s /sbin/nologin -M[root@controller01 ~]# cd /usr/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openstack集群部署—基础服务">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/087llks5.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="mariadb集群部署mariadb服务注意: 以下步骤在二台服务器都要进行 12345678910[root@controller01 ~]# yum install libaio galera rsync lsof -y[root@controller01 ~]# useradd  mysql -s /sbin/nologin -M[root@controller01 ~]# cd /usr/">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-19T03:11:32.046Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="openstack集群部署—基础服务">
+<meta name="twitter:description" content="mariadb集群部署mariadb服务注意: 以下步骤在二台服务器都要进行 12345678910[root@controller01 ~]# yum install libaio galera rsync lsof -y[root@controller01 ~]# useradd  mysql -s /sbin/nologin -M[root@controller01 ~]# cd /usr/">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/087llks5.html">
+
+
+
+
+
+  <title>openstack集群部署—基础服务 | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-envoy">
+          <a href="/envoy" rel="section">
+            
+            envoy
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-istio">
+          <a href="/istio" rel="section">
+            
+            istio
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-openstack">
+          <a href="/openstack" rel="section">
+            
+            openstack
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/087llks5.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">openstack集群部署—基础服务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-21T11:10:01+08:00">
+                2019-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/openstack/" itemprop="url" rel="index">
+                    <span itemprop="name">openstack</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="mariadb集群"><a href="#mariadb集群" class="headerlink" title="mariadb集群"></a>mariadb集群</h1><h2 id="部署mariadb服务"><a href="#部署mariadb服务" class="headerlink" title="部署mariadb服务"></a>部署mariadb服务</h2><p><strong>注意:</strong> 以下步骤在二台服务器都要进行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]<span class="comment"># yum install libaio galera rsync lsof -y</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># useradd  mysql -s /sbin/nologin -M</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># cd /usr/local/src/</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># tar  xf mariadb-10.2.29-linux-x86_64.tar.gz  -C  /usr/local/</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># ln -s /usr/local/mariadb-10.2.29-linux-x86_64/ /usr/local/mysql</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># cd /usr/local/mysql/</span></span><br><span class="line">[root@controller01 mysql]<span class="comment"># cp support-files/my-medium.cnf my.cnf</span></span><br><span class="line">[root@controller01 mysql]<span class="comment"># chown -R mysql.mysql /usr/local/mariadb-10.2.29-linux-x86_64</span></span><br><span class="line">[root@controller01 mysql]<span class="comment"># mkdir -pv  /DB/data/mysql</span></span><br><span class="line">[root@controller01 mysql]<span class="comment"># chown -R mysql.mysql /DB/data/mysql</span></span><br></pre></td></tr></table></figure>
+<p>编辑系统文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 mysql]<span class="comment"># cp /usr/local/mysql/support-files/mysql.server  /etc/init.d/mysqld</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># vim /etc/init.d/mysqld</span></span><br><span class="line">basedir=/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">datadir=/DB/data/mysql</span><br><span class="line"></span><br><span class="line">[root@controller01 ~]<span class="comment"># vim /etc/profile</span></span><br><span class="line"><span class="built_in">export</span> MYSQL_HOME=/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">PATH=<span class="string">":<span class="variable">$MYSQL_HOME</span>/bin:<span class="variable">$PATH</span>"</span></span><br><span class="line">[root@controller01 ~]<span class="comment"># source /etc/profile</span></span><br></pre></td></tr></table></figure>
+<p>编辑<code>controller01</code>配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 mysql]<span class="comment"># cat /usr/local/mysql/my.cnf| grep -v "#" | grep -v "^$"</span></span><br><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /tmp/mysql.sock</span><br><span class="line">[mysqld]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /tmp/mysql.sock</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">datadir = /DB/data/mysql</span><br><span class="line">skip-external-locking</span><br><span class="line">key_buffer_size = 16M</span><br><span class="line">max_allowed_packet = 1M</span><br><span class="line">table_open_cache = 64</span><br><span class="line">sort_buffer_size = 512K</span><br><span class="line">net_buffer_length = 8K</span><br><span class="line">read_buffer_size = 256K</span><br><span class="line">read_rnd_buffer_size = 512K</span><br><span class="line">myisam_sort_buffer_size = 8M</span><br><span class="line">[galera]</span><br><span class="line">wsrep_on=ON</span><br><span class="line">wsrep_provider=/usr/lib64/galera/libgalera_smm.so</span><br><span class="line">wsrep_cluster_address=<span class="string">"gcomm://192.168.182.131,192.168.182.132"</span></span><br><span class="line">wsrep_node_name= controller01</span><br><span class="line">wsrep_node_address=192.168.182.131</span><br><span class="line">binlog_format=row</span><br><span class="line">default_storage_engine=InnoDB</span><br><span class="line">innodb_autoinc_lock_mode=2</span><br><span class="line">wsrep_slave_threads=1</span><br><span class="line">innodb_flush_log_at_trx_commit=0</span><br><span class="line">innodb_buffer_pool_size=120M</span><br><span class="line">wsrep_sst_method=rsync</span><br><span class="line">wsrep_causal_reads=ON</span><br><span class="line"><span class="built_in">log</span>-bin=mysql-bin</span><br><span class="line">binlog_format=row</span><br><span class="line">server-id       = 1</span><br><span class="line">[mysqldump]</span><br><span class="line">quick</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer_size = 20M</span><br><span class="line">sort_buffer_size = 20M</span><br><span class="line">read_buffer = 2M</span><br><span class="line">write_buffer = 2M</span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br></pre></td></tr></table></figure>
+<p>编辑<code>controller02</code>配置文件   </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[root@controller02 ~]<span class="comment"># cat /usr/local/mysql/my.cnf| grep -v "#" | grep -v "^$"</span></span><br><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /tmp/mysql.sock</span><br><span class="line">[mysqld]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /tmp/mysql.sock</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">datadir = /DB/data/mysql</span><br><span class="line">skip-external-locking</span><br><span class="line">key_buffer_size = 16M</span><br><span class="line">max_allowed_packet = 1M</span><br><span class="line">table_open_cache = 64</span><br><span class="line">sort_buffer_size = 512K</span><br><span class="line">net_buffer_length = 8K</span><br><span class="line">read_buffer_size = 256K</span><br><span class="line">read_rnd_buffer_size = 512K</span><br><span class="line">myisam_sort_buffer_size = 8M</span><br><span class="line">[galera]</span><br><span class="line">wsrep_on=ON</span><br><span class="line">wsrep_provider=/usr/lib64/galera/libgalera_smm.so</span><br><span class="line">wsrep_cluster_address=<span class="string">"gcomm://192.168.182.131,192.168.182.132"</span></span><br><span class="line">wsrep_node_name= controller02</span><br><span class="line">wsrep_node_address=192.168.182.132</span><br><span class="line">binlog_format=row</span><br><span class="line">default_storage_engine=InnoDB</span><br><span class="line">innodb_autoinc_lock_mode=2</span><br><span class="line">wsrep_slave_threads=1</span><br><span class="line">innodb_flush_log_at_trx_commit=0</span><br><span class="line">innodb_buffer_pool_size=120M</span><br><span class="line">wsrep_sst_method=rsync</span><br><span class="line">wsrep_causal_reads=ON</span><br><span class="line"><span class="built_in">log</span>-bin=mysql-bin</span><br><span class="line">binlog_format=row</span><br><span class="line">server-id       = 1</span><br><span class="line">[mysqldump]</span><br><span class="line">quick</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer_size = 20M</span><br><span class="line">sort_buffer_size = 20M</span><br><span class="line">read_buffer = 2M</span><br><span class="line">write_buffer = 2M</span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br></pre></td></tr></table></figure>
+<h2 id="配置MariaDB-Galera-Cluster"><a href="#配置MariaDB-Galera-Cluster" class="headerlink" title="配置MariaDB Galera Cluster"></a>配置MariaDB Galera Cluster</h2><p>1.mariadb第一个节点进行初始化(192.168.182.131)  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]<span class="comment"># /usr/local/mysql/scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/DB/data/mysql --defaults-file=/usr/local/mysql/my.cnf</span></span><br></pre></td></tr></table></figure>
+<p>2.在192.168.182.131节点上通过bootstrap启动(第一次启动一定要使用<code>--wsrep-new-cluster</code>,再次启动就不需要)   </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]<span class="comment"># mysqld_safe --defaults-file=/usr/local/mysql/my.cnf  --user=mysql --wsrep-new-cluster &amp;</span></span><br></pre></td></tr></table></figure>
+<p>3.在192.168.182.131节点上设置root密码以及安全设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]<span class="comment"># mysql_secure_installation</span></span><br></pre></td></tr></table></figure>
+<p>Enter current password for root (enter for none):   回车<br>Set root password? [Y/n] y<br>Remove anonymous users? [Y/n] y<br>Disallow root login remotely? [Y/n] n<br>Remove test database and access to it? [Y/n] y<br>Reload privilege tables now? [Y/n] y</p>
+<p>4.在其他节点上(192.168.182.132)上启动mariadb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@controller02 ~]<span class="comment"># mysqld_safe --defaults-file=/usr/local/mysql/my.cnf --user=mysql  &amp;</span></span><br></pre></td></tr></table></figure>
+<p>5.检查服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]<span class="comment"># netstat  -lntup|grep mysqld</span></span><br><span class="line">tcp        0      0 0.0.0.0:4567            0.0.0.0:*               LISTEN      28589/mysqld</span><br><span class="line">tcp6       0      0 :::3306                 :::*                    LISTEN      28589/mysqld</span><br><span class="line">[root@controller02 ~]<span class="comment"># netstat  -lntup|grep mysqld</span></span><br><span class="line">tcp        0      0 0.0.0.0:4567            0.0.0.0:*               LISTEN      15798/mysqld</span><br><span class="line">tcp6       0      0 :::3306                 :::*                    LISTEN      15798/mysqld</span><br></pre></td></tr></table></figure>
+<h2 id="校验MariaDB-Galera-Cluster"><a href="#校验MariaDB-Galera-Cluster" class="headerlink" title="校验MariaDB Galera Cluster"></a>校验MariaDB Galera Cluster</h2><p>登录数据库进行查看:    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">[root@controller01 ~]# mysql -p</span><br><span class="line">Enter password:</span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MariaDB connection id is 23</span><br><span class="line">Server version: 10.2.24-MariaDB-log MariaDB Server</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SHOW STATUS LIKE &apos;wsrep_cluster_size&apos;;</span><br><span class="line">+--------------------+-------+</span><br><span class="line">| Variable_name      | Value |</span><br><span class="line">+--------------------+-------+</span><br><span class="line">| wsrep_cluster_size | 2     |</span><br><span class="line">+--------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; show global status like &apos;ws%&apos;;</span><br><span class="line">+-------------------------------+-------------------------------------------+</span><br><span class="line">| Variable_name                 | Value                                     |</span><br><span class="line">+-------------------------------+-------------------------------------------+</span><br><span class="line">| wsrep_applier_thread_count    | 1                                         |</span><br><span class="line">| wsrep_apply_oooe              | 0.000000                                  |</span><br><span class="line">| wsrep_apply_oool              | 0.000000                                  |</span><br><span class="line">| wsrep_apply_window            | 1.000000                                  |</span><br><span class="line">| wsrep_causal_reads            | 1                                         |</span><br><span class="line">| wsrep_cert_deps_distance      | 1.000000                                  |</span><br><span class="line">| wsrep_cert_index_size         | 2                                         |</span><br><span class="line">| wsrep_cert_interval           | 0.000000                                  |</span><br><span class="line">| wsrep_cluster_conf_id         | 2                                         |</span><br><span class="line">| wsrep_cluster_size            | 2                                         |</span><br><span class="line">| wsrep_cluster_state_uuid      | 34db925e-0dd1-11ea-899d-de432d301557      |</span><br><span class="line">| wsrep_cluster_status          | Primary                                   |</span><br><span class="line">| wsrep_commit_oooe             | 0.000000                                  |</span><br><span class="line">| wsrep_commit_oool             | 0.000000                                  |</span><br><span class="line">| wsrep_commit_window           | 1.000000                                  |</span><br><span class="line">| wsrep_connected               | ON                                        |</span><br><span class="line">| wsrep_desync_count            | 0                                         |</span><br><span class="line">| wsrep_evs_delayed             |                                           |</span><br><span class="line">| wsrep_evs_evict_list          |                                           |</span><br><span class="line">| wsrep_evs_repl_latency        | 0/0/0/0/0                                 |</span><br><span class="line">| wsrep_evs_state               | OPERATIONAL                               |</span><br><span class="line">| wsrep_flow_control_paused     | 0.000000                                  |</span><br><span class="line">| wsrep_flow_control_paused_ns  | 0                                         |</span><br><span class="line">| wsrep_flow_control_recv       | 0                                         |</span><br><span class="line">| wsrep_flow_control_sent       | 0                                         |</span><br><span class="line">| wsrep_gcomm_uuid              | 34da0224-0dd1-11ea-abba-97637e178a34      |</span><br><span class="line">| wsrep_incoming_addresses      | 192.168.182.131:3306,192.168.182.132:3306 |</span><br><span class="line">| wsrep_last_committed          | 3                                         |</span><br><span class="line">| wsrep_local_bf_aborts         | 0                                         |</span><br><span class="line">| wsrep_local_cached_downto     | 1                                         |</span><br><span class="line">| wsrep_local_cert_failures     | 0                                         |</span><br><span class="line">| wsrep_local_commits           | 0                                         |</span><br><span class="line">| wsrep_local_index             | 0                                         |</span><br><span class="line">| wsrep_local_recv_queue        | 0                                         |</span><br><span class="line">| wsrep_local_recv_queue_avg    | 0.166667                                  |</span><br><span class="line">| wsrep_local_recv_queue_max    | 2                                         |</span><br><span class="line">| wsrep_local_recv_queue_min    | 0                                         |</span><br><span class="line">| wsrep_local_replays           | 0                                         |</span><br><span class="line">| wsrep_local_send_queue        | 0                                         |</span><br><span class="line">| wsrep_local_send_queue_avg    | 0.000000                                  |</span><br><span class="line">| wsrep_local_send_queue_max    | 1                                         |</span><br><span class="line">| wsrep_local_send_queue_min    | 0                                         |</span><br><span class="line">| wsrep_local_state             | 4                                         |</span><br><span class="line">| wsrep_local_state_comment     | Synced                                    |</span><br><span class="line">| wsrep_local_state_uuid        | 34db925e-0dd1-11ea-899d-de432d301557      |</span><br><span class="line">| wsrep_protocol_version        | 7                                         |</span><br><span class="line">| wsrep_provider_name           | Galera                                    |</span><br><span class="line">| wsrep_provider_vendor         | Codership Oy &lt;info@codership.com&gt;         |</span><br><span class="line">| wsrep_provider_version        | 3.16(r5c765eb)                            |</span><br><span class="line">| wsrep_ready                   | ON                                        |</span><br><span class="line">| wsrep_received                | 6                                         |</span><br><span class="line">| wsrep_received_bytes          | 440                                       |</span><br><span class="line">| wsrep_repl_data_bytes         | 1077                                      |</span><br><span class="line">| wsrep_repl_keys               | 3                                         |</span><br><span class="line">| wsrep_repl_keys_bytes         | 93                                        |</span><br><span class="line">| wsrep_repl_other_bytes        | 0                                         |</span><br><span class="line">| wsrep_replicated              | 3                                         |</span><br><span class="line">| wsrep_replicated_bytes        | 1362                                      |</span><br><span class="line">| wsrep_rollbacker_thread_count | 1                                         |</span><br><span class="line">| wsrep_thread_count            | 2                                         |</span><br><span class="line">+-------------------------------+-------------------------------------------+</span><br><span class="line">60 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="RabbitMQ集群"><a href="#RabbitMQ集群" class="headerlink" title="RabbitMQ集群"></a>RabbitMQ集群</h1><h2 id="安装rabbitmq"><a href="#安装rabbitmq" class="headerlink" title="安装rabbitmq"></a>安装rabbitmq</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 在全部控制节点，使用aliyun的epel镜像，以controller01节点为例</span><br><span class="line">[root@controller01 ~]# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line">[root@controller01 ~]# yum install erlang rabbitmq-server -y</span><br><span class="line"></span><br><span class="line"># 设置开机启动</span><br><span class="line">[root@controller01 ~]# systemctl enable rabbitmq-server.service</span><br></pre></td></tr></table></figure>
+<h2 id="构建rabbitmq集群"><a href="#构建rabbitmq集群" class="headerlink" title="构建rabbitmq集群"></a>构建rabbitmq集群</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 任选1个控制节点首先启动rabbitmq服务，这里选择controller01节点</span><br><span class="line">[root@controller01 ~]# systemctl start rabbitmq-server.service</span><br><span class="line">[root@controller01 ~]# rabbitmqctl cluster_status</span><br><span class="line"></span><br><span class="line"># 分发.erlang.cookie</span><br><span class="line">[root@controller01 ~]# scp /var/lib/rabbitmq/.erlang.cookie root@192.168.182.132:/var/lib/rabbitmq/</span><br><span class="line"></span><br><span class="line"># 修改controller02节点.erlang.cookie文件的用户/组，以controller02节点为例</span><br><span class="line">[root@controller02 ~]# chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie</span><br><span class="line"></span><br><span class="line"># 注意修改全部控制节点.erlang.cookie文件的权限，默认即400权限，可不修改</span><br><span class="line">[root@controller02 ~]# ll /var/lib/rabbitmq/.erlang.cookie</span><br><span class="line"></span><br><span class="line"># 启动controller02节点的rabbitmq服务 </span><br><span class="line">[root@controller02 ~]# systemctl start rabbitmq-server</span><br><span class="line"></span><br><span class="line"># 构建集群，controller02节点以ram节点的形式加入集群</span><br><span class="line">[root@controller02 mysql]# rabbitmqctl stop_app</span><br><span class="line">Stopping rabbit application on node rabbit@controller02</span><br><span class="line">[root@controller02 mysql]# rabbitmqctl join_cluster --ram rabbit@controller01</span><br><span class="line">Clustering node rabbit@controller02 with rabbit@controller01</span><br><span class="line">[root@controller02 mysql]# rabbitmqctl start_app</span><br><span class="line">Starting node rabbit@controller02</span><br></pre></td></tr></table></figure>
+<h2 id="rabbitmq账号"><a href="#rabbitmq账号" class="headerlink" title="rabbitmq账号"></a>rabbitmq账号</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 在任意节点新建账号并设置密码，以controller01节点为例</span><br><span class="line">[root@controller01 ~]# rabbitmqctl add_user openstack rabbitmq</span><br><span class="line"></span><br><span class="line"># 设置新建账号的状态</span><br><span class="line">[root@controller01 ~]# rabbitmqctl set_user_tags openstack administrator</span><br><span class="line"></span><br><span class="line"># 设置新建账号的权限</span><br><span class="line">[root@controller01 ~]# rabbitmqctl set_permissions -p &quot;/&quot; openstack &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br><span class="line"></span><br><span class="line"># 查看账号</span><br><span class="line">[root@controller01 ~]# rabbitmqctl list_users</span><br></pre></td></tr></table></figure>
+<h2 id="镜像队列ha"><a href="#镜像队列ha" class="headerlink" title="镜像队列ha"></a>镜像队列ha</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 设置镜像队列高可用</span><br><span class="line">[root@controller01 ~]# rabbitmqctl set_policy ha-all &quot;^&quot; &apos;&#123;&quot;ha-mode&quot;:&quot;all&quot;&#125;&apos;</span><br><span class="line"></span><br><span class="line"># 查看镜像队列策略</span><br><span class="line">[root@controller01 ~]# rabbitmqctl list_policies </span><br><span class="line"></span><br><span class="line"># 在全部控制节点安装web管理插件，以controller01节点为例</span><br><span class="line">[root@controller01 ~]# rabbitmq-plugins enable rabbitmq_management</span><br><span class="line"></span><br><span class="line">#访问：</span><br><span class="line">http://192.168.182.131:15672</span><br></pre></td></tr></table></figure>
+<h1 id="Memcached集群"><a href="#Memcached集群" class="headerlink" title="Memcached集群"></a>Memcached集群</h1><p> Memcached是无状态的，各控制节点独立部署，openstack各服务模块统一调用多个控制节点的memcached服务即可。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#所有控制节点都安装</span><br><span class="line">[root@controller01 ~]#  yum install memcached python-memcached -y</span><br><span class="line">[root@controller01 ~]# sed -i &apos;s|127.0.0.1,::1|0.0.0.0|g&apos; /etc/sysconfig/memcached </span><br><span class="line">[root@controller01 ~]# systemctl enable memcached.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/memcached.service to /usr/lib/systemd/system/memcached.service.</span><br><span class="line">[root@controller01 ~]# systemctl start memcached.service</span><br><span class="line">[root@controller01 ~]# systemctl status memcached.service</span><br><span class="line">● memcached.service - memcached daemon</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/memcached.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since Mon 2019-11-25 10:09:55 CST; 12s ago</span><br><span class="line"> Main PID: 3653 (memcached)</span><br><span class="line">   CGroup: /system.slice/memcached.service</span><br><span class="line">           └─3653 /usr/bin/memcached -p 11211 -u memcached -m 64 -c 1024 -l 0.0.0.0</span><br><span class="line"></span><br><span class="line">Nov 25 10:09:55 controller01 systemd[1]: Started memcached daemon.</span><br></pre></td></tr></table></figure>
+<h1 id="keepalived和haproxy集群"><a href="#keepalived和haproxy集群" class="headerlink" title="keepalived和haproxy集群"></a>keepalived和haproxy集群</h1><p>yum安装就可以</p>
+<p>配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_openstack</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface em3 # 本地网卡名称</span><br><span class="line">    virtual_router_id 61</span><br><span class="line">    priority 120 # 权重,要唯一</span><br><span class="line">    advert_int 1</span><br><span class="line">    mcast_src_ip 192.168.182.131 # 本地IP</span><br><span class="line">    nopreempt</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass sqP05dQgMSlzrxHj</span><br><span class="line">    &#125;</span><br><span class="line">    unicast_peer &#123;</span><br><span class="line">        192.168.182.132</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.182.130/24 # VIP</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line">global</span><br><span class="line">  chroot  /var/lib/haproxy</span><br><span class="line">  daemon</span><br><span class="line">  group  haproxy</span><br><span class="line">  user  haproxy</span><br><span class="line">  maxconn  4000</span><br><span class="line">  pidfile  /var/run/haproxy.pid</span><br><span class="line"></span><br><span class="line">defaults</span><br><span class="line">  log  global</span><br><span class="line">  maxconn  4000</span><br><span class="line">  option  redispatch</span><br><span class="line">  retries  3</span><br><span class="line">  timeout  http-request 10s</span><br><span class="line">  timeout  queue 1m</span><br><span class="line">  timeout  connect 10s</span><br><span class="line">  timeout  client 1m</span><br><span class="line">  timeout  server 1m</span><br><span class="line">  timeout  check 10s</span><br><span class="line"># mysql服务；</span><br><span class="line">#listen mysql_cluster</span><br><span class="line">#  bind 192.168.182.130:3306</span><br><span class="line">#  balance  source</span><br><span class="line">#  mode    tcp</span><br><span class="line">#  server controller01 192.168.182.131:3306 check inter 2000 rise 2 fall 5</span><br><span class="line">#  server controller02 192.168.182.132:3306 backup check inter 2000 rise 2 fall 5</span><br><span class="line"># haproxy监控页</span><br><span class="line">listen stats</span><br><span class="line">  bind 0.0.0.0:1080</span><br><span class="line">  mode http</span><br><span class="line">  stats enable</span><br><span class="line">  stats uri /</span><br><span class="line">  stats realm OpenStack\ Haproxy</span><br><span class="line">  stats auth admin:admin</span><br><span class="line">  stats  refresh 30s</span><br><span class="line">  stats  show-node</span><br><span class="line">  stats  show-legends</span><br><span class="line">  stats  hide-version</span><br><span class="line"></span><br><span class="line"># horizon服务</span><br><span class="line"> listen dashboard_cluster</span><br><span class="line">  bind 192.168.182.130:80</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:80 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:80 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 为rabbirmq提供ha集群访问端口，供openstack各服务访问；</span><br><span class="line"># 如果openstack各服务直接连接rabbitmq集群，这里可不设置rabbitmq的负载均衡</span><br><span class="line"> listen rabbitmq_cluster</span><br><span class="line">   bind 192.168.182.130:5673</span><br><span class="line">   mode tcp</span><br><span class="line">   option tcpka</span><br><span class="line">   balance roundrobin</span><br><span class="line">   timeout client  3h</span><br><span class="line">   timeout server  3h</span><br><span class="line">   option  clitcpka</span><br><span class="line">   server controller01 192.168.182.131:5672 check inter 10s rise 2 fall 5</span><br><span class="line">   server controller02 192.168.182.132:5672 check inter 10s rise 2 fall 5</span><br><span class="line"></span><br><span class="line"># glance_api服务</span><br><span class="line"> listen glance_api_cluster</span><br><span class="line">  bind 192.168.182.130:9292</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:9292 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:9292 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># keystone_public _api服务</span><br><span class="line">  listen keystone_public_cluster</span><br><span class="line">  bind 192.168.182.130:5000</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:5000 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:5000 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"># 兼容aws ec2-api</span><br><span class="line"># listen nova_ec2_api_cluster</span><br><span class="line">#  bind 192.168.182.130:8773</span><br><span class="line">#  balance  source</span><br><span class="line">#  option  tcpka</span><br><span class="line">#  option  tcplog</span><br><span class="line">#  server controller01 192.168.182.131:8773 check inter 2000 rise 2 fall 5</span><br><span class="line">#  server controller02 192.168.182.132:8773 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen nova_compute_api_cluster</span><br><span class="line">  bind 192.168.182.130:8774</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:8774 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:8774 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen nova_placement_cluster</span><br><span class="line">  bind 192.168.182.130:8778</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:8778 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:8778 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen nova_metadata_api_cluster</span><br><span class="line">  bind 192.168.182.130:8775</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:8775 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:8775 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen nova_vncproxy_cluster</span><br><span class="line">  bind 192.168.182.130:6080</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:6080 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:6080 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen neutron_api_cluster</span><br><span class="line">  bind 192.168.182.130:9696</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:9696 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:9696 check inter 2000 rise 2 fall 5</span><br><span class="line"></span><br><span class="line"> listen cinder_api_cluster</span><br><span class="line">  bind 192.168.182.130:8776</span><br><span class="line">  balance  source</span><br><span class="line">  option  tcpka</span><br><span class="line">  option  httpchk</span><br><span class="line">  option  tcplog</span><br><span class="line">  server controller01 192.168.182.131:8776 check inter 2000 rise 2 fall 5</span><br><span class="line">  server controller02 192.168.182.132:8776 check inter 2000 rise 2 fall 5</span><br></pre></td></tr></table></figure>
+<p>后面实验环境没拿vip，自己做时候，手动替换下就可以，就能做集群了</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/087llks5.html" title="openstack集群部署—基础服务">https://shenshengkun.github.io/posts/087llks5.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/001dll5a.html" rel="next" title="openstack集群部署—集群环境">
+                <i class="fa fa-chevron-left"></i> openstack集群部署—集群环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/0dsa918a.html" rel="prev" title="openstack集群部署—Keystone集群">
+                openstack集群部署—Keystone集群 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://i4t.com/" title="Abcdocker" target="_blank">Abcdocker</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.dgstack.cn/" title="Dgstack" target="_blank">Dgstack</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.anonym0x1.com/" title="Anony" target="_blank">Anony</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=314773&auto=1&height=66"></iframe>
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mariadb集群"><span class="nav-number">1.</span> <span class="nav-text">mariadb集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#部署mariadb服务"><span class="nav-number">1.1.</span> <span class="nav-text">部署mariadb服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置MariaDB-Galera-Cluster"><span class="nav-number">1.2.</span> <span class="nav-text">配置MariaDB Galera Cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#校验MariaDB-Galera-Cluster"><span class="nav-number">1.3.</span> <span class="nav-text">校验MariaDB Galera Cluster</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ集群"><span class="nav-number">2.</span> <span class="nav-text">RabbitMQ集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装rabbitmq"><span class="nav-number">2.1.</span> <span class="nav-text">安装rabbitmq</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建rabbitmq集群"><span class="nav-number">2.2.</span> <span class="nav-text">构建rabbitmq集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rabbitmq账号"><span class="nav-number">2.3.</span> <span class="nav-text">rabbitmq账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像队列ha"><span class="nav-number">2.4.</span> <span class="nav-text">镜像队列ha</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memcached集群"><span class="nav-number">3.</span> <span class="nav-text">Memcached集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#keepalived和haproxy集群"><span class="nav-number">4.</span> <span class="nav-text">keepalived和haproxy集群</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

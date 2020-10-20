@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="LXCFS简介社区中常见的做法是利用lxcfs来提供容器中的资源可见性。lxcfs 是一个开源的FUSE（用户态文件系统）实现来支持LXC容器，它也可以支持Docker容器。 LXCFS通过用户态文件系统，在容器中提供下列 procfs 的文件。 123456/proc/cpuinfo/proc/diskstats/proc/meminfo/proc/stat/proc/swaps/proc/up">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s1.12以下版本设置LXCFS">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/dd6348aa.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="LXCFS简介社区中常见的做法是利用lxcfs来提供容器中的资源可见性。lxcfs 是一个开源的FUSE（用户态文件系统）实现来支持LXC容器，它也可以支持Docker容器。 LXCFS通过用户态文件系统，在容器中提供下列 procfs 的文件。 123456/proc/cpuinfo/proc/diskstats/proc/meminfo/proc/stat/proc/swaps/proc/up">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-22T02:06:00.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s1.12以下版本设置LXCFS">
+<meta name="twitter:description" content="LXCFS简介社区中常见的做法是利用lxcfs来提供容器中的资源可见性。lxcfs 是一个开源的FUSE（用户态文件系统）实现来支持LXC容器，它也可以支持Docker容器。 LXCFS通过用户态文件系统，在容器中提供下列 procfs 的文件。 123456/proc/cpuinfo/proc/diskstats/proc/meminfo/proc/stat/proc/swaps/proc/up">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/dd6348aa.html">
+
+
+
+
+
+  <title>k8s1.12以下版本设置LXCFS | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-envoy">
+          <a href="/envoy" rel="section">
+            
+            envoy
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-istio">
+          <a href="/istio" rel="section">
+            
+            istio
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-openstack">
+          <a href="/openstack" rel="section">
+            
+            openstack
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/dd6348aa.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">k8s1.12以下版本设置LXCFS</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-07T10:20:01+08:00">
+                2019-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="LXCFS简介"><a href="#LXCFS简介" class="headerlink" title="LXCFS简介"></a>LXCFS简介</h1><p>社区中常见的做法是利用lxcfs来提供容器中的资源可见性。lxcfs 是一个开源的FUSE（用户态文件系统）实现来支持LXC容器，它也可以支持Docker容器。</p>
+<p>LXCFS通过用户态文件系统，在容器中提供下列 <code>procfs</code> 的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/proc/cpuinfo</span><br><span class="line">/proc/diskstats</span><br><span class="line">/proc/meminfo</span><br><span class="line">/proc/stat</span><br><span class="line">/proc/swaps</span><br><span class="line">/proc/uptime</span><br></pre></td></tr></table></figure>
+<p> 比如，把宿主机的 <code>/var/lib/lxcfs/proc/memoinfo</code> 文件挂载到Docker容器的<code>/proc/meminfo</code>位置后。容器中进程读取相应文件内容时，LXCFS的FUSE实现会从容器对应的Cgroup中读取正确的内存限制。从而使得应用获得正确的资源约束设定。 </p>
+<h1 id="Docker环境下LXCFS使用"><a href="#Docker环境下LXCFS使用" class="headerlink" title="Docker环境下LXCFS使用"></a>Docker环境下LXCFS使用</h1><p>安装 lxcfs 的RPM包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://copr-be.cloud.fedoraproject.org/results/ganto/lxd/epel-7-x86_64/00486278-lxcfs/lxcfs-2.0.5-3.el7.centos.x86_64.rpm</span><br><span class="line">yum install lxcfs-2.0.5-3.el7.centos.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>启动 lxcfs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxcfs /var/lib/lxcfs &amp;</span><br></pre></td></tr></table></figure>
+<p>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -m 256m \</span><br><span class="line">      -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw \</span><br><span class="line">      -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats:rw \</span><br><span class="line">      -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo:rw \</span><br><span class="line">      -v /var/lib/lxcfs/proc/stat:/proc/stat:rw \</span><br><span class="line">      -v /var/lib/lxcfs/proc/swaps:/proc/swaps:rw \</span><br><span class="line">      -v /var/lib/lxcfs/proc/uptime:/proc/uptime:rw \</span><br><span class="line">      ubuntu:16.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<p> 结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# docker run -it -m 256m \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats:rw \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo:rw \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/stat:/proc/stat:rw \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/swaps:/proc/swaps:rw \</span><br><span class="line">&gt;       -v /var/lib/lxcfs/proc/uptime:/proc/uptime:rw \</span><br><span class="line">&gt;       ubuntu:16.04 /bin/bash</span><br><span class="line">root@6bcd804eef79:/# free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:            256           0         254         189           0         254</span><br><span class="line">Swap:           256           0         256</span><br><span class="line">root@6bcd804eef79:/#</span><br></pre></td></tr></table></figure>
+<p> 我们可以看到total的内存为256MB，配置已经生效。 </p>
+<h1 id="lxcfs-的-Kubernetes实践"><a href="#lxcfs-的-Kubernetes实践" class="headerlink" title="lxcfs 的 Kubernetes实践"></a>lxcfs 的 Kubernetes实践</h1><p>在kubernetes中使用lxcfs需要解决两个问题：</p>
+<p>第一个问题是每个node上都要启动lxcfs，这个简单，部署一个daemonset就可以了。</p>
+<p>第二个问题是将lxcfs维护的/proc文件挂载到每个容器中</p>
+<p>在集群节点上安装并启动lxcfs，我们将用Kubernetes的方式，用利用容器和DaemonSet方式来运行 lxcfs FUSE文件系统。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/denverdino/lxcfs-initializer</span><br><span class="line">cd lxcfs-initializer</span><br></pre></td></tr></table></figure>
+<h2 id="lxcfs-daemonset"><a href="#lxcfs-daemonset" class="headerlink" title="lxcfs-daemonset"></a>lxcfs-daemonset</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1beta2</span><br><span class="line">kind: DaemonSet</span><br><span class="line">metadata:</span><br><span class="line">  name: lxcfs</span><br><span class="line">  labels:</span><br><span class="line">    app: lxcfs</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: lxcfs</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: lxcfs</span><br><span class="line">    spec:</span><br><span class="line">      hostPID: true</span><br><span class="line">      tolerations:</span><br><span class="line">      - key: node-role.kubernetes.io/master</span><br><span class="line">        effect: NoSchedule</span><br><span class="line">      containers:</span><br><span class="line">      - name: lxcfs</span><br><span class="line">        image: registry.cn-hangzhou.aliyuncs.com/denverdino/lxcfs:3.0.4</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        securityContext:</span><br><span class="line">          privileged: true</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - name: cgroup</span><br><span class="line">          mountPath: /sys/fs/cgroup</span><br><span class="line">        - name: lxcfs</span><br><span class="line">          mountPath: /var/lib/lxcfs</span><br><span class="line">          mountPropagation: Bidirectional</span><br><span class="line">        - name: usr-local</span><br><span class="line">          mountPath: /usr/local</span><br><span class="line">      volumes:</span><br><span class="line">      - name: cgroup</span><br><span class="line">        hostPath:</span><br><span class="line">          path: /sys/fs/cgroup</span><br><span class="line">      - name: usr-local</span><br><span class="line">        hostPath:</span><br><span class="line">          path: /usr/local</span><br><span class="line">      - name: lxcfs</span><br><span class="line">        hostPath:</span><br><span class="line">          path: /var/lib/lxcfs</span><br><span class="line">          type: DirectoryOrCreate</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f lxcfs-daemonset.yaml</span><br></pre></td></tr></table></figure>
+<p>Kubernetes提供了 Initializer 扩展机制，可以用于对资源创建进行拦截和注入处理，我们可以借助它优雅地完成对lxcfs文件的自动化挂载。 </p>
+<h2 id="lxcfs-initializer"><a href="#lxcfs-initializer" class="headerlink" title="lxcfs-initializer"></a>lxcfs-initializer</h2><h3 id="Initializer功能开启"><a href="#Initializer功能开启" class="headerlink" title="Initializer功能开启"></a>Initializer功能开启</h3><p>在Kubernetes 1.13中<a href="https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#initializers" target="_blank" rel="noopener">initializers</a>还是一个alpha特性，需要在Kube-apiserver中添加参数开启。</p>
+<p>这里使用的是kubernets 1.12，设置方法是一样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--enable-admission-plugins=&quot;Initializers,NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;</span><br><span class="line">--runtime-config=admissionregistration.k8s.io/v1alpha1</span><br></pre></td></tr></table></figure>
+<p><code>--enable-admission-plugins</code>和<code>--admission-control</code>互斥，如果同时设置，kube-apiserver启动报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">error: [admission-control and enable-admission-plugins/disable-admission-plugins flags are mutually exclusive, </span><br><span class="line">enable-admission-plugins plugin &quot;--runtime-config=admissionregistration.k8s.io/v1alpha1&quot; is unknown]</span><br></pre></td></tr></table></figure>
+<h3 id="InitializerConfiguration"><a href="#InitializerConfiguration" class="headerlink" title="InitializerConfiguration"></a>InitializerConfiguration</h3><p><code>InitializerConfiguration</code>资源中定义了一组的<code>initializers</code>。</p>
+<p>每个initializer有一个名字和多个规则，规则中是它要作用的资源，例如下面的initializers中只有一个initializer，名称为<code>podimage.example.com</code>，作用于v1版本的pods。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: admissionregistration.k8s.io/v1alpha1</span><br><span class="line">kind: InitializerConfiguration</span><br><span class="line">metadata:</span><br><span class="line">  name: example-config</span><br><span class="line">initializers:</span><br><span class="line">  # the name needs to be fully qualified, i.e., containing at least two &quot;.&quot;</span><br><span class="line">  - name: podimage.example.com</span><br><span class="line">    rules:</span><br><span class="line">      # apiGroups, apiVersion, resources all support wildcard &quot;*&quot;.</span><br><span class="line">      # &quot;*&quot; cannot be mixed with non-wildcard.</span><br><span class="line">      - apiGroups:</span><br><span class="line">          - &quot;&quot;</span><br><span class="line">        apiVersions:</span><br><span class="line">          - v1</span><br><span class="line">        resources:</span><br><span class="line">          - pods</span><br></pre></td></tr></table></figure>
+<p>在kubernets中创建了上面的initializers之后，新建的pod在pending阶段，metadata中会添加一个initializer列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">metadata:</span><br><span class="line">  creationTimestamp: 2019-01-09T08:56:36Z</span><br><span class="line">  generateName: echo-7cfbbd7d49-</span><br><span class="line">  initializers:</span><br><span class="line">    pending:</span><br><span class="line">    - name: podimage.example.com</span><br></pre></td></tr></table></figure>
+<p>注意需要加上参数<code>--include-uninitialized=true</code>才能看到处于这个阶段的Pod:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kubectl.sh -n demo-echo get pod --include-uninitialized=true -o yaml</span><br></pre></td></tr></table></figure>
+<p>metadata中<code>initializers</code>列表不为空的Pod，处于正在等待初始化状态，需要部署一个<code>initializer controller</code>对处于这个阶段中的pod完成初始化后， pod才能退出pending状态。。</p>
+<p>initializer controller需要自己根据需要实现。</p>
+<h3 id="Initializer-Controller"><a href="#Initializer-Controller" class="headerlink" title="Initializer Controller"></a>Initializer Controller</h3><p>initializer controller监听指定类型的resource，当发现有新创建的resouce创建时，通过检查resource的metadata中的initializer名单，决定是否要对resource进行初始化设置，并且在完成设置之后，需要将对应的initializer名单从resource的metadata中删除，否则resource就一直处于等待初始化设置的状态。</p>
+<p>具体实现可以参考<a href="https://github.com/lijiaocn/lxcfs-initializer" target="_blank" rel="noopener">lxcfs-initializer</a>。</p>
+<p>如果有多个InitializerConfiguration和多个Initializer Controller，会怎样？</p>
+<p>没有在文档中找到具体的说明，k8s的文档中Initializer章节的内容很少，这里通过实验，判断一下。</p>
+<p>创建了两个不同名的但是包含相同rule的InitializerConfiguration：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: admissionregistration.k8s.io/v1alpha1</span><br><span class="line">kind: InitializerConfiguration</span><br><span class="line">metadata:</span><br><span class="line">  name: example-config</span><br><span class="line">initializers:</span><br><span class="line">  # the name needs to be fully qualified, i.e., containing at least two &quot;.&quot;</span><br><span class="line">  - name: podimage.example.com</span><br><span class="line">    rules:</span><br><span class="line">      # apiGroups, apiVersion, resources all support wildcard &quot;*&quot;.</span><br><span class="line">      # &quot;*&quot; cannot be mixed with non-wildcard.</span><br><span class="line">      - apiGroups:</span><br><span class="line">          - &quot;&quot;</span><br><span class="line">        apiVersions:</span><br><span class="line">          - v1</span><br><span class="line">        resources:</span><br><span class="line">          - pods</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: admissionregistration.k8s.io/v1alpha1</span><br><span class="line">kind: InitializerConfiguration</span><br><span class="line">metadata:</span><br><span class="line">  name: example-config-2</span><br><span class="line">initializers:</span><br><span class="line">  # the name needs to be fully qualified, i.e., containing at least two &quot;.&quot;</span><br><span class="line">  - name: podimage-2.example.com rules:</span><br><span class="line">      # apiGroups, apiVersion, resources all support wildcard &quot;*&quot;.</span><br><span class="line">      # &quot;*&quot; cannot be mixed with non-wildcard.</span><br><span class="line">      - apiGroups:</span><br><span class="line">          - &quot;&quot;</span><br><span class="line">        apiVersions:</span><br><span class="line">          - v1</span><br><span class="line">        resources:</span><br><span class="line">          - pods</span><br><span class="line">  - name: podimage.example.com</span><br><span class="line">    rules:</span><br><span class="line">      # apiGroups, apiVersion, resources all support wildcard &quot;*&quot;.</span><br><span class="line">      # &quot;*&quot; cannot be mixed with non-wildcard.</span><br><span class="line">      - apiGroups:</span><br><span class="line">          - &quot;&quot;</span><br><span class="line">        apiVersions:</span><br><span class="line">          - v1</span><br><span class="line">        resources:</span><br><span class="line">          - pods</span><br></pre></td></tr></table></figure>
+<p>Pod中的metadata是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">metadata:</span><br><span class="line">  creationTimestamp: 2019-01-10T04:03:12Z</span><br><span class="line">  generateName: echo-7cfbbd7d49-</span><br><span class="line">  initializers:</span><br><span class="line">    pending:</span><br><span class="line">    - name: podimage.example.com</span><br><span class="line">    - name: podimage-2.example.com</span><br><span class="line">    - name: podimage.example.com</span><br></pre></td></tr></table></figure>
+<p>之后又通过调整InitializerConfiguration的名称排序、创建的先后顺序、内部的rules的顺序，多次试验之后发现，<code>多个InitializerConfiguration</code>的在metadata中是按照它们的<code>名称排序</code>的，和创建时间无关。</p>
+<p>每个InitializerConfiguration中的<code>rules</code>在metadata中顺序与它们<code>定义的顺序</code>一致。</p>
+<p>根据lxcfs-initializer的实现以及k8s的文档，Initializer Controller对目标Resource完成设置之后，需要从metadata中移除对应的Initializer。</p>
+<p>如果定义了多个Initializer，并且有多个Initializer Controller各自负责不同的Initializer，这时候需要小心设计，既要防止“漏掉”应当处理的Resource，导致Resource长期不落地，又要防止已经被删除的Initializer又被重新写上了，重复处理时出现错误。</p>
+<p>根据现在掌握的信息，目前比较稳妥的做法是，将多个Initializer设计为顺序无关，谁先执行都可以，否则只有创建一个InitializerConfiguration，rules的顺序就是Initiliazer的顺序。只设计一个Initializer Controller,或者将多个Initializer Controller设计成串行执行，让它们监测Resource的创建和变化，不仅仅是刚创建，否则一些Initializer可能被漏掉。</p>
+<p><a href="https://github.com/lijiaocn/lxcfs-initializer" target="_blank" rel="noopener">lxcfs-initializer</a>这个Initializer只关心<code>ADD</code>事件，如果同时有其它的Initializer Controller存在，可能会漏掉一些Resource。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">_, controller := cache.NewInformer(includeUninitializedWatchlist, &amp;v1.Deployment&#123;&#125;, resyncPeriod,</span><br><span class="line">	cache.ResourceEventHandlerFuncs&#123;</span><br><span class="line">		AddFunc: func(obj interface&#123;&#125;) &#123;</span><br><span class="line">			err := initializeDeployment(obj.(*v1.Deployment), c, clientset)</span><br><span class="line">			if err != nil &#123;</span><br><span class="line">				log.Println(err)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">kind: ClusterRole</span><br><span class="line">metadata:</span><br><span class="line">  name: lxcfs-initializer-default</span><br><span class="line">  namespace: default</span><br><span class="line">rules:</span><br><span class="line">- apiGroups: [&quot;*&quot;]</span><br><span class="line">  resources: [&quot;pods&quot;]</span><br><span class="line">  verbs: [&quot;initialize&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;watch&quot;, &quot;list&quot;]</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: lxcfs-initializer-service-account</span><br><span class="line">  namespace: default</span><br><span class="line">---</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">metadata:</span><br><span class="line">  name: lxcfs-initializer-role-binding</span><br><span class="line">subjects:</span><br><span class="line">- kind: ServiceAccount</span><br><span class="line">  name: lxcfs-initializer-service-account</span><br><span class="line">  namespace: default</span><br><span class="line">roleRef:</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: lxcfs-initializer-default</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  initializers:</span><br><span class="line">    pending: []</span><br><span class="line">  labels:</span><br><span class="line">    app: lxcfs-initializer</span><br><span class="line">  name: lxcfs-initializer</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: lxcfs-initializer</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: lxcfs-initializer</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: lxcfs-initializer-service-account</span><br><span class="line">      containers:</span><br><span class="line">        - name: lxcfs-initializer</span><br><span class="line">          image: registry.cn-hangzhou.aliyuncs.com/denverdino/lxcfs-initializer:0.0.4</span><br><span class="line">          imagePullPolicy: Always</span><br><span class="line">          args:</span><br><span class="line">            - &quot;-annotation=initializer.kubernetes.io/lxcfs&quot;</span><br><span class="line">            - &quot;-require-annotation=true&quot;</span><br><span class="line">---</span><br><span class="line">apiVersion: admissionregistration.k8s.io/v1alpha1</span><br><span class="line">kind: InitializerConfiguration</span><br><span class="line">metadata:</span><br><span class="line">  name: lxcfs.initializer</span><br><span class="line">initializers:</span><br><span class="line">  - name: lxcfs.initializer.kubernetes.io</span><br><span class="line">    rules:</span><br><span class="line">      - apiGroups:</span><br><span class="line">          - &quot;*&quot;</span><br><span class="line">        apiVersions:</span><br><span class="line">          - &quot;*&quot;</span><br><span class="line">        resources:</span><br><span class="line">          - pods</span><br></pre></td></tr></table></figure>
+<p>首先我们创建了service account <code>lxcfs-initializer-service-account</code>，并对其授权了 “pod” 资源的查找、更改等权限。然后我们部署了一个名为 “lxcfs-initializer” 的Initializer，利用上述SA启动一个容器来处理对 “pod” 资源的创建，如果deployment中包含 <code>initializer.kubernetes.io/lxcfs</code>为<code>true</code>的注释，就会对该应用中容器进行文件挂载 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f lxcfs-initializer.yaml</span><br></pre></td></tr></table></figure>
+<h2 id="下面我们部署一个简单的Apache应用"><a href="#下面我们部署一个简单的Apache应用" class="headerlink" title="下面我们部署一个简单的Apache应用"></a>下面我们部署一个简单的Apache应用</h2><p>为其分配256MB内存，并且声明了如下注释 <code>&quot;initializer.kubernetes.io/lxcfs&quot;: &quot;true&quot;</code></p>
+<p>web.yaml:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: web</span><br><span class="line">  name: web</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: web</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      annotations:</span><br><span class="line">        &quot;initializer.kubernetes.io/lxcfs&quot;: &quot;true&quot;</span><br><span class="line">      labels:</span><br><span class="line">        app: web</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: web</span><br><span class="line">          image: httpd:2.4.32</span><br><span class="line">          imagePullPolicy: Always</span><br><span class="line">          resources:</span><br><span class="line">            requests:</span><br><span class="line">              memory: &quot;256Mi&quot;</span><br><span class="line">              cpu: &quot;500m&quot;</span><br><span class="line">            limits:</span><br><span class="line">              memory: &quot;256Mi&quot;</span><br><span class="line">              cpu: &quot;500m&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f web.yaml</span><br></pre></td></tr></table></figure>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec web-7f6bc6797c-rb9sk free</span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:        262144       2876     259268       2292          0        304</span><br><span class="line">-/+ buffers/cache:       2572     259572</span><br><span class="line">Swap:            0          0          0</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>如果自己的k8s版本跟我的不一样，可以kubectl api-versions看看版本</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/dd6348aa.html" title="k8s1.12以下版本设置LXCFS">https://shenshengkun.github.io/posts/dd6348aa.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/ak013ldk.html" rel="next" title="Kubelet资源预留">
+                <i class="fa fa-chevron-left"></i> Kubelet资源预留
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/9jdfjdja.html" rel="prev" title="k8s1.12以上版本设置LXCFS">
+                k8s1.12以上版本设置LXCFS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://i4t.com/" title="Abcdocker" target="_blank">Abcdocker</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.dgstack.cn/" title="Dgstack" target="_blank">Dgstack</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.anonym0x1.com/" title="Anony" target="_blank">Anony</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=314773&auto=1&height=66"></iframe>
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LXCFS简介"><span class="nav-number">1.</span> <span class="nav-text">LXCFS简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker环境下LXCFS使用"><span class="nav-number">2.</span> <span class="nav-text">Docker环境下LXCFS使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lxcfs-的-Kubernetes实践"><span class="nav-number">3.</span> <span class="nav-text">lxcfs 的 Kubernetes实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lxcfs-daemonset"><span class="nav-number">3.1.</span> <span class="nav-text">lxcfs-daemonset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lxcfs-initializer"><span class="nav-number">3.2.</span> <span class="nav-text">lxcfs-initializer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Initializer功能开启"><span class="nav-number">3.2.1.</span> <span class="nav-text">Initializer功能开启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializerConfiguration"><span class="nav-number">3.2.2.</span> <span class="nav-text">InitializerConfiguration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Initializer-Controller"><span class="nav-number">3.2.3.</span> <span class="nav-text">Initializer Controller</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面我们部署一个简单的Apache应用"><span class="nav-number">3.3.</span> <span class="nav-text">下面我们部署一个简单的Apache应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">3.3.1.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

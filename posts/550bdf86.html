@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="舒宇的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="安装监控插件12345wget https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.0.4rc1/elasticsearch_exporter-1.0.4rc1.linux-amd64.tar.gz tar -zxvf elasticsearch_exporter-1.0.4rc1.linux-am">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus监控elasticsearch">
+<meta property="og:url" content="https://shenshengkun.github.io/posts/550bdf86.html">
+<meta property="og:site_name" content="舒宇的博客">
+<meta property="og:description" content="安装监控插件12345wget https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.0.4rc1/elasticsearch_exporter-1.0.4rc1.linux-amd64.tar.gz tar -zxvf elasticsearch_exporter-1.0.4rc1.linux-am">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://shenshengkun.github.io/images/ela.png">
+<meta property="og:updated_time" content="2019-08-29T01:34:29.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prometheus监控elasticsearch">
+<meta name="twitter:description" content="安装监控插件12345wget https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.0.4rc1/elasticsearch_exporter-1.0.4rc1.linux-amd64.tar.gz tar -zxvf elasticsearch_exporter-1.0.4rc1.linux-am">
+<meta name="twitter:image" content="https://shenshengkun.github.io/images/ela.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://shenshengkun.github.io/posts/550bdf86.html">
+
+
+
+
+
+  <title>Prometheus监控elasticsearch | 舒宇的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒宇的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/python" rel="section">
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-k8s">
+          <a href="/k8s" rel="section">
+            
+            k8s
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-envoy">
+          <a href="/envoy" rel="section">
+            
+            envoy
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-istio">
+          <a href="/istio" rel="section">
+            
+            istio
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-openstack">
+          <a href="/openstack" rel="section">
+            
+            openstack
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ceph">
+          <a href="/ceph" rel="section">
+            
+            ceph
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://shenshengkun.github.io/posts/550bdf86.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shu Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sy.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒宇的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Prometheus监控elasticsearch</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-22T09:49:01+08:00">
+                2019-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/k8s/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="安装监控插件"><a href="#安装监控插件" class="headerlink" title="安装监控插件"></a>安装监控插件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.0.4rc1/elasticsearch_exporter-1.0.4rc1.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"> tar -zxvf elasticsearch_exporter-1.0.4rc1.linux-amd64.tar.gz</span><br><span class="line"> cd elasticsearch_exporter-1.0.4rc1.linux-amd64/</span><br><span class="line"> nohup ./elasticsearch_exporter --web.listen-address &quot;:9109&quot;  --es.uri http://192.168.50.153:9200 &amp;</span><br></pre></td></tr></table></figure>
+<p>启动成功后，可以访问 <a href="http://192.168.50.153:9109/metrics" target="_blank" rel="noopener">http://192.168.50.153:9109/metrics</a>  ，看抓取的信息</p>
+<h1 id="监控图表"><a href="#监控图表" class="headerlink" title="监控图表"></a>监控图表</h1><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>解析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>##搜索和索引性能</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_indices_search_query_total</td>
+<td>查询总数 吞吐量</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_search_query_time_seconds</td>
+<td>查询总时间    性能</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_search_fetch_total</td>
+<td>提取总数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_search_fetch_time_seconds</td>
+<td>花费在提取上的总时间</td>
+</tr>
+<tr>
+<td>##索引请求</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_indices_indexing_index_total</td>
+<td>索引的文件总数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_indexing_index_time_seconds_total</td>
+<td>索引文档总时间</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_indexing_delete_total</td>
+<td>索引的文件删除总数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_indexing_delete_time_seconds_total</td>
+<td>索引的文件删除总时间</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_refresh_total</td>
+<td>索引刷新总数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_refresh_time_seconds_total</td>
+<td>刷新指数的总时间</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_flush_total</td>
+<td>索引刷新总数到磁盘</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_flush_time_seconds</td>
+<td>将索引刷新到磁盘上的总时间 累计flush时间</td>
+</tr>
+<tr>
+<td>##JVM内存和垃圾回收</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_gc_collection_seconds_sum</td>
+<td>GC run time in seconds垃圾回收时间</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_gc_collection_seconds_count</td>
+<td>Count of JVM GC runs垃圾搜集数</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_committed_bytes</td>
+<td>JVM memory currently committed by area最大使用内存限制</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_max_bytes</td>
+<td>配置的最大jvm值</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_pool_max_bytes</td>
+<td>JVM内存最大池数</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_pool_peak_max_bytes</td>
+<td>最大的JVM内存峰值</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_pool_peak_used_bytes</td>
+<td>池使用的JVM内存峰值</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_pool_used_bytes</td>
+<td>目前使用的JVM内存池</td>
+</tr>
+<tr>
+<td>elasticsearch_jvm_memory_used_bytes</td>
+<td>JVM memory currently used by area 内存使用量</td>
+</tr>
+<tr>
+<td>##集群健康和节点可用性</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_status</td>
+<td>集群状态，green（ 所有的主分片和副本分片都正常运行）、yellow（所有的主分片都正常运行，但不是所有的副本分片都正常运行）red（有主分片没能正常运行）值为1的即为对应状态</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_number_of_data_nodes</td>
+<td>node节点的数量</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_number_of_in_flight_fetch</td>
+<td>正在进行的碎片信息请求的数量</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_number_of_nodes</td>
+<td>集群内所有的节点</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_number_of_pending_tasks</td>
+<td>尚未执行的集群级别更改</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_initializing_shards</td>
+<td>正在初始化的分片数</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_unassigned_shards</td>
+<td>未分配分片数</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_active_primary_shards</td>
+<td>活跃的主分片总数</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_active_shards</td>
+<td>活跃的分片总数（包括复制分片）</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_relocating_shards</td>
+<td>当前节点正在迁移到其他节点的分片数量，通常为0，集群中有节点新加入或者退出时该值会增加</td>
+</tr>
+<tr>
+<td>##资源饱和度</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_thread_pool_completed_count</td>
+<td>线程池操作完成（bulk、index、search、force_merge）</td>
+</tr>
+<tr>
+<td>elasticsearch_thread_pool_active_count</td>
+<td>线程池线程活动（bulk、index、search、force_merge）</td>
+</tr>
+<tr>
+<td>elasticsearch_thread_pool_largest_count</td>
+<td>线程池最大线程数（bulk、index、search、force_merge）</td>
+</tr>
+<tr>
+<td>elasticsearch_thread_pool_queue_count</td>
+<td>线程池中的排队线程数（bulk、index、search、force_merge）</td>
+</tr>
+<tr>
+<td>elasticsearch_thread_pool_rejected_count</td>
+<td>线程池的被拒绝线程数（bulk、index、search、force_merge）</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_fielddata_memory_size_bytes</td>
+<td>fielddata缓存的大小（字节）</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_fielddata_evictions</td>
+<td>来自fielddata缓存的驱逐次数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_filter_cache_evictions</td>
+<td>来自过滤器缓存的驱逐次数（仅版本2.x）</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_filter_cache_memory_size_bytes</td>
+<td>过滤器高速缓存的大小（字节）（仅版本2.x）</td>
+</tr>
+<tr>
+<td>elasticsearch_cluster_health_number_of_pending_tasks</td>
+<td>待处理任务数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_time_seconds</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_missing_total</td>
+<td>丢失的文件的GET请求总数</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_missing_time_seconds</td>
+<td>花费在文档丢失的GET请求上的总时间</td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_exists_time_seconds</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_exists_total</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_indices_get_total</td>
+<td></td>
+</tr>
+<tr>
+<td>##主机级别的系统和网络指标</td>
+<td></td>
+</tr>
+<tr>
+<td>elasticsearch_process_cpu_percent</td>
+<td>Percent CPU used by process CPU使用率</td>
+</tr>
+<tr>
+<td>elasticsearch_filesystem_data_free_bytes</td>
+<td>Free space on block device in bytes 磁盘可用空间</td>
+</tr>
+<tr>
+<td>elasticsearch_process_open_files_count</td>
+<td>Open file descriptors ES进程打开的文件描述符</td>
+</tr>
+<tr>
+<td>elasticsearch_transport_rx_packets_total</td>
+<td>Count of packets receivedES节点之间网络入流量</td>
+</tr>
+<tr>
+<td>elasticsearch_transport_tx_packets_total</td>
+<td>Count of packets sentES节点之间网络出流量</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="prometheus配置"><a href="#prometheus配置" class="headerlink" title="prometheus配置"></a>prometheus配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- job_name: &apos;elasticsearch&apos;</span><br><span class="line">      scrape_interval: 60s</span><br><span class="line">      scrape_timeout:  30s</span><br><span class="line">      metrics_path: &quot;/metrics&quot;</span><br><span class="line">      static_configs:</span><br><span class="line">      - targets:</span><br><span class="line">        - &apos;192.168.50.153:9109&apos;</span><br><span class="line">        labels:</span><br><span class="line">          service: elasticsearch</span><br><span class="line">      relabel_configs:</span><br><span class="line">      - source_labels: [__address__]</span><br><span class="line">        regex: &apos;(.*)\:9109&apos;</span><br><span class="line">        target_label:  &apos;instance&apos;</span><br><span class="line">        replacement:   &apos;$1&apos;</span><br><span class="line">      - source_labels: [__address__]</span><br><span class="line">        regex:         &apos;.*\.(.*)\.lan.*&apos;</span><br><span class="line">        target_label:  &apos;environment&apos;</span><br><span class="line">        replacement:   &apos;$1&apos;</span><br></pre></td></tr></table></figure>
+<p>之后运行重读prometheus配置命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./reload-prometheus.sh</span><br></pre></td></tr></table></figure>
+<h1 id="grafana模板"><a href="#grafana模板" class="headerlink" title="grafana模板"></a>grafana模板</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://grafana.com/dashboards/2322</span><br></pre></td></tr></table></figure>
+<p><img src="https://shenshengkun.github.io/images/ela.png" alt=""></p>
+<h1 id="报警配置"><a href="#报警配置" class="headerlink" title="报警配置"></a>报警配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">groups:</span><br><span class="line">- name: elasticsearchStatsAlert</span><br><span class="line">  rules:</span><br><span class="line">  - alert: Elastic_Cluster_Health_RED</span><br><span class="line">    expr: elasticsearch_cluster_health_status&#123;color=&quot;red&quot;&#125;==1 </span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot;Instance &#123;&#123; $labels.instance &#125;&#125;: not all primary and replica shards are allocated in elasticsearch cluster &#123;&#123; $labels.cluster &#125;&#125;&quot;</span><br><span class="line">      description: &quot;Instance &#123;&#123; $labels.instance &#125;&#125;: not all primary and replica shards are allocated in elasticsearch cluster &#123;&#123; $labels.cluster &#125;&#125;.&quot;</span><br><span class="line">  - alert: Elastic_Cluster_Health_Yellow </span><br><span class="line">    expr: elasticsearch_cluster_health_status&#123;color=&quot;yellow&quot;&#125;==1</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; Instance &#123;&#123; $labels.instance &#125;&#125;: not all primary and replica shards are allocated in elasticsearch cluster &#123;&#123; $labels.cluster &#125;&#125;&quot; </span><br><span class="line">      description: &quot;Instance &#123;&#123; $labels.instance &#125;&#125;: not all primary and replica shards are allocated in elasticsearch cluster &#123;&#123; $labels.cluster &#125;&#125;.&quot;</span><br><span class="line">  - alert: Elasticsearch_JVM_Heap_Too_High</span><br><span class="line">    expr: elasticsearch_jvm_memory_used_bytes&#123;area=&quot;heap&quot;&#125; / elasticsearch_jvm_memory_max_bytes&#123;area=&quot;heap&quot;&#125; &gt; 0.8</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125; heap usage is high &quot;</span><br><span class="line">      description: &quot;The heap in &#123;&#123; $labels.instance &#125;&#125; is over 80% for 15m.&quot;</span><br><span class="line">  - alert: Elasticsearch_health_up</span><br><span class="line">    expr: elasticsearch_cluster_health_up !=1</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; ElasticSearch node: &#123;&#123; $labels.instance &#125;&#125; last scrape of the ElasticSearch cluster health failed&quot;                               </span><br><span class="line">      description: &quot;ElasticSearch node: &#123;&#123; $labels.instance &#125;&#125; last scrape of the ElasticSearch cluster health failed&quot;</span><br><span class="line">  - alert: Elasticsearch_Too_Few_Nodes_Running</span><br><span class="line">    expr: elasticsearch_cluster_health_number_of_nodes &lt; 12</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot;There are only &#123;&#123;$value&#125;&#125; &lt; 12 ElasticSearch nodes running &quot;                               </span><br><span class="line">      description: &quot;lasticSearch running on less than 12 nodes(total 14)&quot;</span><br><span class="line">  - alert: Elasticsearch_Count_of_JVM_GC_Runs</span><br><span class="line">    expr: rate(elasticsearch_jvm_gc_collection_seconds_count&#123;&#125;[5m])&gt;5</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: Count of JVM GC runs &gt; 5 per sec and has a value of &#123;&#123; $value &#125;&#125; &quot;</span><br><span class="line">      description: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: Count of JVM GC runs &gt; 5 per sec and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">  - alert: Elasticsearch_GC_Run_Time</span><br><span class="line">    expr: rate(elasticsearch_jvm_gc_collection_seconds_sum[5m])&gt;0.3</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: GC run time in seconds &gt; 0.3 sec and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">      description: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: GC run time in seconds &gt; 0.3 sec and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">  - alert: Elasticsearch_json_parse_failures</span><br><span class="line">    expr: elasticsearch_cluster_health_json_parse_failures&gt;0</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: json parse failures &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">      description: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: json parse failures &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">  - alert: Elasticsearch_breakers_tripped</span><br><span class="line">    expr: rate(elasticsearch_breakers_tripped&#123;&#125;[5m])&gt;0</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: breakers tripped &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">      description: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: breakers tripped &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">  - alert: Elasticsearch_health_timed_out</span><br><span class="line">    expr: elasticsearch_cluster_health_timed_out&gt;0</span><br><span class="line">    for: 1m</span><br><span class="line">    labels:</span><br><span class="line">      severity: critical</span><br><span class="line">    annotations:</span><br><span class="line">      summary: &quot; ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: Number of cluster health checks timed out &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br><span class="line">      description: &quot;ElasticSearch node &#123;&#123; $labels.instance &#125;&#125;: Number of cluster health checks timed out &gt; 0 and has a value of &#123;&#123; $value &#125;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="elasticsearch-7-x监控"><a href="#elasticsearch-7-x监控" class="headerlink" title="elasticsearch-7.x监控"></a>elasticsearch-7.x监控</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Since Elasticsearch 7.0.0 : ./bin/elasticsearch-plugin install -b https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/7.2.1.0/prometheus-exporter-7.2.1.0.zip</span><br><span class="line"></span><br><span class="line">Since Elasticsearch 6.0.0 : ./bin/elasticsearch-plugin install -b https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/6.8.0.0/prometheus-exporter-6.8.0.0.zip</span><br><span class="line"></span><br><span class="line">On Elasticsearch 5.x.x : ./bin/elasticsearch-plugin install -b https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/5.6.16.0/elasticsearch-prometheus-exporter-5.6.16.0.zip</span><br><span class="line"></span><br><span class="line">On old 2.x.x versions : ./bin/plugin install https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/2.4.1.0/elasticsearch-prometheus-exporter-2.4.1.0.zip</span><br><span class="line"></span><br><span class="line">Do not forget to restart the node after the installation!</span><br><span class="line"></span><br><span class="line">Note that the plugin needs the following special permissions:</span><br><span class="line"></span><br><span class="line">java.lang.RuntimePermission accessClassInPackage.sun.misc</span><br><span class="line">java.lang.RuntimePermission accessDeclaredMembers</span><br><span class="line">java.lang.reflect.ReflectPermission suppressAccessChecks</span><br><span class="line">If you have a lot of indices and think this data is irrelevant, you can disable in the main configuration file:</span><br><span class="line"></span><br><span class="line">prometheus.indices: false</span><br><span class="line">To disable exporting cluster settings use:</span><br><span class="line"></span><br><span class="line">prometheus.cluster.settings: false</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Uninstall</span><br><span class="line">Since Elasticsearch 6.0.0: ./bin/elasticsearch-plugin remove prometheus-exporter</span><br><span class="line"></span><br><span class="line">On Elasticsearch 5.x.x: ./bin/elasticsearch-plugin remove prometheus-exporter</span><br><span class="line"></span><br><span class="line">On old 2.x.x versions: ./bin/plugin remove prometheus-exporter</span><br></pre></td></tr></table></figure>
+<h2 id="prometheus配置-1"><a href="#prometheus配置-1" class="headerlink" title="prometheus配置"></a>prometheus配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- job_name: elasticsearch</span><br><span class="line">  scrape_interval: 10s</span><br><span class="line">  metrics_path: &quot;/_prometheus/metrics&quot;</span><br><span class="line">  static_configs:</span><br><span class="line">  - targets:</span><br><span class="line">    - node1:9200</span><br><span class="line">    - node2:9200</span><br><span class="line">    - node3:9200</span><br></pre></td></tr></table></figure>
+<p>带账号密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- job_name: &apos;elastic-cluster&apos;</span><br><span class="line">      scrape_interval: 10s</span><br><span class="line">      metrics_path: &apos;/_prometheus/metrics&apos;</span><br><span class="line">      static_configs:</span><br><span class="line">      - targets:</span><br><span class="line">        - &apos;node1:9200&apos;</span><br><span class="line">        - &apos;node2:9200&apos;</span><br><span class="line">        - &apos;node3:9200&apos;</span><br><span class="line">      basic_auth:</span><br><span class="line">        username: &apos;elastic&apos;</span><br><span class="line">        password: &apos;elastic&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="grafana"><a href="#grafana" class="headerlink" title="grafana"></a>grafana</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://grafana.com/grafana/dashboards/266</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/WeChatQR.png" alt="Shu Yu 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/AliPayQR.jpg" alt="Shu Yu 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Shu Yu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://shenshengkun.github.io/posts/550bdf86.html" title="Prometheus监控elasticsearch">https://shenshengkun.github.io/posts/550bdf86.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/354cfft6.html" rel="next" title="Prometheus删除数据指标">
+                <i class="fa fa-chevron-left"></i> Prometheus删除数据指标
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/440gqa86.html" rel="prev" title="Prometheus监控mongo">
+                Prometheus监控mongo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/sy.jpg" alt="Shu Yu">
+            
+              <p class="site-author-name" itemprop="name">Shu Yu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">173</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/weixin_37934134" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://i4t.com/" title="Abcdocker" target="_blank">Abcdocker</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.dgstack.cn/" title="Dgstack" target="_blank">Dgstack</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.anonym0x1.com/" title="Anony" target="_blank">Anony</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=314773&auto=1&height=66"></iframe>
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装监控插件"><span class="nav-number">1.</span> <span class="nav-text">安装监控插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#监控图表"><span class="nav-number">2.</span> <span class="nav-text">监控图表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prometheus配置"><span class="nav-number">3.</span> <span class="nav-text">prometheus配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#grafana模板"><span class="nav-number">4.</span> <span class="nav-text">grafana模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#报警配置"><span class="nav-number">5.</span> <span class="nav-text">报警配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#elasticsearch-7-x监控"><span class="nav-number">6.</span> <span class="nav-text">elasticsearch-7.x监控</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prometheus配置-1"><span class="nav-number">6.1.</span> <span class="nav-text">prometheus配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grafana"><span class="nav-number">6.2.</span> <span class="nav-text">grafana</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shu Yu</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v</div>
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v="></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
