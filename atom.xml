@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://shenshengkun.github.io/"/>
-  <updated>2020-06-30T01:15:59.029Z</updated>
+  <updated>2021-03-03T06:51:00.657Z</updated>
   <id>https://shenshengkun.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>k8s的pod名称不宜过长</title>
+    <link href="https://shenshengkun.github.io/posts/dv8pan45.html"/>
+    <id>https://shenshengkun.github.io/posts/dv8pan45.html</id>
+    <published>2021-03-03T06:10:01.000Z</published>
+    <updated>2021-03-03T06:51:00.657Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="pod名称命名规范"><a href="#pod名称命名规范" class="headerlink" title="pod名称命名规范"></a>pod名称命名规范</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod名字受DNS Label Names 63位长度限制。</span><br><span class="line">prometheus在生成metric的label时也有64个字符的限制，如果超过了，会导致有些pod label被截断，监控有问题，调metics的一些自动扩容策略也会有问题。</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;pod名称命名规范&quot;&gt;&lt;a href=&quot;#pod名称命名规范&quot; class=&quot;headerlink&quot; title=&quot;pod名称命名规范&quot;&gt;&lt;/a&gt;pod名称命名规范&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
+      
+    
+    </summary>
+    
+      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>k8s二次调度</title>
@@ -449,29 +472,6 @@
       
       
         &lt;h1 id=&quot;表达式语言数据类型&quot;&gt;&lt;a href=&quot;#表达式语言数据类型&quot; class=&quot;headerlink&quot; title=&quot;表达式语言数据类型&quot;&gt;&lt;/a&gt;表达式语言数据类型&lt;/h1&gt;&lt;p&gt;在Prometheus的表达式语言中，任何表达式或者子表达式都可以归为四种类型：&lt;/
-      
-    
-    </summary>
-    
-      <category term="k8s" scheme="https://shenshengkun.github.io/categories/k8s/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>ingress自动化https</title>
-    <link href="https://shenshengkun.github.io/posts/p99mnb44.html"/>
-    <id>https://shenshengkun.github.io/posts/p99mnb44.html</id>
-    <published>2020-05-06T01:30:01.000Z</published>
-    <updated>2020-05-06T02:16:15.876Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>如果用<code>cfssl或者openssl</code>之类的工具手动生成TLS证书，这样就可以轻松搞定站点的https访问了。理想是很美好，但实际操作时却很痛苦，主要有以下几点缺陷：</p><ol><li>如果k8s集群上部署的应用较多，要为每个应用的不同域名生成https证书，操作太麻烦。</li><li>上述这些手动操作没有跟k8s的deployment描述文件放在一起记录下来，很容易遗忘。</li><li>证书过期后，又得手动执行命令重新生成证书。</li></ol><h1 id="证书管理器"><a href="#证书管理器" class="headerlink" title="证书管理器"></a>证书管理器</h1><h2 id="cert-manager的架构"><a href="#cert-manager的架构" class="headerlink" title="cert-manager的架构"></a>cert-manager的架构</h2><p><img src="https://shenshengkun.github.io/images/ingress_certmanager.png" alt=""></p><p>上面是官方给出的架构图，可以看到cert-manager在k8s中定义了两个自定义类型资源：<code>Issuer</code>和<code>Certificate</code>。</p><p>其中<code>Issuer</code>代表的是证书颁发者，可以定义各种提供者的证书颁发者，当前支持基于<code>Letsencrypt</code>、<code>vault</code>和<code>CA</code>的证书颁发者，还可以定义不同环境下的证书颁发者。</p><p>而<code>Certificate</code>代表的是生成证书的请求，一般其中存入生成证书的元信息，如域名等等。</p><p>一旦在k8s中定义了上述两类资源，部署的<code>cert-manager</code>则会根据<code>Issuer</code>和<code>Certificate</code>生成TLS证书，并将证书保存进k8s的<code>Secret</code>资源中，然后在<code>Ingress</code>资源中就可以引用到这些生成的<code>Secret</code>资源。对于已经生成的证书，还是定期检查证书的有效期，如即将超过有效期，还会自动续期。</p><h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><h2 id="使用常规清单安装"><a href="#使用常规清单安装" class="headerlink" title="使用常规清单安装"></a>使用常规清单安装</h2><blockquote><p>注意：从cert-manager v0.11.0开始，Kubernetes的最低支持版本是v1.12.0。仍在运行Kubernetes v1.11或更低版本的用户应在安装cert-manager之前升级到受支持的版本。<br>创建一个名称空间以在其中运行cert-manager</p></blockquote><p>创建一个namespace</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># namespace.yaml </span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Namespace</span><br><span class="line">metadata:</span><br><span class="line">  name: cert-manager</span><br></pre></td></tr></table></figure><p>安装cert-manager，官方地址为</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply --validate=<span class="literal">false</span> -f https:<span class="comment">//github.com/jetstack/cert-manager/releases/download/v0.13.0/cert-manager.yaml</span></span><br></pre></td></tr></table></figure><p>yaml中有三个镜像，分别为</p><ul><li>shenshengkun/cert-manager-controller:v0.13.1</li><li>shenshengkun/cert-manager-cainjector:v0.13.1</li><li>shenshengkun/cert-manager-webhook:v0.13.1</li></ul><p>默认是从<code>quay.io</code>获取镜像，如果<code>quay.io</code>的镜像无法获取，改成我上面的镜像库</p><h2 id="使用Helm安装"><a href="#使用Helm安装" class="headerlink" title="使用Helm安装"></a>使用Helm安装</h2><p>部署前需要一些 crd</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/v0.13.0/deploy/manifests/00-crds.yaml</span><br></pre></td></tr></table></figure><p>为cert-manager创建名称空间</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace cert-manager</span><br></pre></td></tr></table></figure><p>添加Jetstack Helm存储库。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm repo add jetstack https://charts.jetstack.io</span><br></pre></td></tr></table></figure><p>更新您的本地Helm存储库缓存</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm repo update</span><br></pre></td></tr></table></figure><ul><li><p>安装cert-manager</p><ul><li><p>Helm v3+</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helm install \</span><br><span class="line">cert-manager jetstack/cert-manager \</span><br><span class="line">--namespace cert-manager \</span><br><span class="line">--version v0.13.0</span><br></pre></td></tr></table></figure></li><li><p>Helm v2</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">helm install \</span><br><span class="line">--name cert-manager \</span><br><span class="line">--namespace cert-manager \</span><br><span class="line">--version v0.13.0 \</span><br><span class="line">jetstack/cert-manager</span><br></pre></td></tr></table></figure></li></ul></li></ul><h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: tomcat-test                 </span><br><span class="line">  namespace: test</span><br><span class="line">  annotations:</span><br><span class="line">    #指定使用test做代理</span><br><span class="line">    kubernetes.io/ingress.class: &quot;nginx-backend&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/ssl-redirect: &quot;true&quot;</span><br><span class="line">    #关联到名为letsencrypt-prod的Issuer</span><br><span class="line">    cert-manager.io/issuer: &quot;letsencrypt-prod&quot;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    #自定义域名</span><br><span class="line">    - test.sy.com</span><br><span class="line">    secretName: test-tls</span><br><span class="line">  rules:</span><br><span class="line">    #自定义域名</span><br><span class="line">  - host: test.sy.com</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - backend:</span><br><span class="line">          #服务名称</span><br><span class="line">          serviceName: tomcat-test-opdev</span><br><span class="line">          #服务端口</span><br><span class="line">          servicePort: 6080</span><br><span class="line">        path: /</span><br><span class="line">---</span><br><span class="line">apiVersion: cert-manager.io/v1alpha2</span><br><span class="line">kind: Issuer</span><br><span class="line">metadata:</span><br><span class="line">  name: letsencrypt-prod</span><br><span class="line">  #保持和ingress处于相同的ns</span><br><span class="line">  namespace: test</span><br><span class="line">spec:</span><br><span class="line">  selfSigned: &#123;&#125;</span><br><span class="line">---</span><br><span class="line">apiVersion: cert-manager.io/v1alpha2</span><br><span class="line">kind: Certificate</span><br><span class="line">metadata:</span><br><span class="line">  name: test-tls</span><br><span class="line">  #保持和ingress处于相同的ns</span><br><span class="line">  namespace: test</span><br><span class="line">spec:</span><br><span class="line">  secretName: test-tls</span><br><span class="line">  duration: 2160h</span><br><span class="line">  renewBefore: 360h</span><br><span class="line">  dnsNames:</span><br><span class="line">  #自定义域名</span><br><span class="line">  - test.sy.com</span><br><span class="line">  issuerRef:</span><br><span class="line">    #指定名为letsencrypt-prod的Issuer</span><br><span class="line">    name: letsencrypt-prod</span><br></pre></td></tr></table></figure><p><img src="https://shenshengkun.github.io/images/ingress_certmanager1.png" alt=""></p><h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul><li><a href="https://cert-manager.io/docs/concepts/certificate/" target="_blank" rel="noopener">https://cert-manager.io/docs/concepts/certificate/</a> </li><li><a href="https://cloud.tencent.com/developer/article/1402451" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1402451</a> </li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; title=&quot;说明&quot;&gt;&lt;/a&gt;说明&lt;/h1&gt;&lt;p&gt;如果用&lt;code&gt;cfssl或者openssl&lt;/code&gt;之类的工具手动生成TLS证书，这样就可以轻松搞定站点的https访问了。理想是很
       
     
     </summary>
